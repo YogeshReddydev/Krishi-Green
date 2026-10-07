@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { PipelineSection } from './components/PipelineSection';
 import { DualMarketplace } from './components/DualMarketplace';
@@ -7,8 +7,12 @@ import { ImpactCalculatorSection } from './components/ImpactCalculatorSection';
 import { CropRotationScheduler } from './components/CropRotationScheduler';
 import { HomeIntro } from './components/HomeIntro';
 import { HelplinePage } from './components/HelplinePage';
+import { MapsLocationDetector } from './components/MapsLocationDetector';
+import { SearchGroundingWidget } from './components/SearchGroundingWidget';
 import { QRTraceabilityModal } from './components/QRTraceabilityModal';
 import { HelplineModal } from './components/HelplineModal';
+import { db } from './lib/firebase';
+import { collection, onSnapshot, addDoc } from 'firebase/firestore';
 import {
   INITIAL_WASTE_REQUESTS,
   INITIAL_BATCHES,
@@ -33,15 +37,18 @@ import {
   MapPin,
   ExternalLink,
   Bot,
+  Compass,
+  Search,
 } from 'lucide-react';
 import { UI_TRANSLATIONS } from './data/translations';
+import farmerWelcomeImg from './assets/images/krishigreen_farmer_welcome_1791353512681.jpg';
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<string>('home');
   const [language, setLanguage] = useState<SupportedLanguage>('en');
   const [viewMode, setViewMode] = useState<'portal' | 'mobile'>('portal');
 
-  // Core Data States
+  // Core Data States (With Firestore persistence & offline fallback)
   const [wasteRequests, setWasteRequests] = useState<WasteCollectionRequest[]>(INITIAL_WASTE_REQUESTS);
   const [batches, setBatches] = useState<ProcessingBatch[]>(INITIAL_BATCHES);
   const [products, setProducts] = useState<OrganicProduct[]>(INITIAL_PRODUCTS);
@@ -55,7 +62,89 @@ export default function App() {
 
   const t = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.en;
 
-  const handleRequestPickup = (req: Partial<WasteCollectionRequest>) => {
+  // Real-time Firestore sync with resilient fallback
+  useEffect(() => {
+    try {
+      // 1. Waste requests
+      const unsubWaste = onSnapshot(collection(db, 'waste_requests'), (snapshot) => {
+        if (!snapshot.empty) {
+          const remoteRequests: WasteCollectionRequest[] = snapshot.docs.map((docSnap) => ({
+            id: docSnap.id,
+            ...(docSnap.data() as any),
+          }));
+          setWasteRequests((prev) => {
+            const merged = [...remoteRequests];
+            INITIAL_WASTE_REQUESTS.forEach((init) => {
+              if (!merged.some((m) => m.id === init.id)) merged.push(init);
+            });
+            return merged;
+          });
+        }
+      }, (err) => console.log('Firestore waste_requests sync:', err.message));
+
+      // 2. Processing batches
+      const unsubBatches = onSnapshot(collection(db, 'processing_batches'), (snapshot) => {
+        if (!snapshot.empty) {
+          const remoteBatches: ProcessingBatch[] = snapshot.docs.map((docSnap) => ({
+            id: docSnap.id,
+            ...(docSnap.data() as any),
+          }));
+          setBatches((prev) => {
+            const merged = [...remoteBatches];
+            INITIAL_BATCHES.forEach((init) => {
+              if (!merged.some((m) => m.id === init.id)) merged.push(init);
+            });
+            return merged;
+          });
+        }
+      }, (err) => console.log('Firestore processing_batches sync:', err.message));
+
+      // 3. Organic products
+      const unsubProducts = onSnapshot(collection(db, 'organic_products'), (snapshot) => {
+        if (!snapshot.empty) {
+          const remoteProds: OrganicProduct[] = snapshot.docs.map((docSnap) => ({
+            id: docSnap.id,
+            ...(docSnap.data() as any),
+          }));
+          setProducts((prev) => {
+            const merged = [...remoteProds];
+            INITIAL_PRODUCTS.forEach((init) => {
+              if (!merged.some((m) => m.id === init.id)) merged.push(init);
+            });
+            return merged;
+          });
+        }
+      }, (err) => console.log('Firestore organic_products sync:', err.message));
+
+      // 4. Support tickets
+      const unsubTickets = onSnapshot(collection(db, 'support_tickets'), (snapshot) => {
+        if (!snapshot.empty) {
+          const remoteTickets: SupportTicket[] = snapshot.docs.map((docSnap) => ({
+            id: docSnap.id,
+            ...(docSnap.data() as any),
+          }));
+          setTickets((prev) => {
+            const merged = [...remoteTickets];
+            INITIAL_TICKETS.forEach((init) => {
+              if (!merged.some((m) => m.id === init.id)) merged.push(init);
+            });
+            return merged;
+          });
+        }
+      }, (err) => console.log('Firestore support_tickets sync:', err.message));
+
+      return () => {
+        unsubWaste();
+        unsubBatches();
+        unsubProducts();
+        unsubTickets();
+      };
+    } catch (e) {
+      console.warn('Firestore subscription initialized with local cache');
+    }
+  }, []);
+
+  const handleRequestPickup = async (req: Partial<WasteCollectionRequest>) => {
     const newReq: WasteCollectionRequest = {
       id: `WC-${Math.floor(1050 + Math.random() * 900)}`,
       generatorType: req.generatorType || 'Household',
@@ -70,9 +159,16 @@ export default function App() {
       createdAt: req.createdAt || new Date().toISOString().replace('T', ' ').slice(0, 16),
     };
     setWasteRequests([newReq, ...wasteRequests]);
+
+    // Persist to Firestore
+    try {
+      await addDoc(collection(db, 'waste_requests'), newReq);
+    } catch (err) {
+      console.warn('Persisted locally to cache:', err);
+    }
   };
 
-  const handleAddBatch = (batch: Partial<ProcessingBatch>) => {
+  const handleAddBatch = async (batch: Partial<ProcessingBatch>) => {
     const newBatch: ProcessingBatch = {
       id: `BATCH-${Date.now()}`,
       batchNo: batch.batchNo || `KG-BATCH-${Date.now()}`,
@@ -93,9 +189,16 @@ export default function App() {
       qrCodeData: batch.qrCodeData || `https://krishigreen.in/verify/${batch.batchNo}`,
     };
     setBatches([newBatch, ...batches]);
+
+    // Persist to Firestore
+    try {
+      await addDoc(collection(db, 'processing_batches'), newBatch);
+    } catch (err) {
+      console.warn('Persisted locally to cache:', err);
+    }
   };
 
-  const handleAddProduct = (prod: Partial<OrganicProduct>) => {
+  const handleAddProduct = async (prod: Partial<OrganicProduct>) => {
     const newProd: OrganicProduct = {
       id: `PROD-${Date.now()}`,
       name: prod.name || 'Organic Soil Compost',
@@ -117,6 +220,13 @@ export default function App() {
       image: prod.image || 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=600&q=80',
     };
     setProducts([newProd, ...products]);
+
+    // Persist to Firestore
+    try {
+      await addDoc(collection(db, 'organic_products'), newProd);
+    } catch (err) {
+      console.warn('Persisted locally to cache:', err);
+    }
   };
 
   const handleOpenQRForBatch = (batch: ProcessingBatch) => {
@@ -150,8 +260,14 @@ export default function App() {
     });
   };
 
-  const handleTicketCreated = (newTicket: SupportTicket) => {
+  const handleTicketCreated = async (newTicket: SupportTicket) => {
     setTickets([newTicket, ...tickets]);
+    // Persist to Firestore
+    try {
+      await addDoc(collection(db, 'support_tickets'), newTicket);
+    } catch (err) {
+      console.warn('Ticket saved locally:', err);
+    }
   };
 
   return (
@@ -160,7 +276,7 @@ export default function App() {
       <div
         className="fixed inset-0 pointer-events-none z-0 opacity-12 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('/farmer_welcome.jpg')`,
+          backgroundImage: `url('${farmerWelcomeImg}')`,
         }}
       />
       {/* Framing Ambient High-Contrast Overlay to guarantee 100% crystal-clear UI contrast */}
@@ -172,7 +288,7 @@ export default function App() {
       <div className="fixed bottom-2 left-2 w-28 h-28 pointer-events-none z-10 border-b-2 border-l-2 border-emerald-600/30 rounded-bl-3xl hidden md:block" />
       <div className="fixed bottom-2 right-2 w-28 h-28 pointer-events-none z-10 border-b-2 border-r-2 border-emerald-600/30 rounded-br-3xl hidden md:block" />
 
-      {/* App Header (Full Language Shell Reactive) */}
+      {/* App Header (Full Language Shell Reactive + Google Auth) */}
       <Header
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
@@ -228,6 +344,8 @@ export default function App() {
                   {currentTab === 'rotation' && t.navRotation}
                   {currentTab === 'schemes' && t.navSchemes}
                   {currentTab === 'impact' && t.navImpact}
+                  {currentTab === 'maps' && t.navMaps}
+                  {currentTab === 'search' && t.navSearch}
                   {currentTab === 'helpline' && t.navHelpline}
                 </span>
               </div>
@@ -242,11 +360,21 @@ export default function App() {
 
           {/* Dedicated Webpage 1: Home / Intro Overview */}
           {currentTab === 'home' && (
-            <HomeIntro
-              onNavigate={(tab) => setCurrentTab(tab)}
-              onOpenHelpline={() => setIsHelplineOpen(true)}
-              language={language}
-            />
+            <div className="space-y-6">
+              <HomeIntro
+                onNavigate={(tab) => setCurrentTab(tab)}
+                onOpenHelpline={() => setIsHelplineOpen(true)}
+                language={language}
+              />
+              {/* Grounded Agricultural Intelligence Preview Modules on Home */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
+                <MapsLocationDetector
+                  language={language}
+                  onLocationDetected={(loc) => console.log('Detected loc:', loc)}
+                />
+                <SearchGroundingWidget language={language} />
+              </div>
+            </div>
           )}
 
           {/* Dedicated Webpage 2: Waste-to-Wealth Pipeline */}
@@ -285,7 +413,13 @@ export default function App() {
           {/* Dedicated Webpage 6: Live Impact & Analytics */}
           {currentTab === 'impact' && <ImpactCalculatorSection language={language} />}
 
-          {/* Dedicated Webpage 7: 24x7 Helpline & AI Advisor */}
+          {/* Dedicated Webpage 7: Google Maps Agri-Hub & Location Detector */}
+          {currentTab === 'maps' && <MapsLocationDetector language={language} />}
+
+          {/* Dedicated Webpage 8: Live Google Search Weather & Mandi Intel */}
+          {currentTab === 'search' && <SearchGroundingWidget language={language} />}
+
+          {/* Dedicated Webpage 9: 24x7 Helpline & AI Advisor */}
           {currentTab === 'helpline' && (
             <HelplinePage
               language={language}

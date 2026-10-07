@@ -35,6 +35,8 @@ export interface ShellTranslations {
   navSchemes: string;
   navImpact: string;
   navHelpline: string;
+  navMaps: string;
+  navSearch: string;
   requestPickup: string;
   logBatch: string;
   listProduct: string;

@@ -1,0 +1,125 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with role, contact info, and preferences",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "description": "User email address" },
+        "displayName": { "type": "string", "description": "Full name of the user" },
+        "photoURL": { "type": "string", "description": "Profile picture URL" },
+        "role": { "type": "string", "enum": ["farmer", "fpo_lead", "admin"], "description": "User role in KrishiGreen" },
+        "village": { "type": "string", "description": "Village or Gram Panchayat" },
+        "phone": { "type": "string", "description": "Mobile phone number" },
+        "landAcres": { "type": "number", "description": "Land size in acres" },
+        "createdAt": { "type": "string", "description": "Account creation timestamp" }
+      },
+      "required": ["uid", "email"]
+    },
+    "WasteRequest": {
+      "title": "WasteRequest",
+      "description": "Food and bio-waste collection request logged by farmers or generators",
+      "type": "object",
+      "properties": {
+        "generatorType": { "type": "string", "description": "Type of waste generator (Household, Mandi, Hotel, Farm)" },
+        "wasteType": { "type": "string", "description": "Description of organic waste" },
+        "estimatedWeightKg": { "type": "number", "description": "Estimated weight in kilograms" },
+        "village": { "type": "string", "description": "Pickup village or address" },
+        "contactName": { "type": "string", "description": "Name of contact person" },
+        "phone": { "type": "string", "description": "Contact phone" },
+        "pickupDate": { "type": "string", "description": "Desired pickup date" },
+        "status": { "type": "string", "enum": ["Pending Pickup", "Collected", "In Processing", "Completed"], "description": "Status" },
+        "notes": { "type": "string", "description": "Additional pickup notes" },
+        "userId": { "type": "string", "description": "Owner user UID" },
+        "createdAt": { "type": "string", "description": "Creation timestamp" }
+      },
+      "required": ["generatorType", "wasteType", "estimatedWeightKg", "village", "status"]
+    },
+    "ProcessingBatch": {
+      "title": "ProcessingBatch",
+      "description": "Decentralized bio-fertilizer fermentation and composting batch",
+      "type": "object",
+      "properties": {
+        "batchNo": { "type": "string", "description": "Unique batch tracking identifier" },
+        "unitName": { "type": "string", "description": "Name of the processing unit" },
+        "operatorName": { "type": "string", "description": "Name of operator" },
+        "village": { "type": "string", "description": "Village location" },
+        "processType": { "type": "string", "description": "Vermi-composting, Bio-Enzyme, or Jeevamrutha" },
+        "inputWasteKg": { "type": "number", "description": "Input waste weight in kg" },
+        "startDate": { "type": "string", "description": "Batch initiation date" },
+        "estimatedReadyDate": { "type": "string", "description": "Expected completion date" },
+        "currentStage": { "type": "string", "description": "Current processing stage" },
+        "stageProgressPercent": { "type": "number", "description": "Stage completion percentage" },
+        "outputProduct": { "type": "string", "description": "Output bio-fertilizer name" },
+        "expectedYieldKg": { "type": "number", "description": "Expected yield in kg" },
+        "status": { "type": "string", "description": "Current status" },
+        "qrCodeData": { "type": "string", "description": "Verification URL or code" },
+        "userId": { "type": "string", "description": "Creator user UID" }
+      },
+      "required": ["batchNo", "unitName", "processType", "inputWasteKg", "status"]
+    },
+    "OrganicProduct": {
+      "title": "OrganicProduct",
+      "description": "Organic input product listed on the KrishiGreen marketplace",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Product name" },
+        "category": { "type": "string", "description": "Category" },
+        "pricePerUnit": { "type": "number", "description": "Price per unit in INR" },
+        "unit": { "type": "string", "description": "Packaging unit" },
+        "sellerName": { "type": "string", "description": "Seller name" },
+        "sellerRole": { "type": "string", "description": "Role of seller" },
+        "village": { "type": "string", "description": "Seller village" },
+        "availableStock": { "type": "number", "description": "Stock count" },
+        "batchNo": { "type": "string", "description": "Batch reference code" },
+        "description": { "type": "string", "description": "Product details" },
+        "organicCertified": { "type": "boolean", "description": "Certification flag" },
+        "qrTraceabilityCode": { "type": "string", "description": "QR code" },
+        "image": { "type": "string", "description": "Image URL" },
+        "userId": { "type": "string", "description": "Seller user UID" }
+      },
+      "required": ["name", "pricePerUnit", "unit", "sellerName"]
+    },
+    "SupportTicket": {
+      "title": "SupportTicket",
+      "description": "Helpline and advisory support ticket logged for farmers",
+      "type": "object",
+      "properties": {
+        "callerName": { "type": "string", "description": "Name of caller" },
+        "phone": { "type": "string", "description": "Caller phone" },
+        "language": { "type": "string", "description": "Language of interaction" },
+        "category": { "type": "string", "description": "Query category" },
+        "query": { "type": "string", "description": "Question or request" },
+        "status": { "type": "string", "enum": ["Open", "In Progress", "Resolved"], "description": "Ticket status" },
+        "resolutionNotes": { "type": "string", "description": "Agronomist or AI response" },
+        "priority": { "type": "string", "description": "Ticket priority" },
+        "createdAt": { "type": "string", "description": "Timestamp" },
+        "userId": { "type": "string", "description": "User UID if signed in" }
+      },
+      "required": ["category", "query", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile information"
+    },
+    "/waste_requests/{requestId}": {
+      "schema": "WasteRequest",
+      "description": "Organic waste collection requests"
+    },
+    "/processing_batches/{batchId}": {
+      "schema": "ProcessingBatch",
+      "description": "Decentralized bio-processing and composting batches"
+    },
+    "/organic_products/{productId}": {
+      "schema": "OrganicProduct",
+      "description": "Marketplace organic fertilizers and bio-stimulants"
+    },
+    "/support_tickets/{ticketId}": {
+      "schema": "SupportTicket",
+      "description": "24x7 helpline farmer support tickets"
+    }
+  }
+}

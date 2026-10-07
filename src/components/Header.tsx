@@ -12,10 +12,13 @@ import {
   RotateCcw,
   Home,
   Bot,
+  Compass,
+  Search,
 } from 'lucide-react';
 import { SupportedLanguage } from '../types';
 import { SUPPORTED_LANGUAGES, UI_TRANSLATIONS } from '../data/translations';
 import { WeatherWidget } from './WeatherWidget';
+import { UserAuthButton } from './UserAuthButton';
 
 interface HeaderProps {
   currentTab: string;
@@ -48,6 +51,8 @@ export const Header: React.FC<HeaderProps> = ({
     { id: 'rotation', label: t.navRotation, icon: RotateCcw },
     { id: 'schemes', label: t.navSchemes, icon: FileCheck2 },
     { id: 'impact', label: t.navImpact, icon: TrendingUp },
+    { id: 'maps', label: t.navMaps, icon: Compass },
+    { id: 'search', label: t.navSearch, icon: Search },
     { id: 'helpline', label: t.navHelpline, icon: Bot },
   ];
 
@@ -152,7 +157,7 @@ export const Header: React.FC<HeaderProps> = ({
           })}
         </nav>
 
-        {/* Right tools: Weather widget, Voice trigger & Multilingual Selector */}
+        {/* Right tools: Weather widget, Voice trigger, Multilingual Selector & User Auth */}
         <div className="flex items-center gap-2 shrink-0">
           {/* Real-time Agricultural Weather Widget */}
           <WeatherWidget />
@@ -182,6 +187,9 @@ export const Header: React.FC<HeaderProps> = ({
               ))}
             </select>
           </div>
+
+          {/* Firebase Google Auth & User Profile Button */}
+          <UserAuthButton language={language} />
         </div>
       </div>
 
