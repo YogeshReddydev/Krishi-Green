@@ -98,6 +98,64 @@
         "userId": { "type": "string", "description": "User UID if signed in" }
       },
       "required": ["category", "query", "status"]
+    },
+    "VerifiedProvider": {
+      "title": "VerifiedProvider",
+      "description": "Verified machinery dealership, CHC, baler or compost facility in pilot districts",
+      "type": "object",
+      "properties": {
+        "businessName": { "type": "string", "description": "Business name" },
+        "district": { "type": "string", "description": "AP Pilot district" },
+        "headquartersOrMandal": { "type": "string", "description": "Mandal or town" },
+        "address": { "type": "string", "description": "Full address" },
+        "category": { "type": "string", "description": "Provider category" },
+        "publicPhone": { "type": "string", "description": "Contact phone" },
+        "verificationStatus": { "type": "string", "description": "Verification status" },
+        "sourceName": { "type": "string", "description": "Data source authority" }
+      },
+      "required": ["businessName", "district", "category"]
+    },
+    "ProviderEnquiry": {
+      "title": "ProviderEnquiry",
+      "description": "Direct quotation and rental enquiry sent to equipment providers",
+      "type": "object",
+      "properties": {
+        "providerId": { "type": "string", "description": "Target provider ID" },
+        "providerName": { "type": "string", "description": "Provider business name" },
+        "farmerName": { "type": "string", "description": "Enquiring farmer name" },
+        "farmerPhone": { "type": "string", "description": "Contact phone" },
+        "district": { "type": "string", "description": "District" },
+        "status": { "type": "string", "description": "Enquiry status" }
+      },
+      "required": ["providerId", "farmerName", "farmerPhone"]
+    },
+    "WasteLifecycleRecord": {
+      "title": "WasteLifecycleRecord",
+      "description": "Complete 16-stage verifiable waste-to-wealth audit record",
+      "type": "object",
+      "properties": {
+        "currentStage": { "type": "string", "description": "Active stage name" },
+        "stageNumber": { "type": "number", "description": "Stage number from 1 to 16" },
+        "district": { "type": "string", "description": "Pilot district" },
+        "wasteType": { "type": "string", "description": "Waste type" },
+        "declaredWeightKg": { "type": "number", "description": "Weight in kg" }
+      },
+      "required": ["currentStage", "stageNumber", "wasteType"]
+    },
+    "CarbonProject": {
+      "title": "CarbonProject",
+      "description": "Indian Carbon Market (BEE / CCTS) project with gross-to-net emissions accounting",
+      "type": "object",
+      "properties": {
+        "projectTitle": { "type": "string", "description": "Project title" },
+        "district": { "type": "string", "description": "AP District" },
+        "methodologyCode": { "type": "string", "description": "ICM methodology code" },
+        "grossAvoidedTCO2e": { "type": "number", "description": "Gross tCO2e avoided" },
+        "netIssuedCreditsTCO2e": { "type": "number", "description": "Net credits" },
+        "farmerPoolPayoutINR": { "type": "number", "description": "70% farmer share" },
+        "lifecycleStage": { "type": "string", "description": "Lifecycle stage" }
+      },
+      "required": ["projectTitle", "district", "methodologyCode", "lifecycleStage"]
     }
   },
   "firestore": {
@@ -120,6 +178,22 @@
     "/support_tickets/{ticketId}": {
       "schema": "SupportTicket",
       "description": "24x7 helpline farmer support tickets"
+    },
+    "/verified_providers/{providerId}": {
+      "schema": "VerifiedProvider",
+      "description": "Verified machinery and biomass providers in AP pilot districts"
+    },
+    "/provider_enquiries/{enquiryId}": {
+      "schema": "ProviderEnquiry",
+      "description": "Machinery and rental quotation enquiries"
+    },
+    "/waste_lifecycle_events/{eventId}": {
+      "schema": "WasteLifecycleRecord",
+      "description": "16-stage verifiable waste-to-wealth lifecycle records"
+    },
+    "/carbon_projects/{projectId}": {
+      "schema": "CarbonProject",
+      "description": "BEE / ICM certified agricultural carbon projects"
     }
   }
 }

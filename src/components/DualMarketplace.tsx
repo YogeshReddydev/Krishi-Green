@@ -128,9 +128,9 @@ export const DualMarketplace: React.FC<DualMarketplaceProps> = ({
       <div className="bg-white rounded-2xl border border-gray-200 p-5 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold mb-1.5">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold mb-1.5 border border-emerald-200">
               <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-              Slide 06 • The Rural Economic Engine
+              Rural Economic Engine • Direct Farmer Commerce
             </div>
             <h2 className="text-xl sm:text-2xl font-extrabold text-gray-900 tracking-tight">
               KrishiGreen Dual Marketplace & Equipment Hub

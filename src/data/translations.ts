@@ -31,12 +31,14 @@ export interface ShellTranslations {
   mobileView: string;
   navPipeline: string;
   navMarketplace: string;
+  navApPilot?: string;
+  navCarbon?: string;
   navRotation: string;
   navSchemes: string;
   navImpact: string;
   navHelpline: string;
-  navMaps: string;
-  navSearch: string;
+  navMaps?: string;
+  navSearch?: string;
   requestPickup: string;
   logBatch: string;
   listProduct: string;
@@ -89,6 +91,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, ShellTranslations> = {
     mobileView: 'Farmer Mobile',
     navPipeline: 'Waste-to-Wealth Pipeline',
     navMarketplace: 'Dual Marketplace & Machinery',
+    navApPilot: 'AP Equipment & Providers',
+    navCarbon: 'Carbon & Climate Engine',
     navRotation: 'Crop Rotation Scheduler',
     navSchemes: 'Govt Subsidies',
     navImpact: 'Live Impact & Analytics',
@@ -197,6 +201,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, ShellTranslations> = {
     mobileView: 'రైతు మొబైల్',
     navPipeline: 'వ్యర్థాల నుండి సంపద పైప్‌లైన్',
     navMarketplace: 'సేంద్రీయ మార్కెట్ & పరికరాలు',
+    navApPilot: 'ఆంధ్రప్రదేశ్ యంత్రాలు & కేంద్రాలు',
+    navCarbon: 'కార్బన్ క్రెడిట్ & క్లైమేట్ ఇంజిన్',
     navRotation: 'పంట మార్పిడి పట్టిక',
     navSchemes: 'ప్రభుత్వ పథకాలు & సబ్సిడీలు',
     navImpact: 'ప్రభావం & లాభాల గణన',

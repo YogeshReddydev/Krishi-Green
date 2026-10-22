@@ -11,6 +11,10 @@ import { MapsLocationDetector } from './components/MapsLocationDetector';
 import { SearchGroundingWidget } from './components/SearchGroundingWidget';
 import { QRTraceabilityModal } from './components/QRTraceabilityModal';
 import { HelplineModal } from './components/HelplineModal';
+import { AndhraPradeshDiscoveryMap } from './components/AndhraPradeshDiscoveryMap';
+import { CarbonEngineSection } from './components/CarbonEngineSection';
+import { WasteToWealthPipeline } from './components/WasteToWealthPipeline';
+import { RealImpactDashboard } from './components/RealImpactDashboard';
 import { db } from './lib/firebase';
 import { collection, onSnapshot, addDoc } from 'firebase/firestore';
 import {
@@ -271,7 +275,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col relative text-gray-800 bg-[#f7faf4]">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col relative text-gray-800 bg-[#f7faf4]">
       {/* Agricultural Farmland Framing & Textured Visual Background */}
       <div
         className="fixed inset-0 pointer-events-none z-0 opacity-12 bg-cover bg-center bg-no-repeat"
@@ -339,8 +343,10 @@ export default function App() {
                 </button>
                 <span className="text-gray-400">/</span>
                 <span className="font-extrabold text-gray-900">
+                  {currentTab === 'ap-pilot' && (t.navApPilot || 'AP Equipment & Providers')}
                   {currentTab === 'pipeline' && t.navPipeline}
                   {currentTab === 'marketplace' && t.navMarketplace}
+                  {currentTab === 'carbon' && (t.navCarbon || 'Carbon & Climate Engine')}
                   {currentTab === 'rotation' && t.navRotation}
                   {currentTab === 'schemes' && t.navSchemes}
                   {currentTab === 'impact' && t.navImpact}
@@ -377,21 +383,17 @@ export default function App() {
             </div>
           )}
 
-          {/* Dedicated Webpage 2: Waste-to-Wealth Pipeline */}
-          {currentTab === 'pipeline' && (
-            <PipelineSection
-              requests={wasteRequests}
-              batches={batches}
-              onRequestPickup={handleRequestPickup}
-              onAddBatch={handleAddBatch}
-              onOpenQR={handleOpenQRForBatch}
-              onGoToMarketplace={() => setCurrentTab('marketplace')}
-              onGoToRotation={() => setCurrentTab('rotation')}
-              language={language}
-            />
+          {/* Dedicated Webpage 2: Andhra Pradesh Geographic Pilot (5 District Groups) */}
+          {currentTab === 'ap-pilot' && (
+            <AndhraPradeshDiscoveryMap language={language} />
           )}
 
-          {/* Dedicated Webpage 3: Dual Marketplace & Machinery */}
+          {/* Dedicated Webpage 3: 16-Stage Waste-to-Wealth Pipeline */}
+          {currentTab === 'pipeline' && (
+            <WasteToWealthPipeline language={language} onOpenQR={setActiveQRBatch} />
+          )}
+
+          {/* Dedicated Webpage 4: Dual Marketplace & Machinery */}
           {currentTab === 'marketplace' && (
             <DualMarketplace
               products={products}
@@ -402,24 +404,29 @@ export default function App() {
             />
           )}
 
-          {/* Dedicated Webpage 4: Crop Rotation Scheduler */}
+          {/* Dedicated Webpage 5: Carbon Credit & Climate Engine (BEE / ICM) */}
+          {currentTab === 'carbon' && (
+            <CarbonEngineSection language={language} />
+          )}
+
+          {/* Dedicated Webpage 6: Crop Rotation Scheduler */}
           {currentTab === 'rotation' && (
             <CropRotationScheduler batches={batches} language={language} />
           )}
 
-          {/* Dedicated Webpage 5: Government Schemes & Subsidies */}
+          {/* Dedicated Webpage 7: Government Schemes & Subsidies */}
           {currentTab === 'schemes' && <SchemeNavigator language={language} />}
 
-          {/* Dedicated Webpage 6: Live Impact & Analytics */}
-          {currentTab === 'impact' && <ImpactCalculatorSection language={language} />}
+          {/* Dedicated Webpage 8: Live Real-Data Impact Ledger */}
+          {currentTab === 'impact' && <RealImpactDashboard language={language} />}
 
-          {/* Dedicated Webpage 7: Google Maps Agri-Hub & Location Detector */}
+          {/* Dedicated Webpage 9: Google Maps Agri-Hub & Location Detector */}
           {currentTab === 'maps' && <MapsLocationDetector language={language} />}
 
-          {/* Dedicated Webpage 8: Live Google Search Weather & Mandi Intel */}
+          {/* Dedicated Webpage 10: Live Google Search Weather & Mandi Intel */}
           {currentTab === 'search' && <SearchGroundingWidget language={language} />}
 
-          {/* Dedicated Webpage 9: 24x7 Helpline & AI Advisor */}
+          {/* Dedicated Webpage 11: 24x7 Helpline & AI Advisor */}
           {currentTab === 'helpline' && (
             <HelplinePage
               language={language}

@@ -161,9 +161,9 @@ export const PipelineSection: React.FC<PipelineSectionProps> = ({
       {/* Overview Banner */}
       <div className="bg-gradient-to-r from-emerald-900 via-green-800 to-teal-900 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
         <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/30 text-emerald-200 text-xs font-semibold mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/30 text-emerald-200 text-xs font-semibold mb-3 border border-emerald-400/40">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            Slide 04 Blueprint • Closed-Loop Agri Economy
+            Circular Economy Blueprint • Closed-Loop Agriculture
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">
             The 5-Step Waste-to-Wealth Pipeline
@@ -539,7 +539,7 @@ export const PipelineSection: React.FC<PipelineSectionProps> = ({
                 <Store className="w-8 h-8" />
               </div>
               <div className="space-y-2 text-sm text-purple-950">
-                <h4 className="font-bold text-base">Fair & Transparent Shared Prosperity Model (Slide 09)</h4>
+                <h4 className="font-bold text-base">Fair & Transparent Shared Prosperity Model</h4>
                 <p className="text-xs leading-relaxed text-purple-800">
                   KrishiGreen keeps commissions deliberately low (3–8%) and capped for smallholders. Every rupee paid by buyers flows directly into village SHGs and farmer bank accounts through instant UPI settlement.
                 </p>

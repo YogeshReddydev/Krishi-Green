@@ -154,3 +154,203 @@ export interface CropRotationPattern {
   humusRestorationRate: string;
   description: string;
 }
+
+// ============================================================================
+// ANDHRA PRADESH GEOGRAPHIC PILOT & VERIFIED PROVIDER DISCOVERY
+// ============================================================================
+export type APDistrict =
+  | 'Palnadu'
+  | 'Prakasam'
+  | 'Kurnool'
+  | 'East Godavari'
+  | 'West Godavari'
+  | 'Vizianagaram';
+
+export type VerifiedProviderCategory =
+  | 'Custom Hiring Centre (CHC)'
+  | 'Tractor & Machinery Dealership'
+  | 'Straw & Paddy Baler Provider'
+  | 'Shredder & Mulcher Service'
+  | 'Biomass / Briquette Facility'
+  | 'Organic Compost / Vermicompost Plant'
+  | 'Farmer Producer Organization (FPO)';
+
+export interface VerifiedProvider {
+  id: string;
+  businessName: string;
+  district: APDistrict;
+  headquartersOrMandal: string;
+  address: string;
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
+  category: VerifiedProviderCategory;
+  publicPhone: string;
+  website?: string;
+  verificationStatus: 'Verified by Dept / Ground Audit' | 'User Submitted (Pending Review)';
+  sourceName: string;
+  sourceUrl?: string;
+  lastCheckedTimestamp: string;
+  supportedEquipment: string[];
+  pricingNotes: string;
+  enquiryEnabled: boolean;
+  reportedCount?: number;
+}
+
+export interface ProviderEnquiry {
+  id: string;
+  providerId: string;
+  providerName: string;
+  farmerName: string;
+  farmerPhone: string;
+  village: string;
+  district: APDistrict;
+  requiredEquipmentOrService: string;
+  preferredDates: string;
+  rentalOrPurchase: 'Rental Booking' | 'Purchase Enquiry' | 'Custom Harvesting Service';
+  status: 'Submitted' | 'In Review' | 'Quoted' | 'Declined';
+  createdAt: string;
+}
+
+// ============================================================================
+// COMPLETE 16-STAGE WASTE-TO-WEALTH PIPELINE
+// ============================================================================
+export type WasteLifecycleStage =
+  | 'Farmer/Aggregator Registration'
+  | 'Waste Declaration'
+  | 'Collection Request'
+  | 'Collection Scheduling'
+  | 'Weighing & Evidence Capture'
+  | 'Collection Confirmation'
+  | 'Transport Tracking'
+  | 'Receiving Facility Confirmation'
+  | 'Quality Assessment'
+  | 'Processing Batch'
+  | 'Output Measurement'
+  | 'Product Quality & Compliance'
+  | 'Buyer Enquiry / Order'
+  | 'Delivery Confirmation'
+  | 'Payment Reconciliation'
+  | 'Environmental Impact Accounting';
+
+export interface WeighbridgeSlip {
+  tareWeightKg: number;
+  grossWeightKg: number;
+  netWeightKg: number;
+  slipNumber: string;
+  weighbridgeLocation: string;
+  photoUrl?: string;
+}
+
+export interface TransportTracking {
+  vehicleNumber: string;
+  driverName: string;
+  driverPhone: string;
+  dispatchTime: string;
+  etaMinutes: number;
+}
+
+export interface QualityAssessment {
+  moisturePercent: number;
+  foreignMatterPercent: number;
+  ph: number;
+  accepted: boolean;
+  inspectorNotes: string;
+}
+
+export interface LabComplianceReport {
+  fcoStandardMet: boolean;
+  nitrogenPercent: number;
+  phosphorusPercent: number;
+  potassiumPercent: number;
+  organicCarbonPercent: number;
+  heavyMetalsPass: boolean;
+  labCertificateNo: string;
+}
+
+export interface FinancialSettlement {
+  grossValueINR: number;
+  farmerPayoutINR: number;
+  aggregatorFeeINR: number;
+  platformFeeINR: number;
+  payoutStatus: 'Pending' | 'Processed' | 'Settled';
+  bankRefNo?: string;
+}
+
+export interface CarbonAccountingRecord {
+  methaneAvoidedKg: number;
+  tCO2eAvoided: number;
+  verifiedDate: string;
+}
+
+export interface WasteLifecycleRecord {
+  id: string;
+  batchOrDeclarationId: string;
+  currentStage: WasteLifecycleStage;
+  stageNumber: number; // 1 to 16
+  district: APDistrict | string;
+  village: string;
+  farmerOrAggregatorName: string;
+  wasteType: string;
+  declaredWeightKg: number;
+  weighbridgeSlip?: WeighbridgeSlip;
+  transport?: TransportTracking;
+  qualityAssessment?: QualityAssessment;
+  labCompliance?: LabComplianceReport;
+  financialSettlement?: FinancialSettlement;
+  carbonAccounting?: CarbonAccountingRecord;
+  updatedAt: string;
+  createdAt: string;
+}
+
+// ============================================================================
+// CARBON CREDIT & CLIMATE ENGINE (INDIAN CARBON MARKET / BEE / VOLUNTARY)
+// ============================================================================
+export type CarbonMethodologyCode = 'ICM-AGRI-01' | 'ICM-AGRI-02' | 'ICM-AGRI-03';
+
+export interface CarbonMethodology {
+  code: CarbonMethodologyCode;
+  standard: 'Indian Carbon Market (BEE / CCTS)' | 'Gold Standard' | 'Verra VM0042';
+  title: string;
+  description: string;
+  baselineEmissionFactorTCO2e: number; // e.g. 0.85 tCO2e/tonne
+  eligiblePractices: string[];
+}
+
+export type CarbonLifecycleStage =
+  | 'Draft'
+  | 'Eligibility Assessment'
+  | 'Monitoring & Evidence'
+  | 'Independent Verification'
+  | 'Issuance'
+  | 'Listed for Offtake'
+  | 'Retired';
+
+export interface CarbonProject {
+  id: string;
+  projectTitle: string;
+  district: APDistrict;
+  mandal: string;
+  farmerGroupId: string;
+  farmerGroupName: string;
+  participatingFarmersCount: number;
+  totalAcreageHa: number;
+  methodologyCode: CarbonMethodologyCode;
+  baselineEmissionsTCO2e: number;
+  grossAvoidedTCO2e: number;
+  bufferPoolDeductionTCO2e: number; // 10%
+  leakageDeductionTCO2e: number; // 5%
+  netIssuedCreditsTCO2e: number; // 85% of gross
+  creditPriceINR: number; // e.g. ₹1,250 / tCO2e
+  totalCreditValueINR: number;
+  farmerPoolPayoutINR: number; // 70% direct to farmers
+  aggregatorShareINR: number; // 20%
+  registryVerificationFeeINR: number; // 10%
+  lifecycleStage: CarbonLifecycleStage;
+  registrySerialNo: string;
+  monitoringEvidenceCount: number;
+  verificationAgency: string;
+  issuanceDate?: string;
+  createdAt: string;
+}

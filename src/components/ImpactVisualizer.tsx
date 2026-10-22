@@ -224,9 +224,9 @@ export const ImpactVisualizer: React.FC = () => {
       {/* Header and Toggle */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold mb-1.5">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold mb-1.5 border border-emerald-200">
             <BarChart3 className="w-3.5 h-3.5 text-emerald-600" />
-            Slide 08 & 11 • Real-Time Environmental Analytics
+            Real-Time Environmental Analytics & Trends
           </div>
           <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900 tracking-tight">
             Impact Data Visualization & Seasonal Trends
@@ -497,7 +497,7 @@ export const ImpactVisualizer: React.FC = () => {
           <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
           <div>
             <strong className="block text-emerald-950 font-bold">
-              Carbon Credit Aggregation & Verification (Slide 09 & 10)
+              Carbon Credit Aggregation & Verification (BEE / CCTS)
             </strong>
             <p className="text-emerald-800 text-[11px]">
               Every metric ton of diverted landfill organic waste is geotagged and ledgered with batch QR codes, allowing village FPOs to pool verified carbon offsets under international accreditation registries.

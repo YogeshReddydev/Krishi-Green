@@ -43,16 +43,16 @@ export const ImpactCalculatorSection: React.FC<ImpactCalculatorProps> = ({ langu
 
   return (
     <div className="space-y-6">
-      {/* Top Banner: The Problem (Slide 02) vs The Impact (Slide 08) */}
+      {/* Top Banner: The Problem vs The Impact */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* The Problem (Slide 02) */}
+        {/* The Problem */}
         <div className="bg-gradient-to-br from-rose-950 via-red-950 to-orange-950 text-white rounded-2xl p-6 shadow-md border border-rose-900/40 space-y-4">
           <div className="flex items-center gap-2">
             <span className="p-1.5 bg-rose-500/30 text-rose-300 rounded-lg">
               <ShieldAlert className="w-4 h-4" />
             </span>
             <span className="text-xs font-bold uppercase tracking-wider text-rose-300">
-              Slide 02 • The Crisis in Numbers
+              The Crisis in Numbers • National Baseline
             </span>
           </div>
 
@@ -85,14 +85,14 @@ export const ImpactCalculatorSection: React.FC<ImpactCalculatorProps> = ({ langu
           </div>
         </div>
 
-        {/* The Impact We Create (Slide 08) */}
+        {/* The Impact We Create */}
         <div className="bg-gradient-to-br from-emerald-950 via-green-900 to-teal-950 text-white rounded-2xl p-6 shadow-md border border-emerald-800/50 space-y-4">
           <div className="flex items-center gap-2">
             <span className="p-1.5 bg-emerald-500/30 text-emerald-300 rounded-lg">
               <Sparkles className="w-4 h-4" />
             </span>
             <span className="text-xs font-bold uppercase tracking-wider text-emerald-300">
-              Slide 08 • Verified National Impact Targets
+              Verified National Impact Targets
             </span>
           </div>
 
@@ -327,7 +327,7 @@ export const ImpactCalculatorSection: React.FC<ImpactCalculatorProps> = ({ langu
       {/* Real-time Environmental Data Visualization using Recharts */}
       <ImpactVisualizer />
 
-      {/* Slide 11: Pilot Plan & Milestones */}
+      {/* Ground Pilot Plan & Milestones */}
       <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-100">
           <div>
@@ -336,7 +336,7 @@ export const ImpactCalculatorSection: React.FC<ImpactCalculatorProps> = ({ langu
                 <Target className="w-4 h-4" />
               </span>
               <h3 className="font-bold text-gray-900 text-base">
-                Slide 11 • Ground Pilot Execution Plan
+                Ground Pilot Execution Plan & Milestones
               </h3>
             </div>
             <p className="text-xs text-gray-500 mt-0.5">

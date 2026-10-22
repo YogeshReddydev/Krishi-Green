@@ -177,7 +177,7 @@ export const HelplineModal: React.FC<HelplineModalProps> = ({
       setConversation([...newConvo, { role: 'assistant', text: aiReply }]);
       speakText(aiReply);
 
-      // Create tracked support ticket automatically (as per Slide 5)
+      // Create tracked support ticket automatically
       const newTicket: SupportTicket = {
         id: `TKT-${Math.floor(1000 + Math.random() * 9000)}`,
         callerName: callerName,

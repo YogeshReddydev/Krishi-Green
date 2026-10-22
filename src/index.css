@@ -1,13 +1,57 @@
 @import "tailwindcss";
 
+:root {
+  --color-primary: #15803d;
+  --color-primary-hover: #166534;
+  --color-secondary: #22c55e;
+  --color-accent: #a16207;
+  --color-background: #f8faf6;
+  --color-foreground: #0f172a;
+  --color-card: #ffffff;
+  --color-card-border: #e2e8f0;
+  --color-ring: #15803d;
+}
+
 @layer base {
-  body {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  html, body {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: #f8faf5;
-    color: #1f2937;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
     margin: 0;
     padding: 0;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
     -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  
+  #root {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* Accessible focus indicators */
+  :focus-visible {
+    outline: 2px solid #15803d;
+    outline-offset: 2px;
+  }
+
+  /* Interactive button active feedback */
+  button:not(:disabled), a:not(:disabled) {
+    cursor: pointer;
   }
 }
 
@@ -36,4 +80,24 @@
 
 .animate-pulse-ring {
   animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Subtle fade in keyframe */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Respect user's motion preferences per UI-UX Pro Max skill */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
