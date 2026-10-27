@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
+import { Sidebar } from './components/Sidebar';
 import { PipelineSection } from './components/PipelineSection';
 import { DualMarketplace } from './components/DualMarketplace';
 import { SchemeNavigator } from './components/SchemeNavigator';
@@ -9,6 +10,7 @@ import { HomeIntro } from './components/HomeIntro';
 import { HelplinePage } from './components/HelplinePage';
 import { MapsLocationDetector } from './components/MapsLocationDetector';
 import { SearchGroundingWidget } from './components/SearchGroundingWidget';
+import { RealtimeWeatherDashboardWidget } from './components/RealtimeWeatherDashboardWidget';
 import { QRTraceabilityModal } from './components/QRTraceabilityModal';
 import { HelplineModal } from './components/HelplineModal';
 import { AndhraPradeshDiscoveryMap } from './components/AndhraPradeshDiscoveryMap';
@@ -63,6 +65,8 @@ export default function App() {
   const [isHelplineOpen, setIsHelplineOpen] = useState<boolean>(false);
   const [activeQRBatch, setActiveQRBatch] = useState<any | null>(null);
   const [showTicketsDrawer, setShowTicketsDrawer] = useState<boolean>(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState<boolean>(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
 
   const t = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.en;
 
@@ -302,9 +306,24 @@ export default function App() {
         setViewMode={setViewMode}
         onOpenHelpline={() => setIsHelplineOpen(true)}
         onOpenVoice={() => setIsHelplineOpen(true)}
+        onToggleMobileSidebar={() => setIsMobileSidebarOpen((prev) => !prev)}
+        onToggleDesktopSidebar={() => setIsSidebarCollapsed((prev) => !prev)}
+        isSidebarCollapsed={isSidebarCollapsed}
       />
 
-      {/* Main Website Container */}
+      {/* Main Website Container with Left Navigation Panel */}
+      <div className="flex flex-1 min-h-[calc(100vh-4rem)] relative z-10">
+        <Sidebar
+          currentTab={currentTab}
+          onSelectTab={(tab) => setCurrentTab(tab)}
+          language={language}
+          isMobileOpen={isMobileSidebarOpen}
+          onCloseMobile={() => setIsMobileSidebarOpen(false)}
+          isCollapsed={isSidebarCollapsed}
+          onToggleCollapse={() => setIsSidebarCollapsed((prev) => !prev)}
+          onOpenHelpline={() => setIsHelplineOpen(true)}
+        />
+        <div className="flex-1 min-w-0 flex flex-col justify-between">
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6 relative z-10">
         <div className={viewMode === 'mobile' ? 'max-w-md mx-auto shadow-2xl rounded-3xl bg-white/98 backdrop-blur-md p-4 sm:p-5 border-2 border-emerald-200 space-y-5' : 'space-y-6'}>
           {/* Quick Status Pill in Mobile mode */}
@@ -367,18 +386,40 @@ export default function App() {
           {/* Dedicated Webpage 1: Home / Intro Overview */}
           {currentTab === 'home' && (
             <div className="space-y-6">
+              {/* 1. TOP ENTRANCE ONLY: Welcome, Circular Flow & Quick Navigation */}
               <HomeIntro
                 onNavigate={(tab) => setCurrentTab(tab)}
                 onOpenHelpline={() => setIsHelplineOpen(true)}
                 language={language}
               />
-              {/* Grounded Agricultural Intelligence Preview Modules on Home */}
+
+              {/* 2. MIDDLE: Grounded Agricultural Intelligence Preview Modules */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
                 <MapsLocationDetector
                   language={language}
                   onLocationDetected={(loc) => console.log('Detected loc:', loc)}
                 />
                 <SearchGroundingWidget language={language} />
+              </div>
+
+              {/* 3. BOTTOM: Real-Time Local Weather & Rainfall Probability Dashboard Widget */}
+              <div className="pt-2 border-t border-emerald-100/80">
+                <div className="mb-3 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <h3 className="text-sm font-extrabold text-emerald-950 uppercase tracking-wider font-mono">
+                      {language === 'te' ? 'వాతావరణం & వర్షపాత నివేదిక' : 'Regional Agromet Weather & Rain Probability'}
+                    </h3>
+                  </div>
+                  <button
+                    onClick={() => setCurrentTab('search')}
+                    className="text-xs font-bold text-emerald-700 hover:text-emerald-900 hover:underline flex items-center gap-1"
+                  >
+                    <span>{language === 'te' ? 'పూర్తి నివేదిక చూడండి' : 'Open Weather Intel Tab'}</span>
+                    <span>→</span>
+                  </button>
+                </div>
+                <RealtimeWeatherDashboardWidget language={language} />
               </div>
             </div>
           )}
@@ -424,7 +465,12 @@ export default function App() {
           {currentTab === 'maps' && <MapsLocationDetector language={language} />}
 
           {/* Dedicated Webpage 10: Live Google Search Weather & Mandi Intel */}
-          {currentTab === 'search' && <SearchGroundingWidget language={language} />}
+          {currentTab === 'search' && (
+            <div className="space-y-6">
+              <RealtimeWeatherDashboardWidget language={language} />
+              <SearchGroundingWidget language={language} />
+            </div>
+          )}
 
           {/* Dedicated Webpage 11: 24x7 Helpline & AI Advisor */}
           {currentTab === 'helpline' && (
@@ -436,6 +482,29 @@ export default function App() {
           )}
         </div>
       </main>
+
+      {/* Footer inside main content column */}
+      <footer className="bg-white/95 backdrop-blur-md border-t border-gray-200/90 py-6 px-4 sm:px-6 text-xs text-gray-500 mt-12 relative z-10">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span className="font-extrabold text-emerald-950 text-sm">KrishiGreen</span>
+            <span className="text-gray-400">•</span>
+            <span className="text-gray-600">{t.footerTagline}</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-4 text-[11px]">
+            <button
+              onClick={() => setCurrentTab('helpline')}
+              className="font-medium text-emerald-800 hover:underline"
+            >
+              {t.tollFree}: {t.tollFreeNumber}
+            </button>
+            <span>hello@krishigreen.in</span>
+            <span className="text-emerald-700 font-semibold">{t.villageNode}</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
 
       {/* Floating Action Trigger for 24x7 Helpline & Support Tickets Drawer */}
       <div className="fixed bottom-5 right-5 z-40 flex items-center gap-2.5">
@@ -548,27 +617,6 @@ export default function App() {
         onTicketCreated={handleTicketCreated}
       />
 
-      {/* Footer (Fully localized shell) */}
-      <footer className="bg-white/95 backdrop-blur-md border-t border-gray-200/90 py-6 px-4 sm:px-6 text-xs text-gray-500 mt-12 relative z-10">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <span className="font-extrabold text-emerald-950 text-sm">KrishiGreen</span>
-            <span className="text-gray-400">•</span>
-            <span className="text-gray-600">{t.footerTagline}</span>
           </div>
-
-          <div className="flex flex-wrap items-center gap-4 text-[11px]">
-            <button
-              onClick={() => setCurrentTab('helpline')}
-              className="font-medium text-emerald-800 hover:underline"
-            >
-              {t.tollFree}: {t.tollFreeNumber}
-            </button>
-            <span>hello@krishigreen.in</span>
-            <span className="text-emerald-700 font-semibold">{t.villageNode}</span>
-          </div>
-        </div>
-      </footer>
-    </div>
   );
 }

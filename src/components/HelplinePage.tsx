@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { SupportedLanguage, SupportTicket } from '../types';
 import { UI_TRANSLATIONS, SUPPORTED_LANGUAGES } from '../data/translations';
+import { SpeechListenButton } from './SpeechListenButton';
 
 interface HelplinePageProps {
   language: SupportedLanguage;
@@ -349,6 +350,17 @@ export const HelplinePage: React.FC<HelplinePageProps> = ({
                       )}
                     </div>
                     <p className="whitespace-pre-line text-xs font-normal">{msg.text}</p>
+                    {msg.role === 'assistant' && (
+                      <div className="mt-2 pt-2 border-t border-gray-100 flex items-center justify-between gap-2">
+                        <span className="text-[10px] text-gray-400">Audio Advisory</span>
+                        <SpeechListenButton
+                          text={msg.text}
+                          language={language}
+                          size="xs"
+                          variant="subtle"
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}

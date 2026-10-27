@@ -4,21 +4,16 @@ import {
   Phone,
   Globe2,
   Smartphone,
-  Layers,
-  ShoppingBag,
-  TrendingUp,
-  FileCheck2,
   Mic,
-  RotateCcw,
-  Home,
-  Bot,
-  Flame,
-  MapPin,
+  Menu,
+  ChevronRight,
+  ShieldCheck,
   Sparkles,
 } from 'lucide-react';
 import { SupportedLanguage } from '../types';
 import { SUPPORTED_LANGUAGES, UI_TRANSLATIONS } from '../data/translations';
 import { WeatherWidget } from './WeatherWidget';
+import { WeatherAlertBanner } from './WeatherAlertBanner';
 import { UserAuthButton } from './UserAuthButton';
 
 interface HeaderProps {
@@ -30,6 +25,9 @@ interface HeaderProps {
   setViewMode: (mode: 'portal' | 'mobile') => void;
   onOpenHelpline: () => void;
   onOpenVoice: () => void;
+  onToggleMobileSidebar: () => void;
+  onToggleDesktopSidebar?: () => void;
+  isSidebarCollapsed?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -41,21 +39,40 @@ export const Header: React.FC<HeaderProps> = ({
   setViewMode,
   onOpenHelpline,
   onOpenVoice,
+  onToggleMobileSidebar,
+  onToggleDesktopSidebar,
+  isSidebarCollapsed,
 }) => {
   const t = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.en;
-  const currentLangObj = SUPPORTED_LANGUAGES.find((l) => l.code === language) || SUPPORTED_LANGUAGES[0];
 
-  const navItems = [
-    { id: 'home', label: t.navHome, icon: Home },
-    { id: 'ap-pilot', label: t.navApPilot || 'AP Pilot (5 Districts)', icon: MapPin },
-    { id: 'pipeline', label: t.navPipeline, icon: Layers },
-    { id: 'marketplace', label: t.navMarketplace, icon: ShoppingBag },
-    { id: 'carbon', label: t.navCarbon || 'Carbon & Climate', icon: Flame },
-    { id: 'rotation', label: t.navRotation, icon: RotateCcw },
-    { id: 'schemes', label: t.navSchemes, icon: FileCheck2 },
-    { id: 'impact', label: t.navImpact, icon: TrendingUp },
-    { id: 'helpline', label: t.navHelpline, icon: Bot },
-  ];
+  const getTabLabel = (tab: string) => {
+    switch (tab) {
+      case 'home':
+        return t.navHome || 'Home / Overview';
+      case 'ap-pilot':
+        return t.navApPilot || 'AP Equipment & Providers';
+      case 'pipeline':
+        return t.navPipeline || 'Waste-to-Wealth Pipeline';
+      case 'marketplace':
+        return t.navMarketplace || 'Dual Marketplace & Machinery';
+      case 'carbon':
+        return t.navCarbon || 'Carbon & Climate Engine';
+      case 'rotation':
+        return t.navRotation || 'Crop Rotation Scheduler';
+      case 'schemes':
+        return t.navSchemes || 'Govt Subsidies & Schemes';
+      case 'impact':
+        return t.navImpact || 'Live Impact Ledger';
+      case 'maps':
+        return t.navMaps || 'Agri Maps Hub';
+      case 'search':
+        return t.navSearch || 'Weather & Agro Intel';
+      case 'helpline':
+        return t.navHelpline || '24x7 Helpline & AI';
+      default:
+        return 'Overview';
+    }
+  };
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-emerald-100/90 shadow-xs transition-colors duration-200">
@@ -111,57 +128,70 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Main navigation bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
-        {/* Brand identity */}
-        <div
-          className="flex items-center gap-3 cursor-pointer shrink-0 group"
-          onClick={() => setCurrentTab('home')}
-        >
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-800 via-emerald-600 to-green-500 flex items-center justify-center shadow-md shadow-emerald-700/20 text-white shrink-0 group-hover:scale-105 transition-transform duration-200">
-            <Sprout className="w-5 h-5 text-emerald-50" />
-          </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <h1 className="font-black text-xl text-emerald-950 tracking-tight leading-none">
-                Krishi<span className="text-emerald-600">Green</span>
-              </h1>
-              <span className="text-[10px] font-bold px-1.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-md font-mono border border-emerald-200">
-                {t.circularAgro}
-              </span>
+      {/* Real-Time Adverse Weather Alert Banner (Search-Grounded for Farmers) */}
+      <WeatherAlertBanner language={language} />
+
+      {/* Main navigation bar without overflowing horizontal tab slider */}
+      <div className="px-4 sm:px-6 py-2.5 flex items-center justify-between gap-3 sm:gap-4">
+        {/* Left: Sidebar Hamburger toggle + Brand Identity */}
+        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+          {/* Mobile hamburger menu toggle */}
+          <button
+            onClick={onToggleMobileSidebar}
+            className="lg:hidden p-2 rounded-xl text-emerald-900 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/80 transition active:scale-95"
+            aria-label="Open navigation menu"
+            title="Open navigation menu"
+          >
+            <Menu className="w-5 h-5 text-emerald-800" />
+          </button>
+
+          {/* Desktop sidebar toggle button */}
+          <button
+            onClick={onToggleDesktopSidebar}
+            className="hidden lg:flex p-2 rounded-xl text-emerald-900 bg-emerald-50/70 hover:bg-emerald-100 border border-emerald-200/80 transition active:scale-95"
+            aria-label="Toggle navigation panel"
+            title="Toggle navigation sidebar"
+          >
+            <Menu className="w-4 h-4 text-emerald-800" />
+          </button>
+
+          {/* Brand logo */}
+          <div
+            className="flex items-center gap-2.5 cursor-pointer group select-none"
+            onClick={() => setCurrentTab('home')}
+          >
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-emerald-800 via-emerald-600 to-green-500 flex items-center justify-center shadow-md shadow-emerald-700/20 text-white shrink-0 group-hover:scale-105 transition-transform duration-200">
+              <Sprout className="w-5 h-5 text-emerald-50" />
             </div>
-            <p className="text-[11px] text-gray-500 font-medium tracking-tight mt-0.5">
-              {t.tagline}
-            </p>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <h1 className="font-black text-lg sm:text-xl text-emerald-950 tracking-tight leading-none">
+                  Krishi<span className="text-emerald-600">Green</span>
+                </h1>
+                <span className="text-[10px] font-bold px-1.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-md font-mono border border-emerald-200 hidden sm:inline-block">
+                  {t.circularAgro}
+                </span>
+              </div>
+              <p className="text-[10px] sm:text-[11px] text-gray-500 font-medium tracking-tight mt-0.5 hidden xs:block">
+                {t.tagline}
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Desktop Nav Items with UI/UX Pro Max Active Indicators */}
-        <nav className="hidden xl:flex items-center gap-1 bg-gray-50/80 p-1 rounded-2xl border border-gray-200/80">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = currentTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setCurrentTab(item.id)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all duration-200 active:scale-98 ${
-                  isActive
-                    ? 'bg-emerald-800 text-white shadow-xs'
-                    : 'text-gray-600 hover:text-emerald-900 hover:bg-white/80'
-                }`}
-              >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-emerald-200' : 'text-gray-400'}`} />
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
-        </nav>
+        {/* Center: Current Active Module Chip / Breadcrumb indicator */}
+        <div className="hidden md:flex items-center gap-2 px-3 py-1 bg-emerald-50/70 rounded-full border border-emerald-200/70 text-xs font-semibold text-emerald-900">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-gray-500 text-[11px]">Active View:</span>
+          <span className="font-bold text-emerald-950">{getTabLabel(currentTab)}</span>
+        </div>
 
         {/* Right tools: Weather widget, Voice trigger, Multilingual Selector & User Auth */}
         <div className="flex items-center gap-2 shrink-0">
-          {/* Real-time Agricultural Weather Widget */}
-          <WeatherWidget />
+          {/* Real-time Agricultural Weather Widget (Now plenty of space!) */}
+          <div className="shrink-0">
+            <WeatherWidget />
+          </div>
 
           {/* Voice Search Quick Button */}
           <button
@@ -170,7 +200,7 @@ export const Header: React.FC<HeaderProps> = ({
             title="Speak query in regional language"
           >
             <Mic className="w-4 h-4 text-emerald-700" />
-            <span className="hidden sm:inline">{t.voiceAssistant}</span>
+            <span className="hidden xl:inline">{t.voiceAssistant}</span>
           </button>
 
           {/* 13+ Languages Dropdown with flag icon */}
@@ -192,28 +222,6 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Firebase Google Auth & User Profile Button */}
           <UserAuthButton language={language} />
         </div>
-      </div>
-
-      {/* Secondary Ribbon for tablet & mobile navigation */}
-      <div className="xl:hidden flex items-center gap-1.5 overflow-x-auto px-4 py-2 bg-gray-50/90 border-t border-gray-100 scrollbar-none">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = currentTab === item.id;
-          return (
-            <button
-              key={item.id}
-              onClick={() => setCurrentTab(item.id)}
-              className={`px-3 py-1.5 rounded-xl text-xs whitespace-nowrap font-bold flex items-center gap-1.5 transition-all duration-200 active:scale-98 shrink-0 ${
-                isActive
-                  ? 'bg-emerald-800 text-white shadow-xs'
-                  : 'bg-white text-gray-700 border border-gray-200/80 hover:bg-gray-50'
-              }`}
-            >
-              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-emerald-200' : 'text-gray-400'}`} />
-              <span>{item.label}</span>
-            </button>
-          );
-        })}
       </div>
     </header>
   );

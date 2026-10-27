@@ -42,13 +42,15 @@ interface RegionOption {
 }
 
 const POPULAR_AGRI_REGIONS: RegionOption[] = [
-  { name: 'Nashik', state: 'Maharashtra (Pilot Hub)', lat: 20.00, lon: 73.79 },
-  { name: 'Ludhiana', state: 'Punjab', lat: 30.90, lon: 75.85 },
-  { name: 'Warangal', state: 'Telangana', lat: 17.97, lon: 79.59 },
-  { name: 'Thanjavur', state: 'Tamil Nadu', lat: 10.78, lon: 79.13 },
+  { name: 'Palnadu', state: 'Andhra Pradesh (Pilot Hub)', lat: 16.236, lon: 80.049 },
+  { name: 'Prakasam', state: 'Andhra Pradesh (Ongole)', lat: 15.505, lon: 80.044 },
+  { name: 'Kurnool', state: 'Andhra Pradesh (Rayalaseema)', lat: 15.828, lon: 78.037 },
+  { name: 'East Godavari', state: 'Andhra Pradesh (Rajahmundry)', lat: 17.000, lon: 81.804 },
+  { name: 'West Godavari', state: 'Andhra Pradesh (Bhimavaram)', lat: 16.544, lon: 81.522 },
+  { name: 'Vizianagaram', state: 'Andhra Pradesh (North Coast)', lat: 18.112, lon: 83.407 },
   { name: 'Guntur', state: 'Andhra Pradesh', lat: 16.30, lon: 80.44 },
-  { name: 'Indore', state: 'Madhya Pradesh', lat: 22.71, lon: 75.85 },
-  { name: 'Varanasi', state: 'Uttar Pradesh', lat: 25.31, lon: 82.97 },
+  { name: 'Nashik', state: 'Maharashtra', lat: 20.00, lon: 73.79 },
+  { name: 'Ludhiana', state: 'Punjab', lat: 30.90, lon: 75.85 },
 ];
 
 export const WeatherWidget: React.FC = () => {

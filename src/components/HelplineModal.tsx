@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { SupportedLanguage, SupportTicket } from '../types';
 import { UI_TRANSLATIONS, SUPPORTED_LANGUAGES } from '../data/translations';
+import { SpeechListenButton } from './SpeechListenButton';
 
 interface HelplineModalProps {
   isOpen: boolean;
@@ -335,12 +336,7 @@ export const HelplineModal: React.FC<HelplineModalProps> = ({
                     <span className="flex items-center gap-1 text-emerald-800 font-semibold">
                       <Sparkles className="w-3 h-3 text-emerald-600" /> Grounded Agri-Advisor
                     </span>
-                    <button
-                      onClick={() => speakText(msg.text)}
-                      className="p-1 hover:text-emerald-700 rounded text-emerald-800 transition flex items-center gap-1"
-                    >
-                      <Volume2 className="w-3.5 h-3.5" /> Listen
-                    </button>
+                    <SpeechListenButton text={msg.text} language={language} size="xs" variant="subtle" />
                   </div>
                 )}
               </div>

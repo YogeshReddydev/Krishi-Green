@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { ProcessingBatch, CropRotationPattern, SupportedLanguage } from '../types';
 import { CROP_ROTATION_PATTERNS } from '../data/cropRotationData';
+import { CropGrowthTracker } from './CropGrowthTracker';
 
 interface CropRotationSchedulerProps {
   batches: ProcessingBatch[];
@@ -205,6 +206,12 @@ Format the response clearly with:
           })}
         </div>
       </div>
+
+      {/* Visual Crop Growth Progression & Emoji Health Tracker */}
+      <CropGrowthTracker
+        language={language}
+        activeBatchName={activeBatch ? activeBatch.outputProduct : 'KrishiGreen Grade-A Vermicompost'}
+      />
 
       {/* STEP 2: Selected Crop Rotation Pattern Details */}
       <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-xs space-y-6">
