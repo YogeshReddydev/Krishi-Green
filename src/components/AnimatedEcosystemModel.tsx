@@ -5,8 +5,6 @@ import {
   ShieldCheck,
   Sprout,
   Coins,
-  Play,
-  Pause,
   ArrowRight,
   TrendingUp,
   Sparkles,
@@ -179,46 +177,33 @@ export const AnimatedEcosystemModel: React.FC<AnimatedEcosystemModelProps> = ({
       <div className="absolute -top-32 -right-32 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Header of the Animated Model */}
+      {/* Process Heading: Clean, authoritative, non-meta workflow description */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 pb-4 relative z-10">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
             <span className="text-xs font-black tracking-widest text-emerald-800 uppercase font-mono">
-              {language === 'te' ? 'జీవ-ఆహార వ్యర్థాల చక్రం' : 'Circular Bio-Economy Model'}
+              {language === 'te' ? 'సేంద్రీయ మార్పిడి ప్రక్రియ' : 'Bio-Waste Conversion Process'}
             </span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
             {language === 'te'
-              ? 'ఆహార వ్యర్థాల నుండి రైతు సౌభాగ్యం వరకు ప్రత్యక్ష చక్రం'
-              : 'Interactive Flow: Turning Surplus Food into Lasting Farmer Wealth'}
+              ? 'ఆహార వ్యర్థాల నుండి రైతు సంపద వరకు 5-దశల నిరంతర ప్రక్రియ'
+              : 'The Biological Conversion Process: From Surplus Food to Farmer Wealth'}
           </h2>
           <p className="text-xs sm:text-sm text-gray-600 mt-1 max-w-2xl">
             {language === 'te'
-              ? 'నగర ఆహార వ్యర్థాలు, కూరగాయల మార్కెట్ మిగులు ఎరువుగా మారి నేల సారవంతాన్ని మరియు రైతు రాబడిని పెంచే ప్రత్యక్ష విశ్లేషణ.'
-              : 'Simulate how decentralized biological conversion diverts tons from landfills into living soil microbiology and direct farmer earnings.'}
+              ? 'మండి సేంద్రీయ వ్యర్థాల సేకరణ నుండి వికేంద్రీకృత ప్రాసెసింగ్, ల్యాబ్ ధృవీకరణ మరియు ప్రత్యక్ష డీబీటీ రైతు రాబడి వరకు నిరంతర ప్రవాహం.'
+              : 'Continuous conversion workflow tracking food waste aggregation, thermophilic bioprocessing, certified organic nutrient extraction, and direct farmer dividends.'}
           </p>
         </div>
 
-        {/* Play / Pause toggle & Simulation status */}
-        <div className="flex items-center gap-3 shrink-0">
-          <button
-            onClick={() => setIsPlaying(!isPlaying)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-gray-200 bg-gray-50 hover:bg-emerald-50 hover:border-emerald-300 text-xs font-bold text-gray-700 transition active:scale-95 cursor-pointer"
-            title={isPlaying ? 'Pause automated playback' : 'Play automated cycle'}
-          >
-            {isPlaying ? (
-              <>
-                <Pause className="w-3.5 h-3.5 text-amber-600" />
-                <span>{language === 'te' ? 'ఆపండి' : 'Pause Flow'}</span>
-              </>
-            ) : (
-              <>
-                <Play className="w-3.5 h-3.5 text-emerald-600" />
-                <span>{language === 'te' ? 'ప్రారంభించండి' : 'Play Flow'}</span>
-              </>
-            )}
-          </button>
+        {/* Automatic Visual Flow Status Indicator */}
+        <div className="flex items-center gap-2.5 shrink-0">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-emerald-200/80 bg-emerald-50/90 text-xs font-mono font-bold text-emerald-900 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+            <span>{language === 'te' ? 'నిరంతర ఆటోమేటిక్ ప్రవాహం' : 'Automated Visual Flow'}</span>
+          </div>
         </div>
       </div>
 
@@ -236,7 +221,9 @@ export const AnimatedEcosystemModel: React.FC<AnimatedEcosystemModelProps> = ({
               key={node.id}
               onClick={() => {
                 setActiveNodeIndex(index);
+                // Pause momentarily on user inspection, then smoothly resume the automated visual flow
                 setIsPlaying(false);
+                setTimeout(() => setIsPlaying(true), 6000);
               }}
               className={`text-left p-4 rounded-2xl border transition-all duration-300 relative group cursor-pointer ${
                 isActive
@@ -360,20 +347,20 @@ export const AnimatedEcosystemModel: React.FC<AnimatedEcosystemModelProps> = ({
 
         {/* 
           ====================================================================
-          FUTURES SIMULATOR SLIDER:
-          Real-time interactive impact computation for lakhs of users
+          BATCH SCALE & OUTPUT METRICS:
+          Real-time deterministic impact calculation
           ====================================================================
         */}
         <div className="border-t border-emerald-800/80 pt-5 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <span className="text-xs font-bold text-emerald-300 uppercase tracking-wider font-mono">
-                {language === 'te' ? 'వ్యర్థాల పరిమాణ అనుకరణ' : 'Interactive Scale Simulator'}
+                {language === 'te' ? 'ప్రాసెసింగ్ బ్యాచ్ కొలమానాలు' : 'Processing Batch Scale & Yield'}
               </span>
               <h4 className="text-sm sm:text-base font-extrabold text-white">
                 {language === 'te'
-                  ? `పరిమాణం: ${(simulatedWasteKg / 1000).toLocaleString('en-IN')} మెట్రిక్ టన్నుల ఆహార వ్యర్థాలు`
-                  : `Simulate Impact for ${(simulatedWasteKg / 1000).toLocaleString('en-IN')} Metric Tons of Bio-Waste`}
+                  ? `పరిమాణం: ${(simulatedWasteKg / 1000).toLocaleString('en-IN')} మెట్రిక్ టన్నుల ఆహార వ్యర్థాల ప్రాసెసింగ్`
+                  : `Conversion Yield for ${(simulatedWasteKg / 1000).toLocaleString('en-IN')} Metric Tons of Bio-Waste`}
               </h4>
             </div>
 
