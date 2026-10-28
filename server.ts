@@ -96,13 +96,17 @@ Key capabilities:
    - Government schemes: PM-PRANAM, PKVY, GOBARdhan, SMAM (equipment subsidy up to 50%), Agri Infrastructure Fund.
    - Farm equipment selection, maintenance, and rental guidance.
    - Mandi price trends and organic produce premium realization.
-2. Language: Reply primarily in the requested language: "${language}". If the user wrote in Hindi, Telugu, Tamil, Marathi, Punjabi, Gujarati, etc., reply in that natural Indian language script with clear, encouraging, respectful language suitable for farmers. Keep answers concise, direct, and structured with bullet points.
+2. CRITICAL MULTILINGUAL INSTRUCTION:
+   - If the requested language is Telugu (తెలుగు, "te", or "Telugu"), YOU MUST REPLY 100% IN AUTHENTIC, FLUENT, RESPECTFUL TELUGU SCRIPT (తెలుగు). NEVER REPLY IN ENGLISH WHEN TELUGU IS REQUESTED.
+   - Use authentic Andhra Pradesh farming terms (ఉదాహరణ: వరి, మిర్చి, పత్తి, జీవామృతం, వర్మీకంపోస్ట్, పచ్చిరొట్ట ఎరువులు, సూక్ష్మ పోషకాలు, కస్టమ్ హైరింగ్ కేంద్రాలు).
+   - If user selected Hindi, reply in fluent Hindi. If English, reply in English.
+   - Structure answers clearly with short bullet points suitable for farmers listening or reading in the field.
 3. Include practical tips (e.g. moisture 50-60%, aeration, curing period) when discussing composting.`;
 
     try {
       const response = await ai.models.generateContent({
         model: 'gemini-3.8-flash',
-        contents: `User language: ${language}\nTopic context: ${context}\nFarmer / Entrepreneur query: ${message}`,
+        contents: `Requested Language: ${language}\nTopic context: ${context}\nFarmer / Entrepreneur query: ${message}\nCRITICAL: Respond completely in ${language}. If Telugu, output pure Telugu script.`,
         config: {
           systemInstruction: systemInstruction,
           temperature: 0.7,
@@ -115,7 +119,10 @@ Key capabilities:
       return res.json(resultData);
     } catch (modelErr: any) {
       console.warn('[AI Advisor Notice] Model call limited or unavailable. Serving verified agronomist guidance.');
-      const fallbackReply = `[KrishiGreen Verified Agri-Advisory (${language})]: For ${message}, maintain 55-60% moisture in composting heaps. Mix dry carbon-rich paddy straw (browns) with vegetable mandi waste (greens) in a 3:1 volumetric ratio. For field application in Andhra Pradesh soils, applying 2 tonnes of enriched vermicompost per acre cuts DAP requirement by 35-40% while preserving soil microbial flora. For immediate equipment or collection support, call our toll-free farmer helpline at 1800-KRISHI-GRN.`;
+      const isTe = language.toLowerCase().includes('telugu') || language === 'te' || language === 'తెలుగు';
+      const fallbackReply = isTe
+        ? `[కృషిగ్రీన్ అధికారిక వ్యవసాయ సలహా (తెలుగు)]: '${message}' కొరకు, కంపోస్టింగ్ కుప్పలలో 55-60% తేమను నిర్వహించండి. వరి గడ్డి మరియు కూరగాయల వ్యర్థాలను 3:1 నిష్పత్తిలో కలపండి. ఆంధ్రప్రదేశ్ నేలల్లో ఎకరాకు 2 టన్నుల నాణ్యమైన వర్మీకంపోస్ట్ వాడటం ద్వారా డీఏపీ (DAP) వాడకాన్ని 35-40% తగ్గించవచ్చు. మరింత సమాచారం మరియు యంత్రాల కోసం టోల్‌ఫ్రీ 1800-కృషి-గ్రీన్ (1800-574-7443) కు కాల్ చేయండి.`
+        : `[KrishiGreen Verified Agri-Advisory (${language})]: For ${message}, maintain 55-60% moisture in composting heaps. Mix dry carbon-rich paddy straw (browns) with vegetable mandi waste (greens) in a 3:1 volumetric ratio. For field application in Andhra Pradesh soils, applying 2 tonnes of enriched vermicompost per acre cuts DAP requirement by 35-40% while preserving soil microbial flora. For immediate equipment or collection support, call our toll-free farmer helpline at 1800-KRISHI-GRN.`;
       const fallbackData = { reply: fallbackReply, isFallback: true };
       advisorCache.set(cacheKey, { data: fallbackData, timestamp: Date.now() });
       return res.json(fallbackData);
@@ -309,6 +316,74 @@ app.post('/api/calculate-impact', (req, res) => {
     });
   } catch (err: any) {
     res.status(500).json({ error: 'Calculation failed' });
+  }
+});
+
+// 5. Multilingual Text-to-Speech (TTS) endpoint
+const ttsCache = new Map<string, { audioBase64: string; timestamp: number }>();
+
+app.post('/api/tts', async (req, res) => {
+  try {
+    const { text, language = 'en' } = req.body;
+    if (!text || typeof text !== 'string') {
+      return res.status(400).json({ error: 'Text is required for TTS' });
+    }
+
+    const trimmedText = text.slice(0, 350).trim();
+    const cacheKey = `${language}:${trimmedText}`;
+    const cached = ttsCache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+      return res.json({ audio: cached.audioBase64, mimeType: 'audio/wav', cached: true });
+    }
+
+    if (!ai) {
+      return res.status(503).json({ error: 'Gemini AI not initialized' });
+    }
+
+    const voiceName = language === 'te' ? 'Kore' : 'Zephyr';
+
+    try {
+      const response = await ai.models.generateContent({
+        model: 'gemini-3.8-flash-lite-tts',
+        contents: [
+          {
+            role: 'user',
+            parts: [
+              {
+                text: trimmedText,
+                speechMetadata: {
+                  style: language === 'te'
+                    ? 'Fluent, authentic Telugu agricultural advisor speaking clearly'
+                    : 'Clear, encouraging agricultural advisor',
+                },
+              },
+            ],
+          },
+        ],
+        config: {
+          responseModalities: ['AUDIO'],
+          speechConfig: {
+            voiceConfig: {
+              prebuiltVoiceConfig: { voiceName },
+            },
+          },
+        },
+      });
+
+      const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+      if (base64Audio) {
+        ttsCache.set(cacheKey, { audioBase64: base64Audio, timestamp: Date.now() });
+        return res.json({ audio: base64Audio, mimeType: 'audio/wav' });
+      }
+
+      return res.status(500).json({ error: 'No audio returned' });
+    } catch (ttsErr: any) {
+      console.warn('[TTS Endpoint Notice] Model TTS not available, client fallback will be used:', ttsErr.message);
+      return res.status(500).json({ error: 'TTS conversion error', message: ttsErr.message });
+    }
+  } catch (err: any) {
+    console.error('TTS route handler error:', err);
+    res.status(500).json({ error: 'TTS request failed' });
   }
 });
 

@@ -397,29 +397,21 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
     <div className={`w-full transition-all duration-300 ${theme.barBg} ${theme.border} text-white`}>
       {/* Primary Banner Strip */}
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2 flex flex-col md:flex-row items-start md:items-center justify-between gap-2.5">
-        {/* Left: Live Pulse, Location Selector & Severity Headline */}
+        {/* Left: Location Selector on the Left */}
         <div className="flex flex-wrap items-center gap-2 sm:gap-3 flex-1 min-w-0">
-          {/* Radar Pulse Badge */}
-          <div className="flex items-center gap-1.5 shrink-0">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${theme.pulseDot} opacity-75`} />
-              <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${theme.pulseDot}`} />
+          {/* District Location Selector on the Left */}
+          <div className="flex items-center gap-1.5 bg-black/40 hover:bg-black/60 border border-emerald-400/40 rounded-xl px-2.5 py-1 text-xs transition shadow-2xs shrink-0">
+            <MapPin className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+            <span className="text-[10px] font-bold text-emerald-300 uppercase hidden sm:inline">
+              {language === 'te' ? 'ప్రాంతం:' : 'District:'}
             </span>
-            <span className={`text-[10px] font-black tracking-wider uppercase px-2 py-0.5 rounded-full ${theme.badge}`}>
-              {theme.badgeText}
-            </span>
-          </div>
-
-          {/* District Selector & GPS trigger */}
-          <div className="flex items-center gap-1 bg-black/30 hover:bg-black/50 border border-white/20 rounded-lg px-2 py-0.5 text-xs transition">
-            <MapPin className="w-3 h-3 text-emerald-400 shrink-0" />
             <select
               value={selectedDistrict.id}
               onChange={(e) => {
                 const found = AP_PILOT_DISTRICTS.find((d) => d.id === e.target.value);
                 if (found) setSelectedDistrict(found);
               }}
-              className="bg-transparent text-[11px] font-bold text-white focus:outline-none cursor-pointer pr-1"
+              className="bg-transparent text-xs font-bold text-white focus:outline-none cursor-pointer pr-1"
               title="Select District for Local Agro-Weather Alert"
             >
               {AP_PILOT_DISTRICTS.map((d) => (
@@ -428,14 +420,13 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
                 </option>
               ))}
             </select>
-
             <button
               onClick={detectLocation}
               disabled={isDetectingGps}
               className="p-1 hover:text-emerald-300 text-gray-300 transition"
-              title="Auto-detect current GPS location"
+              title={language === 'te' ? 'జీపీఎస్ స్థానాన్ని గుర్తించండి' : 'Auto-detect current GPS location'}
             >
-              <Compass className={`w-3 h-3 ${isDetectingGps ? 'animate-spin text-emerald-400' : ''}`} />
+              <Compass className={`w-3.5 h-3.5 ${isDetectingGps ? 'animate-spin text-emerald-400' : ''}`} />
             </button>
           </div>
 
@@ -473,6 +464,7 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
           {alert && !loading && (
             <SpeechListenButton
               text={`${displayTitle}. ${displaySummary}`}
+              textTe={alert?.alertTitleTe && alert?.summaryTe ? `${alert.alertTitleTe}. ${alert.summaryTe}` : undefined}
               language={language}
               size="xs"
               variant="outline"
@@ -577,6 +569,7 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
                   <div className="flex items-center gap-2">
                     <SpeechListenButton
                       text={displayAdvisory}
+                      textTe={alert?.agroAdvisoryTe || undefined}
                       language={language}
                       size="xs"
                       variant="emerald"

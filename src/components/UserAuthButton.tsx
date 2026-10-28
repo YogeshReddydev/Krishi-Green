@@ -43,7 +43,7 @@ export const UserAuthButton: React.FC<UserAuthButtonProps> = ({ language }) => {
       <button
         onClick={handleSignIn}
         disabled={isSigningIn}
-        className="flex items-center gap-2 bg-white hover:bg-emerald-50 text-emerald-900 border border-emerald-300 font-bold px-3 py-1.5 rounded-xl text-xs shadow-2xs transition active:scale-98 cursor-pointer"
+        className="flex items-center gap-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border border-emerald-300 font-black px-3 py-1.5 rounded-xl text-xs shadow-2xs transition active:scale-98 cursor-pointer"
         title="Sign in with Google"
       >
         {isSigningIn ? (
@@ -68,7 +68,7 @@ export const UserAuthButton: React.FC<UserAuthButtonProps> = ({ language }) => {
             />
           </svg>
         )}
-        <span className="hidden sm:inline">Google Sign In</span>
+        <span className="font-bold">{language === 'te' ? 'ప్రొఫైల్' : 'Profile'}</span>
       </button>
     );
   }
@@ -77,22 +77,28 @@ export const UserAuthButton: React.FC<UserAuthButtonProps> = ({ language }) => {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 p-1 bg-emerald-50 hover:bg-emerald-100 rounded-xl border border-emerald-200 transition text-xs cursor-pointer"
+        className="flex items-center gap-2 px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 rounded-xl border border-emerald-300 transition text-xs cursor-pointer shadow-2xs"
+        title="Open Farmer Profile"
       >
         {user.photoURL ? (
           <img
             src={user.photoURL}
             alt={user.displayName || 'Farmer'}
-            className="w-7 h-7 rounded-lg object-cover border border-emerald-300"
+            className="w-7 h-7 rounded-lg object-cover border border-emerald-400"
           />
         ) : (
           <div className="w-7 h-7 rounded-lg bg-emerald-700 text-white flex items-center justify-center font-bold text-xs">
             {user.displayName?.[0] || 'K'}
           </div>
         )}
-        <span className="font-extrabold text-emerald-950 hidden md:inline max-w-[100px] truncate">
-          {user.displayName?.split(' ')[0] || 'Farmer'}
-        </span>
+        <div className="text-left hidden sm:block">
+          <span className="font-black text-emerald-950 block leading-tight text-xs max-w-[100px] truncate">
+            {user.displayName?.split(' ')[0] || 'Farmer'}
+          </span>
+          <span className="text-[10px] text-emerald-700 font-bold block leading-none">
+            {language === 'te' ? 'రైతు ప్రొఫైల్' : 'Profile'}
+          </span>
+        </div>
       </button>
 
       {isOpen && (

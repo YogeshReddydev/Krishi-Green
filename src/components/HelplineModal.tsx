@@ -42,28 +42,75 @@ export const HelplineModal: React.FC<HelplineModalProps> = ({
   const [callerPhone, setCallerPhone] = useState<string>('+91 98220 54123');
   const [ticketCreated, setTicketCreated] = useState<SupportTicket | null>(null);
 
-  const [conversation, setConversation] = useState<Array<{ role: 'assistant' | 'user'; text: string }>>([
-    {
-      role: 'assistant',
-      text:
-        language === 'hi'
-          ? 'नमस्ते! कृषिग्रीन 24x7 राष्ट्रीय हेल्पलाइन 1800-KRISHI-GRN में आपका स्वागत है। आप जैविक खाद, कचरा संग्रहण, कृषि उपकरण या सरकारी योजनाओं के बारे में पूछ सकते हैं।'
-          : language === 'te'
-          ? 'నమస్కారం! కృషిగ్రీన్ 24x7 టోల్-ఫ్రీ హెల్ప్‌లైన్‌కు స్వాగతం. సేంద్రీయ ఎరువులు, వ్యర్థాల సేకరణ లేదా వ్యవసాయ పరికరాల వివరాలను అడగండి.'
-          : 'Namaste! Welcome to KrishiGreen 24x7 National Toll-Free Helpline (1800-KRISHI-GRN). How can we assist your farming today? Ask about bio-fertilizers, waste collection, equipment or government schemes.',
-    },
-  ]);
-
-  if (!isOpen) return null;
-
   const currentLangObj = SUPPORTED_LANGUAGES.find((l) => l.code === language) || SUPPORTED_LANGUAGES[0];
   const t = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.en;
 
-  const speakText = (text: string) => {
+  const getGreeting = (lang: SupportedLanguage) => {
+    if (lang === 'te') {
+      return 'నమస్కారం! కృషిగ్రీన్ 24x7 టోల్-ఫ్రీ జాతీయ హెల్ప్‌లైన్‌కు స్వాగతం (1800-కృషి-గ్రీన్). సేంద్రీయ ఎరువులు, వ్యర్థాల సేకరణ, వ్యవసాయ పరికరాలు లేదా ప్రభుత్వ రాయితీల గురించి మాట్లాడండి.';
+    }
+    if (lang === 'hi') {
+      return 'नमस्ते! कृषिग्रीन 24x7 राष्ट्रीय हेल्पलाइन 1800-KRISHI-GRN में आपका स्वागत है। आप जैविक खाद, कचरा संग्रहण, कृषि उपकरण या सरकारी योजनाओं के बारे में पूछ सकते हैं।';
+    }
+    return 'Namaste! Welcome to KrishiGreen 24x7 National Toll-Free Helpline (1800-KRISHI-GRN). How can we assist your farming today? Ask about bio-fertilizers, waste collection, equipment or government schemes.';
+  };
+
+  const [conversation, setConversation] = useState<Array<{ role: 'assistant' | 'user'; text: string }>>([
+    {
+      role: 'assistant',
+      text: getGreeting(language),
+    },
+  ]);
+
+  // Update greeting immediately when language changes
+  React.useEffect(() => {
+    setConversation([
+      {
+        role: 'assistant',
+        text: getGreeting(language),
+      },
+    ]);
+  }, [language]);
+
+  if (!isOpen) return null;
+
+  const speakText = async (text: string) => {
+    if (typeof window === 'undefined') return;
+
+    // Try server-side TTS first (especially for Telugu)
+    try {
+      const res = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: text.slice(0, 300),
+          language: language,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.audio) {
+          const audio = new Audio(`data:audio/wav;base64,${data.audio}`);
+          setIsSpeaking(true);
+          audio.onended = () => setIsSpeaking(false);
+          audio.onerror = () => {
+            speakWithBrowserSpeech(text);
+          };
+          await audio.play();
+          return;
+        }
+      }
+    } catch {
+      // ignore server TTS error
+    }
+
+    speakWithBrowserSpeech(text);
+  };
+
+  const speakWithBrowserSpeech = (text: string) => {
     if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    // Best effort regional language code
     const langMap: Record<SupportedLanguage, string> = {
       en: 'en-IN',
       hi: 'hi-IN',
@@ -79,8 +126,23 @@ export const HelplineModal: React.FC<HelplineModalProps> = ({
       as: 'as-IN',
       ur: 'ur-PK',
     };
-    utterance.lang = langMap[language] || 'en-IN';
+    const targetLang = langMap[language] || 'en-IN';
+    utterance.lang = targetLang;
     utterance.rate = 0.95;
+    const voices = window.speechSynthesis.getVoices();
+    if (voices && voices.length > 0) {
+      let matched = voices.find(
+        (v) =>
+          v.lang.toLowerCase() === targetLang.toLowerCase() ||
+          v.lang.toLowerCase().replace('_', '-') === targetLang.toLowerCase()
+      );
+      if (!matched && language === 'te') {
+        matched = voices.find(
+          (v) => v.lang.toLowerCase().startsWith('te') || v.name.toLowerCase().includes('telugu')
+        );
+      }
+      if (matched) utterance.voice = matched;
+    }
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
@@ -92,7 +154,9 @@ export const HelplineModal: React.FC<HelplineModalProps> = ({
     setTimeout(() => {
       setCallState('connected');
       speakText(
-        language === 'hi'
+        language === 'te'
+          ? 'కృషిగ్రీన్ టోల్‌ఫ్రీ హెల్ప్‌లైన్ కనెక్ట్ అయింది. మీరు లైవ్ వ్యవసాయ సలహాదారుతో మాట్లాడుతున్నారు. మీ ప్రశ్నను అడగండి.'
+          : language === 'hi'
           ? 'कृषिग्रीन सलाहकार लाइन जुड़ चुकी है। आप अपना प्रश्न बोल सकते हैं।'
           : 'KrishiGreen toll-free helpline connected. You are speaking with the live agricultural advisor.'
       );
@@ -165,7 +229,7 @@ export const HelplineModal: React.FC<HelplineModalProps> = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: textToSend,
-          language: currentLangObj.name,
+          language: language === 'te' ? 'Telugu' : currentLangObj.name,
           context: activeIvrOption,
         }),
       });
@@ -173,7 +237,9 @@ export const HelplineModal: React.FC<HelplineModalProps> = ({
       const data = await res.json();
       const aiReply =
         data.reply ||
-        'For this condition, apply 2.5 tonnes vermicompost and foliar spray bio-enzyme at 5ml/litre water. A support ticket has been created for field technician follow-up.';
+        (language === 'te'
+          ? 'ఈ సమస్యకు ఎకరాకు 2.5 టన్నుల వర్మీకంపోస్ట్ మరియు లీటరు నీటికి 5 మి.లీ బయో-ఎంజైమ్ పిచికారీ చేయండి. ఫీల్డ్ టెక్నీషియన్ సహాయం కోసం టిక్కెట్ నమోదు చేయబడింది.'
+          : 'For this condition, apply 2.5 tonnes vermicompost and foliar spray bio-enzyme at 5ml/litre water. A support ticket has been created for field technician follow-up.');
 
       setConversation([...newConvo, { role: 'assistant', text: aiReply }]);
       speakText(aiReply);

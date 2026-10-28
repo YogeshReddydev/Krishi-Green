@@ -347,56 +347,7 @@ export const INITIAL_EQUIPMENT: EquipmentItem[] = [
   },
 ];
 
-export const INITIAL_TICKETS: SupportTicket[] = [
-  {
-    id: 'TKT-8902',
-    callerName: 'Vitthal Kulkarni',
-    phone: '+91 98223 99881',
-    language: 'Marathi',
-    category: 'Crop Advice',
-    query: 'Tomato crop showing yellowing leaves after second picking. Want advice on Jeevamrutha dosage per acre.',
-    status: 'Resolved',
-    resolutionNotes: 'Recommended 200L Jeevamrutha per acre via drip with 1% zinc sulphate foliar spray. Farmer satisfied.',
-    createdAt: '2026-10-06 09:15',
-    priority: 'Normal',
-  },
-  {
-    id: 'TKT-8903',
-    callerName: 'Narayana Reddy',
-    phone: '+91 94401 22934',
-    language: 'Telugu',
-    category: 'Equipment Breakdown',
-    query: 'Power tiller rented from Custom Hiring Center stopped starting near Ramnagar field. Need mobile mechanic.',
-    status: 'In Progress',
-    resolutionNotes: 'Assigned mechanic Santosh (+91 98234 11200). En route with fuel filter replacement.',
-    createdAt: '2026-10-06 11:40',
-    priority: 'High',
-  },
-  {
-    id: 'TKT-8904',
-    callerName: 'Gurpreet Singh',
-    phone: '+91 98150 77412',
-    language: 'Punjabi',
-    category: 'Government Subsidy',
-    query: 'How to apply for 50% subsidy under SMAM for bio-waste shredder machine through KrishiGreen?',
-    status: 'Open',
-    resolutionNotes: 'Sent direct SMAM portal checklist via SMS and assigned FPO field coordinator to assist document upload.',
-    createdAt: '2026-10-06 14:05',
-    priority: 'Normal',
-  },
-  {
-    id: 'TKT-8905',
-    callerName: 'Lakshmi Devi',
-    phone: '+91 97034 88201',
-    language: 'Hindi',
-    category: 'Pest Emergency',
-    query: 'Fall armyworm attack spotted on sweet corn crop. Need organic formulation urgently before it spreads.',
-    status: 'In Progress',
-    resolutionNotes: 'Prescribed Brahmastra (30ml/pump) with 5% neem seed kernel extract (NSKE). Dispatched 5L bottle from nearest hub.',
-    createdAt: '2026-10-06 16:30',
-    priority: 'Critical',
-  },
-];
+export const INITIAL_TICKETS: SupportTicket[] = [];
 
 export const GOVERNMENT_SCHEMES: GovernmentScheme[] = [
   {

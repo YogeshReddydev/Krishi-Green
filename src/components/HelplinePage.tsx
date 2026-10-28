@@ -83,8 +83,23 @@ export const HelplinePage: React.FC<HelplinePageProps> = ({
       as: 'as-IN',
       ur: 'ur-PK',
     };
-    utterance.lang = langMap[language] || 'en-IN';
+    const targetLang = langMap[language] || 'en-IN';
+    utterance.lang = targetLang;
     utterance.rate = 0.95;
+    const voices = window.speechSynthesis.getVoices();
+    if (voices && voices.length > 0) {
+      let matched = voices.find(
+        (v) =>
+          v.lang.toLowerCase() === targetLang.toLowerCase() ||
+          v.lang.toLowerCase().replace('_', '-') === targetLang.toLowerCase()
+      );
+      if (!matched && language === 'te') {
+        matched = voices.find(
+          (v) => v.lang.toLowerCase().startsWith('te') || v.name.toLowerCase().includes('telugu')
+        );
+      }
+      if (matched) utterance.voice = matched;
+    }
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
@@ -96,7 +111,9 @@ export const HelplinePage: React.FC<HelplinePageProps> = ({
     setTimeout(() => {
       setCallState('connected');
       speakText(
-        language === 'hi'
+        language === 'te'
+          ? 'కృషిగ్రీన్ టోల్‌ఫ్రీ హెల్ప్‌లైన్ కనెక్ట్ అయింది. మీరు లైవ్ వ్యవసాయ సలహాదారుతో మాట్లాడుతున్నారు. మీ ప్రశ్నను అడగండి.'
+          : language === 'hi'
           ? 'कृषिग्रीन सलाहकार लाइन जुड़ चुकी है। आप अपना प्रश्न पूछ सकते हैं।'
           : 'KrishiGreen toll-free helpline connected. You are speaking with the live agricultural advisor.'
       );
@@ -490,6 +507,19 @@ export const HelplinePage: React.FC<HelplinePageProps> = ({
 
             {/* Ticket List */}
             <div className="space-y-3 max-h-[460px] overflow-y-auto pr-1">
+              {filteredTickets.length === 0 && (
+                <div className="p-6 text-center rounded-2xl border-2 border-dashed border-emerald-200 bg-emerald-50/40 space-y-2">
+                  <LifeBuoy className="w-8 h-8 text-emerald-600 mx-auto opacity-70" />
+                  <h4 className="text-xs font-bold text-emerald-950">
+                    {language === 'te' ? 'ఇంకా ఎలాంటి సపోర్ట్ విచారణలు నమోదు కాలేదు' : 'No Active Support Tickets'}
+                  </h4>
+                  <p className="text-[11px] text-gray-500 max-w-xs mx-auto">
+                    {language === 'te'
+                      ? 'రైతులు టోల్‌ఫ్రీ నంబర్‌కు కాల్ చేసినప్పుడు లేదా పైన ఉన్న ఫారమ్ ద్వారా విచారణ నమోదు చేసినప్పుడు అవి నిజ-సమయంలో ఇక్కడ రికార్డ్ అవుతాయి.'
+                      : 'Real tickets are recorded in real-time when farmers call 1800-KRISHI-GRN or register an inquiry through the form above.'}
+                  </p>
+                </div>
+              )}
               {filteredTickets.map((tkt) => (
                 <div
                   key={tkt.id}

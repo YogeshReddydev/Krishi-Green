@@ -52,21 +52,19 @@ import farmerWelcomeImg from './assets/images/krishigreen_farmer_welcome_1791353
 export default function App() {
   const [currentTab, setCurrentTab] = useState<string>('home');
   const [language, setLanguage] = useState<SupportedLanguage>('en');
-  const [viewMode, setViewMode] = useState<'portal' | 'mobile'>('portal');
 
   // Core Data States (With Firestore persistence & offline fallback)
   const [wasteRequests, setWasteRequests] = useState<WasteCollectionRequest[]>(INITIAL_WASTE_REQUESTS);
   const [batches, setBatches] = useState<ProcessingBatch[]>(INITIAL_BATCHES);
   const [products, setProducts] = useState<OrganicProduct[]>(INITIAL_PRODUCTS);
   const [equipment, setEquipment] = useState<EquipmentItem[]>(INITIAL_EQUIPMENT);
-  const [tickets, setTickets] = useState<SupportTicket[]>(INITIAL_TICKETS);
+  const [tickets, setTickets] = useState<SupportTicket[]>([]);
 
   // Modals
   const [isHelplineOpen, setIsHelplineOpen] = useState<boolean>(false);
   const [activeQRBatch, setActiveQRBatch] = useState<any | null>(null);
   const [showTicketsDrawer, setShowTicketsDrawer] = useState<boolean>(false);
-  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState<boolean>(false);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
   const t = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.en;
 
@@ -124,20 +122,16 @@ export default function App() {
         }
       }, (err) => console.log('Firestore organic_products sync:', err.message));
 
-      // 4. Support tickets
+      // 4. Real-time Support tickets (Strictly real data only - no fake fixtures)
       const unsubTickets = onSnapshot(collection(db, 'support_tickets'), (snapshot) => {
         if (!snapshot.empty) {
           const remoteTickets: SupportTicket[] = snapshot.docs.map((docSnap) => ({
             id: docSnap.id,
             ...(docSnap.data() as any),
           }));
-          setTickets((prev) => {
-            const merged = [...remoteTickets];
-            INITIAL_TICKETS.forEach((init) => {
-              if (!merged.some((m) => m.id === init.id)) merged.push(init);
-            });
-            return merged;
-          });
+          setTickets(remoteTickets);
+        } else {
+          setTickets([]);
         }
       }, (err) => console.log('Firestore support_tickets sync:', err.message));
 
@@ -302,54 +296,30 @@ export default function App() {
         setCurrentTab={setCurrentTab}
         language={language}
         setLanguage={setLanguage}
-        viewMode={viewMode}
-        setViewMode={setViewMode}
         onOpenHelpline={() => setIsHelplineOpen(true)}
         onOpenVoice={() => setIsHelplineOpen(true)}
-        onToggleMobileSidebar={() => setIsMobileSidebarOpen((prev) => !prev)}
-        onToggleDesktopSidebar={() => setIsSidebarCollapsed((prev) => !prev)}
-        isSidebarCollapsed={isSidebarCollapsed}
+        onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
       />
 
-      {/* Main Website Container with Left Navigation Panel */}
-      <div className="flex flex-1 min-h-[calc(100vh-4rem)] relative z-10">
-        <Sidebar
-          currentTab={currentTab}
-          onSelectTab={(tab) => setCurrentTab(tab)}
-          language={language}
-          isMobileOpen={isMobileSidebarOpen}
-          onCloseMobile={() => setIsMobileSidebarOpen(false)}
-          isCollapsed={isSidebarCollapsed}
-          onToggleCollapse={() => setIsSidebarCollapsed((prev) => !prev)}
-          onOpenHelpline={() => setIsHelplineOpen(true)}
-        />
-        <div className="flex-1 min-w-0 flex flex-col justify-between">
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6 relative z-10">
-        <div className={viewMode === 'mobile' ? 'max-w-md mx-auto shadow-2xl rounded-3xl bg-white/98 backdrop-blur-md p-4 sm:p-5 border-2 border-emerald-200 space-y-5' : 'space-y-6'}>
-          {/* Quick Status Pill in Mobile mode */}
-          {viewMode === 'mobile' && (
-            <div className="p-4 bg-gradient-to-r from-emerald-950 via-green-900 to-teal-950 text-white rounded-2xl flex items-center justify-between shadow-sm border border-emerald-700/50">
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 bg-emerald-700/70 rounded-xl">
-                  <MapPin className="w-4 h-4 text-emerald-200" />
-                </div>
-                <div>
-                  <span className="text-[10px] uppercase tracking-wider text-emerald-300 block font-bold">
-                    {t.nationalMission}
-                  </span>
-                  <strong className="text-xs sm:text-sm font-extrabold">{t.villageNode}</strong>
-                </div>
-              </div>
-              <button
-                onClick={() => setIsHelplineOpen(true)}
-                className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 rounded-xl text-white flex items-center gap-1.5 text-xs font-bold shadow-sm transition"
-              >
-                <Phone className="w-3.5 h-3.5 text-emerald-100" />
-                <span>1800</span>
-              </button>
-            </div>
-          )}
+      {/* Vertical Slide-over Navigation Drawer */}
+      <Sidebar
+        currentTab={currentTab}
+        onSelectTab={(tab) => {
+          setCurrentTab(tab);
+          setIsSidebarOpen(false);
+        }}
+        language={language}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        onOpenHelpline={() => {
+          setIsHelplineOpen(true);
+          setIsSidebarOpen(false);
+        }}
+      />
 
+      {/* Clean Vertical Main Content Container - Properly fitted for pages without awkward width boundaries */}
+      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6 relative z-10">
+        <div className="space-y-6">
           {/* Webpage Breadcrumb bar when on dedicated modules */}
           {currentTab !== 'home' && (
             <div className="flex items-center justify-between bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-emerald-100 shadow-2xs text-xs">
@@ -489,7 +459,7 @@ export default function App() {
           <div className="flex items-center gap-2">
             <span className="font-extrabold text-emerald-950 text-sm">KrishiGreen</span>
             <span className="text-gray-400">•</span>
-            <span className="text-gray-600">{t.footerTagline}</span>
+            <span className="text-gray-600">{t.tagline}</span>
           </div>
           <div className="flex flex-wrap items-center gap-4 text-[11px]">
             <button
@@ -503,8 +473,6 @@ export default function App() {
           </div>
         </div>
       </footer>
-    </div>
-  </div>
 
       {/* Floating Action Trigger for 24x7 Helpline & Support Tickets Drawer */}
       <div className="fixed bottom-5 right-5 z-40 flex items-center gap-2.5">
