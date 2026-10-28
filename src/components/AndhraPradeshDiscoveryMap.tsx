@@ -241,23 +241,23 @@ export const AndhraPradeshDiscoveryMap: React.FC<AndhraPradeshDiscoveryMapProps>
       {/* Top Header Card */}
       <div className="bg-white/95 backdrop-blur-md rounded-3xl border-2 border-emerald-200/90 p-5 sm:p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-mono font-bold tracking-wide">
+          <div className="inline-flex items-center gap-2 text-xs font-mono font-bold text-emerald-800 tracking-wide">
             <ShieldCheck className="w-4 h-4 text-emerald-700" />
             <span>
               {language === 'te'
-                ? 'ఆంధ్రప్రదేశ్ రియల్ డేటా పైలట్ (5 జిల్లాలు)'
-                : 'Andhra Pradesh Verified Pilot (5 Districts)'}
+                ? 'ధృవీకరించిన కస్టమ్ హైరింగ్ & యంత్రాల నెట్‌వర్క్'
+                : 'Verified Custom Hiring & Machinery Network'}
             </span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
             {language === 'te'
-              ? 'వ్యవసాయ యంత్రాలు & వ్యర్థాల ప్రాసెసింగ్ డైరెక్టరీ'
-              : 'Equipment Discovery & Biomass Processing Directory'}
+              ? 'కస్టమ్ హైరింగ్ కేంద్రాలు & వ్యవసాయ యంత్రాల డైరెక్టరీ'
+              : 'Custom Hiring Centres & Machinery Directory'}
           </h2>
           <p className="text-xs sm:text-sm text-gray-600 max-w-2xl">
             {language === 'te'
-              ? 'పల్నాడు, ప్రకాశం, కర్నూలు, తూర్పు గోదావరి, పశ్చిమ గోదావరి, విజయనగరం జిల్లాల అధికారిక వ్యవసాయ శాఖ డేటా మరియు క్షేత్రస్థాయి పరిశీలన ద్వారా ధృవీకరించిన కేంద్రాలు.'
-              : 'Real, verifiable machinery providers, Custom Hiring Centres (CHCs), balers, shredders, and organic waste processors across AP pilot districts with live quotation workflows.'}
+              ? 'రైతుల కోసం ట్రాక్టర్లు, బేలర్లు, బయో-ష్రెడ్డర్లు మరియు సేంద్రీయ వ్యర్థాల ప్రాసెసింగ్ యంత్రాల అధికారిక డైరెక్టరీ మరియు కొటేషన్ సేవలు.'
+              : 'Real, verifiable machinery providers, Custom Hiring Centres (CHCs), balers, shredders, and bio-waste processors with live quotation workflows.'}
           </p>
         </div>
 

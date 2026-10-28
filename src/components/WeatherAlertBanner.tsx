@@ -53,59 +53,75 @@ export interface DistrictCoords {
 export const AP_PILOT_DISTRICTS: DistrictCoords[] = [
   {
     id: 'palnadu',
-    name: 'Palnadu (Narasaraopet)',
-    nameTe: 'పల్నాడు (నర్సరావుపేట)',
+    name: 'Palnadu / Guntur Hub',
+    nameTe: 'పల్నాడు / గుంటూరు హబ్',
     lat: 16.236,
     lon: 80.049,
-    region: 'Central AP Pilot Hub',
+    region: 'Commercial Chilli & Cotton Zone',
+  },
+  {
+    id: 'godavari_delta',
+    name: 'Godavari Delta (Rajahmundry)',
+    nameTe: 'గోదావరి డెల్టా (రాజమండ్రి)',
+    lat: 17.000,
+    lon: 81.804,
+    region: 'Rice & Paddy Biomass Belt',
+  },
+  {
+    id: 'rayalaseema',
+    name: 'Kurnool / Rayalaseema',
+    nameTe: 'కర్నూలు / రాయలసీమ',
+    lat: 15.828,
+    lon: 78.037,
+    region: 'Millets & Pulses Agro-Zone',
   },
   {
     id: 'prakasam',
-    name: 'Prakasam (Ongole)',
-    nameTe: 'ప్రకాశం (ఒంగోలు)',
+    name: 'Prakasam (Ongole Hub)',
+    nameTe: 'ప్రకాశం (ఒంగోలు హబ్)',
     lat: 15.505,
     lon: 80.044,
-    region: 'South Coastal AP',
-  },
-  {
-    id: 'kurnool',
-    name: 'Kurnool',
-    nameTe: 'కర్నూలు',
-    lat: 15.828,
-    lon: 78.037,
-    region: 'Rayalaseema Pilot Hub',
-  },
-  {
-    id: 'east_godavari',
-    name: 'East Godavari (Rajahmundry)',
-    nameTe: 'తూర్పు గోదావరి (రాజమండ్రి)',
-    lat: 17.000,
-    lon: 81.804,
-    region: 'Delta Agricultural Zone',
-  },
-  {
-    id: 'west_godavari',
-    name: 'West Godavari (Bhimavaram)',
-    nameTe: 'పశ్చిమ గోదావరి (భీమవరం)',
-    lat: 16.544,
-    lon: 81.522,
-    region: 'Paddy Residue Pilot Hub',
+    region: 'Biomass Aggregation Hub',
   },
   {
     id: 'vizianagaram',
-    name: 'Vizianagaram',
-    nameTe: 'విజయనగరం',
+    name: 'Vizianagaram (North Coastal)',
+    nameTe: 'విజయనగరం (ఉత్తర కోస్తా)',
     lat: 18.112,
     lon: 83.407,
-    region: 'North Coastal AP',
+    region: 'North Coastal Agro-Forestry Belt',
   },
   {
-    id: 'guntur',
-    name: 'Guntur',
-    nameTe: 'గుంటూరు',
-    lat: 16.306,
-    lon: 80.436,
-    region: 'Commercial Agri Trade Zone',
+    id: 'punjab_plains',
+    name: 'Ludhiana / Punjab Plains',
+    nameTe: 'లుధియానా / పంజాబ్ మైదానాలు',
+    lat: 30.901,
+    lon: 75.857,
+    region: 'North Indian Grain & Residue Belt',
+  },
+  {
+    id: 'deccan_central',
+    name: 'Vidarbha / Central Maharashtra',
+    nameTe: 'విదర్భ / మహారాష్ట్ర',
+    lat: 20.932,
+    lon: 77.752,
+    region: 'Black Soil Cotton & Soybean Zone',
+  },
+  {
+    id: 'gangetic_plain',
+    name: 'Varanasi / Gangetic Basin',
+    nameTe: 'వారణాసి / గంగా మైదానం',
+    lat: 25.317,
+    lon: 82.973,
+    region: 'Horticulture & Vegetable Corridor',
+  },
+  {
+    id: 'karnataka_south',
+    name: 'Mysuru / Mandya Belt',
+    nameTe: 'మైసూరు / మాండ్య మండలం',
+    lat: 12.295,
+    lon: 76.639,
+    region: 'Sugarcane & Organic Inputs Corridor',
   },
 ];
 
@@ -403,7 +419,7 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
           <div className="flex items-center gap-1.5 bg-black/40 hover:bg-black/60 border border-emerald-400/40 rounded-xl px-2.5 py-1 text-xs transition shadow-2xs shrink-0">
             <MapPin className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
             <span className="text-[10px] font-bold text-emerald-300 uppercase hidden sm:inline">
-              {language === 'te' ? 'ప్రాంతం:' : 'District:'}
+              {language === 'te' ? 'ప్రాంతం:' : 'Region:'}
             </span>
             <select
               value={selectedDistrict.id}
@@ -412,7 +428,7 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
                 if (found) setSelectedDistrict(found);
               }}
               className="bg-transparent text-xs font-bold text-white focus:outline-none cursor-pointer pr-1"
-              title="Select District for Local Agro-Weather Alert"
+              title="Select Agricultural Region / Hub"
             >
               {AP_PILOT_DISTRICTS.map((d) => (
                 <option key={d.id} value={d.id} className="bg-emerald-950 text-white">
@@ -575,7 +591,7 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
                       variant="emerald"
                     />
                     <span className="text-[10px] bg-emerald-500/20 text-emerald-200 px-2 py-0.5 rounded font-mono border border-emerald-400/30">
-                      District: {selectedDistrict.name}
+                      {language === 'te' ? 'ప్రాంతం:' : 'Region:'} {selectedDistrict.name}
                     </span>
                   </div>
                 </div>

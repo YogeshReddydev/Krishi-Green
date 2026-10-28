@@ -57,10 +57,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
       items: [
         {
           id: 'ap-pilot',
-          label: t.navApPilot || 'AP Equipment & Providers',
-          subLabel: language === 'te' ? '5 పైలట్ జిల్లాలు (రైతు భరోసా కేంద్రాలు)' : '5 Pilot Districts (RBK & CHC Hubs)',
+          label: language === 'te' ? 'కస్టమ్ హైరింగ్ & యంత్రాలు' : 'Custom Hiring & Machinery',
+          subLabel: language === 'te' ? 'యంత్రాల అద్దె & సేవా కేంద్రాలు' : 'CHC Machinery Hubs & Rentals',
           icon: MapPin,
-          badge: language === 'te' ? '5 జిల్లాలు' : '5 Dists',
+          badge: language === 'te' ? 'నెట్‌వర్క్' : 'Network',
           badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
         },
         {
@@ -181,9 +181,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <span className="font-black text-lg text-white tracking-tight leading-none">
                   Krishi<span className="text-emerald-400">Green</span>
                 </span>
-                <span className="text-[9px] font-bold px-1.5 py-0.5 bg-emerald-500/30 text-emerald-300 rounded font-mono border border-emerald-400/40">
-                  AP PILOT
-                </span>
               </div>
               <p className="text-[10px] text-emerald-200/90 font-medium tracking-tight mt-0.5">
                 {t.tagline}
@@ -283,11 +280,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div className="flex items-center gap-2 mb-1">
               <ShieldCheck className="w-4 h-4 text-emerald-700 shrink-0" />
               <span className="text-[10px] font-black text-emerald-950 uppercase tracking-wider">
-                {language === 'te' ? 'ఆంధ్రప్రదేశ్ పైలట్ హబ్' : 'Andhra Pradesh Pilot'}
+                {language === 'te' ? 'జాతీయ వ్యవసాయ పర్యావరణ వ్యవస్థ' : 'National Agri-Ecological Network'}
               </span>
             </div>
             <p className="text-[10px] text-gray-600 leading-tight">
-              Palnadu • Prakasam • Kurnool • Godavari • Vizianagaram
+              {language === 'te'
+                ? 'భారతదేశ రైతులు, ఎఫ్‌పీఓలు మరియు సేంద్రీయ ఉత్పత్తిదారుల కొరకు'
+                : 'Serving farmers, FPOs & food-waste aggregators nationwide'}
             </p>
             <button
               onClick={() => {

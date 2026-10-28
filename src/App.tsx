@@ -332,7 +332,7 @@ export default function App() {
                 </button>
                 <span className="text-gray-400">/</span>
                 <span className="font-extrabold text-gray-900">
-                  {currentTab === 'ap-pilot' && (t.navApPilot || 'AP Equipment & Providers')}
+                  {currentTab === 'ap-pilot' && (language === 'te' ? 'కస్టమ్ హైరింగ్ & వ్యవసాయ యంత్రాలు' : 'Custom Hiring & Machinery Hubs')}
                   {currentTab === 'pipeline' && t.navPipeline}
                   {currentTab === 'marketplace' && t.navMarketplace}
                   {currentTab === 'carbon' && (t.navCarbon || 'Carbon & Climate Engine')}
