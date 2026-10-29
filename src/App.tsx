@@ -18,9 +18,9 @@ import { AndhraPradeshDiscoveryMap } from './components/AndhraPradeshDiscoveryMa
 import { CarbonEngineSection } from './components/CarbonEngineSection';
 import { WasteToWealthPipeline } from './components/WasteToWealthPipeline';
 import { RealImpactDashboard } from './components/RealImpactDashboard';
-import { WeatherAlertBanner } from './components/WeatherAlertBanner';
 import { PrototypeTopBanner } from './components/PrototypeTopBanner';
 import { PrototypeNoticeModal } from './components/PrototypeNoticeModal';
+import { OfflineSyncToast } from './components/OfflineSyncToast';
 import { db } from './lib/firebase';
 import { collection, onSnapshot, addDoc } from 'firebase/firestore';
 import {
@@ -310,10 +310,7 @@ export default function App() {
         onOpenDetails={() => setIsPrototypeModalOpen(true)}
       />
 
-      {/* Real-Time Agromet Weather Alert Banner (Flows naturally above header, preventing unusual sticky clutter during scroll) */}
-      <WeatherAlertBanner language={language} />
-
-      {/* Main App Navigation Header (Sticky top-0, clean, compact & smooth during scroll) */}
+      {/* Main App Navigation Header (PINNED sticky top-0: Includes Agri News & Weather Alert Sector + Navigation Board) */}
       <Header
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
@@ -356,6 +353,7 @@ export default function App() {
                 </button>
                 <span className="text-gray-400">/</span>
                 <span className="font-extrabold text-gray-900">
+                  {currentTab === 'process' && (language === 'te' ? 'మా విధానం (వ్యర్థాల నుండి సేంద్రీయ దిగుబడి)' : 'Our Process: Waste Collection to Organic Yield')}
                   {currentTab === 'ap-pilot' && (language === 'te' ? 'కస్టమ్ హైరింగ్ & వ్యవసాయ యంత్రాలు' : 'Custom Hiring & Machinery Hubs')}
                   {currentTab === 'pipeline' && t.navPipeline}
                   {currentTab === 'marketplace' && t.navMarketplace}
@@ -380,12 +378,6 @@ export default function App() {
           {/* Dedicated Webpage 1: Home / Intro Overview */}
           {currentTab === 'home' && (
             <div className="space-y-6">
-              {/* 'Our Process' Section: Static Horizontal Flow Chart from Waste Collection to Organic Yield */}
-              <OurProcessSection
-                onNavigate={(tab) => setCurrentTab(tab)}
-                language={language}
-              />
-
               {/* 1. TOP ENTRANCE: Welcome, Circular Flow & Quick Navigation */}
               <HomeIntro
                 onNavigate={(tab) => setCurrentTab(tab)}
@@ -421,6 +413,16 @@ export default function App() {
                 </div>
                 <RealtimeWeatherDashboardWidget language={language} />
               </div>
+            </div>
+          )}
+
+          {/* Dedicated Webpage: Our Process (6-Stage Waste-to-Wealth & Organic Yield Lifecycle) */}
+          {currentTab === 'process' && (
+            <div className="space-y-6 animate-fadeIn">
+              <OurProcessSection
+                onNavigate={(tab) => setCurrentTab(tab)}
+                language={language}
+              />
             </div>
           )}
 
@@ -622,6 +624,9 @@ export default function App() {
         language={language}
       />
 
-          </div>
+      {/* Subtle Offline Mode & Paused Sync Notification Toast */}
+      <OfflineSyncToast language={language} />
+
+    </div>
   );
 }

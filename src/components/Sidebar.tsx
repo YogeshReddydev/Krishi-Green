@@ -16,6 +16,7 @@ import {
   Sprout,
   ShieldCheck,
   ChevronRight,
+  RefreshCw,
 } from 'lucide-react';
 import { SupportedLanguage } from '../types';
 import { UI_TRANSLATIONS } from '../data/translations';
@@ -49,6 +50,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
           subLabel: language === 'te' ? 'ప్రధాన ముఖచిత్రం & రైతు స్వాగతం' : 'Entrance Hero & Circular Flow',
           icon: Home,
           badge: null,
+        },
+        {
+          id: 'process',
+          label: language === 'te' ? 'మా విధానం (ప్రక్రియ)' : 'Our Process',
+          subLabel: language === 'te' ? 'వ్యర్థాల సేకరణ నుండి సేంద్రీయ దిగుబడి' : 'Waste Collection to Organic Yield',
+          icon: RefreshCw,
+          badge: '6 Stages',
+          badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
         },
       ],
     },

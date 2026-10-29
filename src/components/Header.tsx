@@ -8,6 +8,7 @@ import {
 import { SupportedLanguage } from '../types';
 import { SUPPORTED_LANGUAGES, UI_TRANSLATIONS } from '../data/translations';
 import { WeatherWidget } from './WeatherWidget';
+import { WeatherAlertBanner } from './WeatherAlertBanner';
 import { UserAuthButton } from './UserAuthButton';
 
 interface HeaderProps {
@@ -33,9 +34,12 @@ export const Header: React.FC<HeaderProps> = ({
   const t = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.en;
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-emerald-100 shadow-xs transition-all duration-200">
-      {/* Main Header Board: Menu Trigger + Logo on Left, Profile + Utilities on Right */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 flex items-center justify-between gap-3 sm:gap-4">
+    <header className="sticky top-0 z-40 w-full bg-white shadow-sm border-b border-emerald-100 transition-all duration-200">
+      {/* 1. PINNED Agricultural News & Real-Time Weather Alert Sector */}
+      <WeatherAlertBanner language={language} />
+
+      {/* 2. Main Navigation Board: Menu Trigger + Logo on Left, Profile + Utilities on Right */}
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 flex items-center justify-between gap-3 sm:gap-4 bg-white">
         {/* Left: Left-Panel Menu Sector Trigger & Brand Identity */}
         <div className="flex items-center gap-2.5 sm:gap-3.5 shrink-0">
           {/* Menu Button to open Left Panel Drawer */}
