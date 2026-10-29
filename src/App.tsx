@@ -436,14 +436,15 @@ export default function App() {
             <WasteToWealthPipeline language={language} onOpenQR={setActiveQRBatch} />
           )}
 
-          {/* Dedicated Webpage 4: Dual Marketplace & Machinery */}
-          {currentTab === 'marketplace' && (
+          {/* Dedicated Webpage 4: Strictly Separated Sectors: Selling Farming Products & Farmer Equipment Hub */}
+          {(currentTab === 'marketplace' || currentTab === 'marketplace-products' || currentTab === 'marketplace-machinery') && (
             <DualMarketplace
               products={products}
               equipment={equipment}
               onOpenQR={handleOpenQRForProduct}
               onAddProduct={handleAddProduct}
               language={language}
+              initialSector={currentTab === 'marketplace-machinery' ? 'equipment' : 'products'}
             />
           )}
 

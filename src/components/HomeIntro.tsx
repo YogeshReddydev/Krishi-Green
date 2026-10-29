@@ -37,14 +37,14 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
 
   const ecosystemServices = [
     {
-      tab: 'ap-pilot',
-      title: language === 'te' ? 'కస్టమ్ హైరింగ్ & వ్యవసాయ యంత్రాలు' : 'Custom Hiring Centres & Machinery',
+      tab: 'marketplace-machinery',
+      title: language === 'te' ? 'కస్టమ్ హైరింగ్ & వ్యవసాయ యంత్రాలు' : 'Custom Hiring Machinery Hub',
       desc: language === 'te'
-        ? 'ట్రాక్టర్లు, వరి గడ్డి బేలర్లు, బయో-ష్రెడ్డర్లు మరియు కంపోస్టింగ్ యంత్రాల అద్దె బుకింగ్, సబ్సిడీ కొటేషన్లు.'
-        : 'Book verified tractors, balers, shredders, and compost machinery with SMAM subsidy discount calculations and instant field delivery.',
+        ? 'ఆంధ్రప్రదేశ్ గైడ్ నుండి ట్రాక్టర్లు, పవర్ టిల్లర్లు, డ్రోన్లు, హార్వెస్టర్ల గంటకు సగటు అద్దె మరియు రాయితీ కొనుగోలు.'
+        : 'AP Guide machinery catalog with average rent per hour, SMAM 40-50% subsidy discounts, and certified operators.',
       icon: Tractor,
-      color: 'from-emerald-700 to-teal-600',
-      actionLabel: language === 'te' ? 'యంత్రాల అద్దె బుక్ చేయండి' : 'Book Farm Machinery',
+      color: 'from-amber-600 to-orange-600',
+      actionLabel: language === 'te' ? 'యంత్రాల హబ్ & గంట అద్దె చూడండి' : 'Browse Machinery & Hourly Rent',
     },
     {
       tab: 'pipeline',
@@ -53,18 +53,18 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
         ? 'మండి ఆహార వ్యర్థాల డిక్లరేషన్, కాటా బరువు స్లిప్పులు, రవాణా ట్రాకింగ్ మరియు ల్యాబ్ పరీక్షల 16-దశల నివేదిక.'
         : 'Transparent 16-stage conversion workflow from mandi collection, weighbridge slips, and bio-fermentation to FCO 1985 certified batches.',
       icon: Layers,
-      color: 'from-amber-600 to-orange-500',
+      color: 'from-teal-600 to-emerald-600',
       actionLabel: language === 'te' ? 'పైప్‌లైన్ రికార్డులను చూడండి' : 'View Conversion Lifecycle',
     },
     {
-      tab: 'marketplace',
-      title: language === 'te' ? 'సేంద్రీయ ఎరువుల మార్కెట్‌ప్లేస్' : 'Bio-Inputs & Organic Marketplace',
+      tab: 'marketplace-products',
+      title: language === 'te' ? 'సేంద్రీయ ఎరువుల మార్కెట్‌ప్లేస్' : 'Selling Farming Products',
       desc: language === 'te'
-        ? 'ల్యాబ్ పరీక్షించిన నాణ్యమైన వర్మీకంపోస్ట్, జీవామృతం, బయో-ఎంజైమ్‌ల నేరుగా కొనుగోలు మరియు ఆర్డర్ స్లిప్పులు.'
+        ? 'ల్యాబ్ పరీక్షించిన నాణ్యమైన వర్మీకంపోస్ట్, జీవామృతం, బయో-ఎంజైమ్‌ల నేరుగా కొనుగోలు మరియు రైతు ఉత్పత్తుల అమ్మకం.'
         : 'Direct farmer-to-producer commerce for certified organic vermicompost, bio-stimulants, and microbial bio-enzymes.',
       icon: ShoppingBag,
-      color: 'from-emerald-600 to-teal-500',
-      actionLabel: language === 'te' ? 'మార్కెట్ ఉత్పత్తులు చూడండి' : 'Browse Verified Inputs',
+      color: 'from-emerald-700 to-green-600',
+      actionLabel: language === 'te' ? 'సేంద్రీయ ఉత్పత్తులు చూడండి' : 'Browse Verified Inputs',
     },
     {
       tab: 'carbon',

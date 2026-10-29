@@ -82,18 +82,41 @@ export interface OrganicProduct {
   image: string;
 }
 
+export type EquipmentScale =
+  | 'mini'
+  | 'medium'
+  | 'large'
+  | 'smart'
+  | 'irrigation'
+  | 'supplies-pattas';
+
+export interface HowToUseGuide {
+  overview: string;
+  steps: string[];
+  safetyTips: string[];
+  idealConditions?: string;
+  maintenanceNotes?: string;
+}
+
 export interface EquipmentItem {
   id: string;
   name: string;
-  category: 'Tractor' | 'Power Tiller' | 'Bio-waste Shredder' | 'Rotary Drum Composter' | 'Solar Dehydrator' | 'Power Sprayer';
+  nameTelugu?: string;
+  category: string;
+  sizeScale?: EquipmentScale;
   type: 'Rent' | 'Buy' | 'Both';
+  rentPricePerHour: number;
   rentPricePerDay?: number;
+  rentPricePerAcre?: number;
   salePrice?: number;
   conditionRating: number; // 1-5
   hoursUsed: number;
   inspectionPassed: boolean;
   sellerOrOwner: string;
   location: string;
+  centerId?: string;
+  centerName?: string;
+  mandal?: string;
   contactPhone: string;
   subsidyEligible: boolean;
   subsidySchemeName: string;
@@ -101,6 +124,12 @@ export interface EquipmentItem {
   description: string;
   features: string[];
   image: string;
+  sizeType?: string;
+  hpRating?: string;
+  relevantCrops?: string;
+  operatorAvailable?: boolean;
+  unitOrQuantityAvailable?: string;
+  howToUse?: HowToUseGuide;
 }
 
 export interface SupportTicket {

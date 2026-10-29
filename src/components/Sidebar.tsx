@@ -17,6 +17,7 @@ import {
   ShieldCheck,
   ChevronRight,
   RefreshCw,
+  Tractor,
 } from 'lucide-react';
 import { SupportedLanguage } from '../types';
 import { UI_TRANSLATIONS } from '../data/translations';
@@ -81,11 +82,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
           badgeColor: 'bg-teal-100 text-teal-800 border-teal-200',
         },
         {
-          id: 'marketplace',
-          label: t.navMarketplace || 'Dual Marketplace & Machinery',
-          subLabel: language === 'te' ? 'సేంద్రీయ ఎరువులు & అద్దె పరికరాలు' : 'Bio-Inputs & Custom Hiring',
+          id: 'marketplace-products',
+          label: language === 'te' ? 'వ్యవసాయ ఉత్పత్తుల అమ్మకం' : 'Selling Farming Products',
+          subLabel: language === 'te' ? 'ధృవీకరించబడిన జీవ ఎరువులు & వర్మీకంపోస్ట్' : 'Certified Bio-Inputs & Organic Direct',
           icon: ShoppingBag,
-          badge: language === 'te' ? 'ప్రత్యక్షం' : 'Live',
+          badge: language === 'te' ? 'సేంద్రీయ' : 'Organic',
+          badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+        },
+        {
+          id: 'marketplace-machinery',
+          label: language === 'te' ? 'రైతుల కోసం యంత్రాల హబ్' : 'Equipment Hub for Farmers',
+          subLabel: language === 'te' ? 'గంటకు సగటు అద్దె & AP గైడ్ యంత్రాలు' : 'Hourly Rentals & AP Guide Machinery',
+          icon: Tractor,
+          badge: 'AP Guide',
           badgeColor: 'bg-amber-100 text-amber-800 border-amber-200',
         },
         {

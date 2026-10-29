@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Search,
   CloudSun,
@@ -10,6 +10,9 @@ import {
   Globe2,
   ShieldCheck,
   RefreshCw,
+  Clock,
+  Trash2,
+  X,
 } from 'lucide-react';
 import { SupportedLanguage } from '../types';
 import { SpeechListenButton } from './SpeechListenButton';
@@ -18,12 +21,70 @@ interface SearchGroundingWidgetProps {
   language: SupportedLanguage;
 }
 
+const RECENT_SEARCHES_STORAGE_KEY = 'krishigreen_recent_searches';
+
 export const SearchGroundingWidget: React.FC<SearchGroundingWidgetProps> = ({ language }) => {
   const [query, setQuery] = useState<string>('Current weather forecast and APMC vegetable mandi prices in Nashik');
   const [location, setLocation] = useState<string>('Nashik, Maharashtra');
   const [topic, setTopic] = useState<'weather' | 'mandi' | 'subsidies' | 'general'>('weather');
   const [loading, setLoading] = useState<boolean>(false);
   const [result, setResult] = useState<any | null>(null);
+
+  // Recent Searches state loaded from localStorage
+  const [recentSearches, setRecentSearches] = useState<string[]>(() => {
+    try {
+      const stored = localStorage.getItem(RECENT_SEARCHES_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) return parsed.slice(0, 8);
+      }
+    } catch (e) {
+      console.warn('Failed to load recent searches from localStorage', e);
+    }
+    return [
+      'APMC vegetable mandi rates',
+      'PM-PRANAM fertilizer grant guidelines',
+      'Rainfall alert and soil moisture',
+    ];
+  });
+
+  // Save query to recent searches helper
+  const saveRecentSearch = (searchQuery: string) => {
+    const trimmed = searchQuery.trim();
+    if (!trimmed) return;
+
+    setRecentSearches((prev) => {
+      // Filter out duplicate if it exists and place at the beginning
+      const updated = [trimmed, ...prev.filter((q) => q.toLowerCase() !== trimmed.toLowerCase())].slice(0, 8);
+      try {
+        localStorage.setItem(RECENT_SEARCHES_STORAGE_KEY, JSON.stringify(updated));
+      } catch (e) {
+        console.warn('Failed to save recent search to localStorage', e);
+      }
+      return updated;
+    });
+  };
+
+  const handleRemoveRecentSearch = (itemToRemove: string) => {
+    setRecentSearches((prev) => {
+      const updated = prev.filter((q) => q !== itemToRemove);
+      try {
+        localStorage.setItem(RECENT_SEARCHES_STORAGE_KEY, JSON.stringify(updated));
+      } catch (e) {
+        console.warn('Failed to update recent searches in localStorage', e);
+      }
+      return updated;
+    });
+  };
+
+  const handleClearRecentSearches = () => {
+    setRecentSearches([]);
+    try {
+      localStorage.removeItem(RECENT_SEARCHES_STORAGE_KEY);
+    } catch (e) {
+      console.warn('Failed to clear recent searches from localStorage', e);
+    }
+  };
 
   const presets = [
     {
@@ -52,6 +113,7 @@ export const SearchGroundingWidget: React.FC<SearchGroundingWidgetProps> = ({ la
     const qToSend = customQuery || query;
     if (!qToSend.trim() || loading) return;
 
+    saveRecentSearch(qToSend);
     setLoading(true);
     try {
       const res = await fetch('/api/search-grounding', {
@@ -153,6 +215,56 @@ export const SearchGroundingWidget: React.FC<SearchGroundingWidgetProps> = ({ la
           <span>{loading ? 'Searching...' : 'Ground Search'}</span>
         </button>
       </div>
+
+      {/* Clickable Recent Searches Chips (Saved in LocalStorage) */}
+      {recentSearches.length > 0 && (
+        <div className="space-y-1.5 pt-0.5">
+          <div className="flex items-center justify-between text-xs">
+            <span className="flex items-center gap-1.5 font-bold text-gray-600 text-[11px]">
+              <Clock className="w-3.5 h-3.5 text-emerald-700" />
+              <span>{language === 'te' ? 'ఇటీవలి శోధనలు' : 'Recent Searches'}</span>
+              <span className="text-[10px] text-gray-400 font-normal">({recentSearches.length})</span>
+            </span>
+            <button
+              type="button"
+              onClick={handleClearRecentSearches}
+              className="text-[10px] text-gray-400 hover:text-rose-600 transition flex items-center gap-1 cursor-pointer font-medium"
+              title={language === 'te' ? 'అన్నీ తీసివేయండి' : 'Clear search history'}
+            >
+              <Trash2 className="w-3 h-3" />
+              <span>{language === 'te' ? 'అన్నీ క్లియర్' : 'Clear all'}</span>
+            </button>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-1.5">
+            {recentSearches.map((item, idx) => (
+              <div
+                key={idx}
+                onClick={() => {
+                  setQuery(item);
+                  handleSearch(item);
+                }}
+                className="group inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50/70 hover:bg-emerald-100/90 text-emerald-950 rounded-lg border border-emerald-200/80 text-[11px] font-semibold transition cursor-pointer shadow-2xs hover:border-emerald-300"
+                title={`Click to search: "${item}"`}
+              >
+                <Search className="w-3 h-3 text-emerald-600 shrink-0 group-hover:scale-110 transition-transform" />
+                <span className="truncate max-w-[220px] sm:max-w-[320px]">{item}</span>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemoveRecentSearch(item);
+                  }}
+                  className="text-emerald-700/50 hover:text-rose-600 p-0.5 rounded-md hover:bg-rose-50 transition shrink-0 ml-0.5"
+                  title="Remove this search"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Search Results Display */}
       {result && (
