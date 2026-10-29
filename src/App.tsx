@@ -7,6 +7,7 @@ import { SchemeNavigator } from './components/SchemeNavigator';
 import { ImpactCalculatorSection } from './components/ImpactCalculatorSection';
 import { CropRotationScheduler } from './components/CropRotationScheduler';
 import { HomeIntro } from './components/HomeIntro';
+import { OurProcessSection } from './components/OurProcessSection';
 import { HelplinePage } from './components/HelplinePage';
 import { MapsLocationDetector } from './components/MapsLocationDetector';
 import { SearchGroundingWidget } from './components/SearchGroundingWidget';
@@ -17,6 +18,9 @@ import { AndhraPradeshDiscoveryMap } from './components/AndhraPradeshDiscoveryMa
 import { CarbonEngineSection } from './components/CarbonEngineSection';
 import { WasteToWealthPipeline } from './components/WasteToWealthPipeline';
 import { RealImpactDashboard } from './components/RealImpactDashboard';
+import { WeatherAlertBanner } from './components/WeatherAlertBanner';
+import { PrototypeTopBanner } from './components/PrototypeTopBanner';
+import { PrototypeNoticeModal } from './components/PrototypeNoticeModal';
 import { db } from './lib/firebase';
 import { collection, onSnapshot, addDoc } from 'firebase/firestore';
 import {
@@ -65,6 +69,16 @@ export default function App() {
   const [activeQRBatch, setActiveQRBatch] = useState<any | null>(null);
   const [showTicketsDrawer, setShowTicketsDrawer] = useState<boolean>(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+  const [isPrototypeModalOpen, setIsPrototypeModalOpen] = useState<boolean>(() => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        return localStorage.getItem('krishigreen_prototype_dismissed_v1') !== 'true';
+      } catch {
+        return true;
+      }
+    }
+    return true;
+  });
 
   const t = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.en;
 
@@ -290,7 +304,16 @@ export default function App() {
       <div className="fixed bottom-2 left-2 w-28 h-28 pointer-events-none z-10 border-b-2 border-l-2 border-emerald-600/30 rounded-bl-3xl hidden md:block" />
       <div className="fixed bottom-2 right-2 w-28 h-28 pointer-events-none z-10 border-b-2 border-r-2 border-emerald-600/30 rounded-br-3xl hidden md:block" />
 
-      {/* App Header (Full Language Shell Reactive + Google Auth) */}
+      {/* Top Prototype Announcement Banner (Message on the top) */}
+      <PrototypeTopBanner
+        language={language}
+        onOpenDetails={() => setIsPrototypeModalOpen(true)}
+      />
+
+      {/* Real-Time Agromet Weather Alert Banner (Flows naturally above header, preventing unusual sticky clutter during scroll) */}
+      <WeatherAlertBanner language={language} />
+
+      {/* Main App Navigation Header (Sticky top-0, clean, compact & smooth during scroll) */}
       <Header
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
@@ -299,6 +322,7 @@ export default function App() {
         onOpenHelpline={() => setIsHelplineOpen(true)}
         onOpenVoice={() => setIsHelplineOpen(true)}
         onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
+        onOpenPrototypeModal={() => setIsPrototypeModalOpen(true)}
       />
 
       {/* Vertical Slide-over Navigation Drawer */}
@@ -356,7 +380,13 @@ export default function App() {
           {/* Dedicated Webpage 1: Home / Intro Overview */}
           {currentTab === 'home' && (
             <div className="space-y-6">
-              {/* 1. TOP ENTRANCE ONLY: Welcome, Circular Flow & Quick Navigation */}
+              {/* 'Our Process' Section: Static Horizontal Flow Chart from Waste Collection to Organic Yield */}
+              <OurProcessSection
+                onNavigate={(tab) => setCurrentTab(tab)}
+                language={language}
+              />
+
+              {/* 1. TOP ENTRANCE: Welcome, Circular Flow & Quick Navigation */}
               <HomeIntro
                 onNavigate={(tab) => setCurrentTab(tab)}
                 onOpenHelpline={() => setIsHelplineOpen(true)}
@@ -583,6 +613,13 @@ export default function App() {
         onClose={() => setIsHelplineOpen(false)}
         language={language}
         onTicketCreated={handleTicketCreated}
+      />
+
+      {/* Prototype Welcome Announcement Modal (Shown on site open) */}
+      <PrototypeNoticeModal
+        isOpen={isPrototypeModalOpen}
+        onClose={() => setIsPrototypeModalOpen(false)}
+        language={language}
       />
 
           </div>

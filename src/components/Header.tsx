@@ -8,7 +8,6 @@ import {
 import { SupportedLanguage } from '../types';
 import { SUPPORTED_LANGUAGES, UI_TRANSLATIONS } from '../data/translations';
 import { WeatherWidget } from './WeatherWidget';
-import { WeatherAlertBanner } from './WeatherAlertBanner';
 import { UserAuthButton } from './UserAuthButton';
 
 interface HeaderProps {
@@ -19,6 +18,7 @@ interface HeaderProps {
   onOpenHelpline: () => void;
   onOpenVoice: () => void;
   onToggleSidebar: () => void;
+  onOpenPrototypeModal?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -28,15 +28,13 @@ export const Header: React.FC<HeaderProps> = ({
   setLanguage,
   onOpenVoice,
   onToggleSidebar,
+  onOpenPrototypeModal,
 }) => {
   const t = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.en;
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-emerald-100 shadow-xs transition-colors duration-200">
-      {/* 1. Thin Real-Time Weather Alert Banner */}
-      <WeatherAlertBanner language={language} />
-
-      {/* 2. Main Header Board: Menu Trigger + Logo on Left, Profile + Utilities on Right */}
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-emerald-100 shadow-xs transition-all duration-200">
+      {/* Main Header Board: Menu Trigger + Logo on Left, Profile + Utilities on Right */}
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 flex items-center justify-between gap-3 sm:gap-4">
         {/* Left: Left-Panel Menu Sector Trigger & Brand Identity */}
         <div className="flex items-center gap-2.5 sm:gap-3.5 shrink-0">
@@ -62,9 +60,23 @@ export const Header: React.FC<HeaderProps> = ({
               <Sprout className="w-5 h-5 text-emerald-50" />
             </div>
             <div>
-              <h1 className="font-black text-lg sm:text-xl text-emerald-950 tracking-tight leading-none">
-                Krishi<span className="text-emerald-600">Green</span>
-              </h1>
+              <div className="flex items-center gap-1.5">
+                <h1 className="font-black text-lg sm:text-xl text-emerald-950 tracking-tight leading-none">
+                  Krishi<span className="text-emerald-600">Green</span>
+                </h1>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onOpenPrototypeModal?.();
+                  }}
+                  className="px-1.5 py-0.5 bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 rounded text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider transition cursor-pointer flex items-center gap-1 shadow-2xs"
+                  title={language === 'te' ? 'కృషిగ్రీన్ నమూనా డెమో' : 'Interactive Prototype Pilot'}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                  <span>{language === 'te' ? 'డెమో' : 'Prototype'}</span>
+                </button>
+              </div>
               <p className="text-[10px] sm:text-[11px] text-gray-500 font-semibold tracking-tight mt-0.5 max-w-[200px] sm:max-w-md truncate">
                 {t.tagline}
               </p>
