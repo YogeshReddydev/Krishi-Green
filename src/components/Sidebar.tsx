@@ -19,6 +19,7 @@ import {
 } from './Icons';
 import { SupportedLanguage } from '../types';
 import { UI_TRANSLATIONS } from '../data/translations';
+import { getMultiTranslations } from '../utils/multiLang';
 
 interface SidebarProps {
   currentTab: string;
@@ -40,22 +41,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenLegal,
 }) => {
   const t = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.en;
+  const m = getMultiTranslations(language);
+
+  const isTe = language === 'te';
+  const isHi = language === 'hi';
+  const isTa = language === 'ta';
 
   const navSections = [
     {
-      title: language === 'te' ? 'ప్రధాన విభాగం' : 'MAIN NAVIGATION',
+      title: isTe ? 'ప్రధాన విభాగం' : isHi ? 'मुख्य नेविगेशन' : isTa ? 'முதன்மை வழிசெலுத்தல்' : 'MAIN NAVIGATION',
       items: [
         {
           id: 'home',
           label: t.navHome || 'Home / Overview',
-          subLabel: language === 'te' ? 'ప్రధాన ముఖచిత్రం: రైతు స్వాగతం' : 'Entrance Hero: Circular Flow',
+          subLabel: isTe ? 'ప్రధాన ముఖచిత్రం: రైతు స్వాగతం' : isHi ? 'प्रवेश द्वार: चक्रीय कृषि' : isTa ? 'முகப்பு: சுழற்சி வேளாண்மை' : 'Entrance Hero: Circular Flow',
           icon: IconHome,
           badge: null,
         },
         {
           id: 'process',
-          label: language === 'te' ? 'మా విధానం (ప్రక్రియ)' : 'Our Process',
-          subLabel: language === 'te' ? 'వ్యర్థాల సేకరణ నుండి సేంద్రీయ దిగుబడి' : 'Waste Collection to Organic Yield',
+          label: isTe ? 'మా విధానం (ప్రక్రియ)' : isHi ? 'हमारी प्रक्रिया' : isTa ? 'எங்கள் செயல்முறை' : 'Our Process',
+          subLabel: isTe ? 'వ్యర్థాల సేకరణ నుండి సేంద్రీయ దిగుబడి' : isHi ? 'कचरा संग्रह से जैविक उपज' : isTa ? 'கழிவு சேகரிப்பு முதல் உரம் வரை' : 'Waste Collection to Organic Yield',
           icon: IconRefresh,
           badge: '6 Stages',
           badgeColor: 'bg-stone-200 text-stone-800 border-stone-300',
@@ -63,44 +69,44 @@ export const Sidebar: React.FC<SidebarProps> = ({
       ],
     },
     {
-      title: language === 'te' ? 'క్షేత్ర కార్యకలాపాలు & యంత్రాలు' : 'FIELD & OPERATIONS',
+      title: isTe ? 'క్షేత్ర కార్యకలాపాలు & యంత్రాలు' : isHi ? 'क्षेत्र संचालन एवं कृषि यंत्र' : isTa ? 'கள செயல்பாடுகள் & இயந்திரங்கள்' : 'FIELD & OPERATIONS',
       items: [
         {
           id: 'ap-pilot',
-          label: language === 'te' ? 'కస్టమ్ హైరింగ్ & యంత్రాలు' : 'Custom Hiring & Machinery',
-          subLabel: language === 'te' ? 'యంత్రాల అద్దె & సేవా కేంద్రాలు' : 'CHC Machinery Hubs & Rentals',
+          label: t.navApPilot || m.serviceMachineryTitle,
+          subLabel: isTe ? 'యంత్రాల అద్దె & సేవా కేంద్రాలు' : isHi ? 'कस्टम हायरिंग एवं मशीनरी केंद्र' : isTa ? 'இயந்திர வாடகை மையங்கள்' : 'CHC Machinery Hubs & Rentals',
           icon: IconMapPin,
-          badge: language === 'te' ? 'నెట్‌వర్క్' : 'Network',
+          badge: isTe ? 'నెట్‌వర్క్' : isHi ? 'नेटवर्क' : 'Network',
           badgeColor: 'bg-stone-200 text-stone-800 border-stone-300',
         },
         {
           id: 'pipeline',
           label: t.navPipeline || 'Waste-to-Wealth Pipeline',
-          subLabel: language === 'te' ? '16 దశల క్యూఆర్ ట్రేసింగ్' : '16-Stage Traceable Batching',
+          subLabel: isTe ? '16 దశల క్యూఆర్ ట్రేసింగ్' : isHi ? '16-चरणीय क्यूआर ट्रैकिंग' : '16-Stage Traceable Batching',
           icon: IconLayers,
           badge: '16 Stg',
           badgeColor: 'bg-stone-200 text-stone-800 border-stone-300',
         },
         {
           id: 'marketplace-products',
-          label: language === 'te' ? 'వ్యవసాయ ఉత్పత్తుల అమ్మకం' : 'Selling Farming Products',
-          subLabel: language === 'te' ? 'ధృవీకరించబడిన జీవ ఎరువులు & వర్మీకంపోస్ట్' : 'Certified Bio-Inputs & Organic Direct',
+          label: m.serviceMarketplaceTitle || 'Selling Farming Products',
+          subLabel: isTe ? 'ధృవీకరించబడిన జీవ ఎరువులు & వర్మీకంపోస్ట్' : isHi ? 'प्रमाणित जैविक खाद एवं वर्मीकम्पोस्ट' : 'Certified Bio-Inputs & Organic Direct',
           icon: IconBag,
-          badge: language === 'te' ? 'సేంద్రీయ' : 'Organic',
+          badge: isTe ? 'సేంద్రీయ' : isHi ? 'जैविक' : 'Organic',
           badgeColor: 'bg-[#1e382b] text-[#fbfaf6] border-[#1e382b]',
         },
         {
           id: 'marketplace-machinery',
-          label: language === 'te' ? 'రైతుల కోసం యంత్రాల హబ్' : 'Equipment Hub for Farmers',
-          subLabel: language === 'te' ? 'గంటకు సగటు అద్దె & AP గైడ్ యంత్రాలు' : 'Hourly Rentals & AP Guide Machinery',
+          label: m.serviceMachineryTitle || 'Equipment Hub for Farmers',
+          subLabel: isTe ? 'గంటకు సగటు అద్దె & AP గైడ్ యంత్రాలు' : isHi ? 'प्रति घंटा किराया एवं कृषि उपकरण' : 'Hourly Rentals & AP Guide Machinery',
           icon: IconTractor,
-          badge: 'AP Guide',
+          badge: 'Rental Hub',
           badgeColor: 'bg-[#6b4f3b] text-[#fbfaf6] border-[#6b4f3b]',
         },
         {
           id: 'carbon',
           label: t.navCarbon || 'Carbon & Climate Engine',
-          subLabel: language === 'te' ? 'BEE / ICM కార్బన్ క్రెడిట్ లెడ్జర్' : 'BEE / ICM Registry (Rs 750/tCO2e)',
+          subLabel: isTe ? 'BEE / ICM కార్బన్ క్రెడిట్ లెడ్జర్' : isHi ? 'बीईई कार्बन क्रेडिट लेजर' : 'BEE / ICM Registry (Rs 750/tCO2e)',
           icon: IconFlame,
           badge: 'BEE/ICM',
           badgeColor: 'bg-stone-200 text-stone-800 border-stone-300',
@@ -108,20 +114,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {
           id: 'rotation',
           label: t.navRotation || 'Crop Rotation Scheduler',
-          subLabel: language === 'te' ? '5-దశల పంట వృద్ధి స్థితి ట్రాకర్' : 'Growth Sync & Status Matrix',
+          subLabel: isTe ? '5-దశల పంట వృద్ధి స్థితి ట్రాకర్' : isHi ? 'फसल चक्र एवं पोषण ट्रैकर' : 'Growth Sync & Status Matrix',
           icon: IconRefresh,
-          badge: language === 'te' ? 'వృద్ధి' : 'Active',
+          badge: isTe ? 'వృద్ధి' : isHi ? 'सक्रिय' : 'Active',
           badgeColor: 'bg-stone-200 text-stone-800 border-stone-300',
         },
       ],
     },
     {
-      title: language === 'te' ? 'ప్రభుత్వ పథకాలు & నివేదికలు' : 'GOVERNANCE & AUDIT',
+      title: isTe ? 'ప్రభుత్వ పథకాలు & నివేదికలు' : isHi ? 'सरकारी योजनाएं व ऑडिट' : 'GOVERNANCE & AUDIT',
       items: [
         {
           id: 'schemes',
           label: t.navSchemes || 'Govt Subsidies & Schemes',
-          subLabel: language === 'te' ? 'PM-PRANAM, SMAM & డీబీటీ రాయితీలు' : 'PM-PRANAM & SMAM Subsidies',
+          subLabel: isTe ? 'PM-PRANAM, SMAM & డీబీటీ రాయితీలు' : isHi ? 'पीएम-प्रणाम एवं 50% यंत्र सब्सिडी' : 'PM-PRANAM & SMAM Subsidies',
           icon: IconFileText,
           badge: 'Official',
           badgeColor: 'bg-stone-200 text-stone-800 border-stone-300',
@@ -129,7 +135,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {
           id: 'impact',
           label: t.navImpact || 'Live Impact Ledger',
-          subLabel: language === 'te' ? 'ఆడిట్ లెడ్జర్ & పీడీఎఫ్ డౌన్‌లోడ్' : 'Audited Records & PDF Export',
+          subLabel: isTe ? 'ఆడిట్ లెడ్జర్ & పీడీఎఫ్ డౌన్‌లోడ్' : isHi ? 'ऑडिट लेजर व प्रभाव रिपोर्ट' : 'Audited Records & PDF Export',
           icon: IconTrendingUp,
           badge: 'Audited',
           badgeColor: 'bg-[#1e382b] text-[#fbfaf6] border-[#1e382b]',
@@ -137,7 +143,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {
           id: 'maps',
           label: t.navMaps || 'Agri Maps Hub',
-          subLabel: language === 'te' ? 'జీపీఎస్ & స్థానిక కేంద్రాలు' : 'GIS Field Location Finder',
+          subLabel: isTe ? 'జీపీఎస్ & స్థానిక కేంద్రాలు' : isHi ? 'जीपीएस एवं स्थानीय कृषि केंद्र' : 'GIS Field Location Finder',
           icon: IconCompass,
           badge: 'GIS',
           badgeColor: 'bg-stone-200 text-stone-800 border-stone-300',
@@ -145,7 +151,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {
           id: 'search',
           label: t.navSearch || 'Weather & Agro Intel',
-          subLabel: language === 'te' ? 'వాతావరణం, వర్షపాతం & మండి ధరలు' : 'Rain Risk & IMD Agromet Advisory',
+          subLabel: isTe ? 'వాతావరణం, వర్షపాతం & మండి ధరలు' : isHi ? 'मौसम, बारिश व मंडी भाव रडार' : 'Rain Risk & IMD Agromet Advisory',
           icon: IconCloudSun,
           badge: 'Live IMD',
           badgeColor: 'bg-stone-200 text-stone-800 border-stone-300',
@@ -153,12 +159,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       ],
     },
     {
-      title: language === 'te' ? 'రైతు మద్దతు & సహాయం' : 'FARMER SUPPORT',
+      title: isTe ? 'రైతు మద్దతు & సహాయం' : isHi ? 'किसान सहायता एवं संपर्क' : 'FARMER SUPPORT',
       items: [
         {
           id: 'helpline',
           label: t.navHelpline || '24x7 Helpline & Advisory',
-          subLabel: language === 'te' ? 'ఉచిత టోల్‌ఫ్రీ కాల్ 1800-KRISHI-GRN' : 'Toll-Free & Telugu Agro Advisory',
+          subLabel: isTe ? 'ఉచిత టోల్‌ఫ్రీ కాల్ 1800-KRISHI-GRN' : isHi ? 'निःशुल्क 1800-कृषि-ग्रीन फोन' : 'Toll-Free & Agro Advisory',
           icon: IconPhone,
           badge: '1800 Free',
           badgeColor: 'bg-[#1e382b] text-[#fbfaf6] border-[#1e382b]',

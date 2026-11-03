@@ -6,9 +6,9 @@ import {
 } from './Icons';
 import { SupportedLanguage } from '../types';
 import { SUPPORTED_LANGUAGES, UI_TRANSLATIONS } from '../data/translations';
+import { getMultiTranslations } from '../utils/multiLang';
 import { WeatherWidget } from './WeatherWidget';
 import { WeatherAlertBanner } from './WeatherAlertBanner';
-import { AnimatedNewsTicker } from './AnimatedNewsTicker';
 import { UserAuthButton } from './UserAuthButton';
 
 interface HeaderProps {
@@ -32,14 +32,10 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenPrototypeModal,
 }) => {
   const t = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.en;
+  const m = getMultiTranslations(language);
 
   return (
     <header className="sticky top-0 z-40 w-full bg-white border-b border-gray-200/80 shadow-2xs">
-      {/* Smooth animated continuous live ticker */}
-      <AnimatedNewsTicker
-        language={language}
-        districtName="Palnadu / Guntur Hub"
-      />
 
       {/* 1. Agricultural Regional Advisory Sector */}
       <WeatherAlertBanner language={language} />
@@ -52,11 +48,11 @@ export const Header: React.FC<HeaderProps> = ({
             onClick={onToggleSidebar}
             className="flex items-center gap-2 px-4 py-1.5 bg-[#eafaf1] hover:bg-[#d1fae5] text-[#047857] font-bold rounded-full border border-[#a7f3d0] transition cursor-pointer text-xs sm:text-sm shadow-2xs"
             aria-label="Open Navigation Menu"
-            title={language === 'te' ? 'మెనూ తెరవండి' : 'Open Navigation Menu'}
+            title={m.menu}
           >
             <IconMenu className="w-4 h-4 text-[#047857]" />
             <span className="font-bold tracking-wide">
-              {language === 'te' ? 'మెనూ' : 'Menu'}
+              {m.menu}
             </span>
           </button>
 
@@ -101,12 +97,12 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={onOpenVoice}
             className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#eafaf1] hover:bg-[#d1fae5] text-[#047857] font-bold rounded-full border border-[#a7f3d0] transition cursor-pointer text-xs shadow-2xs"
-            title={language === 'te' ? 'వాయిస్ అసిస్టెంట్' : 'Voice Assistant'}
+            title={m.voiceAssistant}
           >
             <svg className="w-3.5 h-3.5 text-[#047857]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
             </svg>
-            <span className="hidden sm:inline">{language === 'te' ? 'వాయిస్ అసిస్టెంట్' : 'Voice Assistant'}</span>
+            <span className="hidden sm:inline">{m.voiceAssistant}</span>
           </button>
 
           {/* Regional Language Selector */}

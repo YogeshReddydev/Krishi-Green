@@ -188,13 +188,13 @@ export const AnimatedEcosystemModel: React.FC<AnimatedEcosystemModelProps> = ({
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
             {language === 'te'
-              ? 'ఆహార వ్యర్థాల నుండి రైతు సంపద వరకు 5-దశల నిరంతర ప్రక్రియ'
-              : 'The Biological Conversion Process: From Surplus Food to Farmer Wealth'}
+              ? 'మండి ఆహార వ్యర్థాల నుండి సజీవ సేంద్రీయ ఎరువు వరకు'
+              : 'From Mandi Food Surplus to Living Soil Humus'}
           </h2>
-          <p className="text-xs sm:text-sm text-gray-600 mt-1 max-w-2xl">
+          <p className="text-xs text-gray-600 mt-1 max-w-xl">
             {language === 'te'
-              ? 'మండి సేంద్రీయ వ్యర్థాల సేకరణ నుండి వికేంద్రీకృత ప్రాసెసింగ్, ల్యాబ్ ధృవీకరణ మరియు ప్రత్యక్ష డీబీటీ రైతు రాబడి వరకు నిరంతర ప్రవాహం.'
-              : 'Continuous conversion workflow tracking food waste aggregation, thermophilic bioprocessing, certified organic nutrient extraction, and direct farmer dividends.'}
+              ? 'వికేంద్రీకృత సేకరణ, ల్యాబ్ ధృవీకరణ మరియు రైతుకు 70% డీబీటీ రాబడి చక్రం.'
+              : 'Decentralized intake, FCO lab certification, and direct 70% farmer DBT waterfall.'}
           </p>
         </div>
 
@@ -306,9 +306,11 @@ export const AnimatedEcosystemModel: React.FC<AnimatedEcosystemModelProps> = ({
               <span>{language === 'te' ? activeNode.titleTe : activeNode.title}</span>
             </h3>
 
-            <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed font-normal max-w-2xl">
-              {language === 'te' ? activeNode.descriptionTe : activeNode.description}
-            </p>
+            <div className="bg-black/30 rounded-2xl p-3 sm:p-4 border border-emerald-400/20 max-w-2xl">
+              <p className="text-xs sm:text-sm text-emerald-100/95 leading-relaxed font-normal">
+                {language === 'te' ? activeNode.descriptionTe : activeNode.description}
+              </p>
+            </div>
 
             {/* Direct Real-Action Launch Button */}
             <div className="pt-2 flex flex-wrap items-center gap-3">

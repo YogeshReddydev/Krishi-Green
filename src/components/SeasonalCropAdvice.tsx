@@ -23,6 +23,7 @@ import {
   Info,
 } from 'lucide-react';
 import { SupportedLanguage } from '../types';
+import { getMultiTranslations } from '../utils/multiLang';
 import {
   SEASONAL_CROPS_DATABASE,
   AGRO_REGIONS,
@@ -40,6 +41,7 @@ export const SeasonalCropAdvice: React.FC<SeasonalCropAdviceProps> = ({
   language,
   onNavigate,
 }) => {
+  const m = getMultiTranslations(language);
   // Current calendar month (1-12)
   const currentCalendarMonth = new Date().getMonth() + 1; // e.g. 10 for October
   const [selectedMonth, setSelectedMonth] = useState<number>(currentCalendarMonth);
@@ -150,24 +152,14 @@ export const SeasonalCropAdvice: React.FC<SeasonalCropAdviceProps> = ({
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-400/30 mb-2">
             <Sprout className="w-3.5 h-3.5 text-emerald-400" />
-            <span>
-              {language === 'te'
-                ? 'రియల్-టైమ్ సీజనల్ పంటల సలహాదారు • 2026'
-                : 'Real-Time Seasonal Crop Advisory • 2026'}
-            </span>
+            <span>{m.seasonalAdviceTitle}</span>
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2">
-            <span>
-              {language === 'te'
-                ? 'సీజనల్ పంటల సలహా: తదుపరి ఏమి నాటాలి?'
-                : 'Seasonal Crop Advice: What to Plant Next'}
-            </span>
+            <span>{m.seasonalAdviceHeading}</span>
           </h2>
           <p className="text-xs sm:text-sm text-emerald-100/90 mt-1 max-w-3xl leading-relaxed">
-            {language === 'te'
-              ? 'ప్రస్తుత నెల వాతావరణం, నేలలోని తేమ మరియు సేంద్రీయ ఎరువుల లభ్యత ఆధారంగా రైతులకు అనువైన పంటల సిఫార్సులు. రసాయన ఖర్చులను తగ్గించి గరిష్ట లాభాలు పొందండి.'
-              : 'Real-time, region-specific cropping suggestions matched to the current month, residual soil moisture, and KrishiGreen bio-vermicompost schedules to guide what to plant next.'}
+            {m.seasonalAdviceDesc}
           </p>
         </div>
 
@@ -201,7 +193,7 @@ export const SeasonalCropAdvice: React.FC<SeasonalCropAdviceProps> = ({
           <div className="flex items-center justify-between text-xs text-emerald-300 font-bold">
             <span className="flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5 text-emerald-400" />
-              {language === 'te' ? 'ప్రాంతం / జిల్లాను ఎంచుకోండి:' : 'Select Farming District / Agro-Zone:'}
+              {m.selectFarmingDistrict}
             </span>
             <span className="text-[10px] bg-emerald-900/80 px-2 py-0.5 rounded font-mono text-emerald-200">
               {selectedRegion.state}
@@ -243,7 +235,7 @@ export const SeasonalCropAdvice: React.FC<SeasonalCropAdviceProps> = ({
           <div className="flex items-center justify-between text-xs text-emerald-300 font-bold">
             <span className="flex items-center gap-1.5">
               <Calendar className="w-3.5 h-3.5 text-amber-400" />
-              {language === 'te' ? 'నెలను ఎంచుకోండి (విత్తే సమయం):' : 'Select Month (Cropping Window):'}
+              {m.selectCroppingMonth}
             </span>
             <span className="text-[11px] font-black px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30">
               {language === 'te' ? currentMonthInfo.seasonTe : currentMonthInfo.season}
@@ -407,7 +399,7 @@ export const SeasonalCropAdvice: React.FC<SeasonalCropAdviceProps> = ({
                 <div className="space-y-1">
                   <span className="text-[11px] font-bold text-amber-400 flex items-center gap-1">
                     <Sun className="w-3.5 h-3.5" />
-                    {language === 'te' ? 'ఈ నెలలోనే ఎందుకు నాటాలి?' : 'Why plant this month?'}
+                    {m.whyPlantNow}:
                   </span>
                   <p className="text-xs text-emerald-100/90 leading-relaxed bg-white/5 p-2.5 rounded-xl border border-white/5">
                     {language === 'te' ? crop.whyPlantNowTe : crop.whyPlantNow}
@@ -419,7 +411,7 @@ export const SeasonalCropAdvice: React.FC<SeasonalCropAdviceProps> = ({
                   <div className="flex items-center justify-between text-emerald-300 font-bold">
                     <span className="flex items-center gap-1">
                       <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                      {language === 'te' ? 'సేంద్రీయ ఎరువుల మోతాదు' : 'Organic Input Regimen'}
+                      {m.organicRegimen}:
                     </span>
                     <span className="text-[10px] text-amber-300 font-mono">
                       {crop.chemicalReduction}

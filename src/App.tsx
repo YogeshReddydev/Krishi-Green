@@ -18,7 +18,6 @@ import { AndhraPradeshDiscoveryMap } from './components/AndhraPradeshDiscoveryMa
 import { CarbonEngineSection } from './components/CarbonEngineSection';
 import { WasteToWealthPipeline } from './components/WasteToWealthPipeline';
 import { RealImpactDashboard } from './components/RealImpactDashboard';
-import { PrototypeTopBanner } from './components/PrototypeTopBanner';
 import { PrototypeNoticeModal } from './components/PrototypeNoticeModal';
 import { OfflineSyncToast } from './components/OfflineSyncToast';
 import { AnimatedBackground } from './components/AnimatedBackground';
@@ -47,11 +46,13 @@ import {
   IconClose,
 } from './components/Icons';
 import { UI_TRANSLATIONS } from './data/translations';
+import { getMultiTranslations } from './utils/multiLang';
 import farmerWelcomeImg from './assets/images/krishigreen_farmer_welcome_1791353512681.jpg';
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<string>('home');
   const [language, setLanguage] = useState<SupportedLanguage>('en');
+  const m = getMultiTranslations(language);
 
   // Core Data States (With Firestore persistence & offline fallback)
   const [wasteRequests, setWasteRequests] = useState<WasteCollectionRequest[]>(INITIAL_WASTE_REQUESTS);
@@ -297,11 +298,6 @@ export default function App() {
       />
       <div className="fixed inset-0 pointer-events-none z-0 bg-[#f8faf8]/95" />
 
-      {/* Top Prototype Announcement Banner */}
-      <PrototypeTopBanner
-        language={language}
-        onOpenDetails={() => setIsPrototypeModalOpen(true)}
-      />
 
       {/* Main App Navigation Header (PINNED sticky top-0) */}
       <Header
@@ -350,19 +346,19 @@ export default function App() {
                 </button>
                 <span className="text-gray-400">/</span>
                 <span className="font-bold text-gray-900">
-                  {currentTab === 'process' && (language === 'te' ? 'మా విధానం (వ్యర్థాల నుండి సేంద్రీయ దిగుబడి)' : 'Our Process: Waste Collection to Organic Yield')}
-                  {currentTab === 'ap-pilot' && (language === 'te' ? 'కస్టమ్ హైరింగ్ & వ్యవసాయ యంత్రాలు' : 'Custom Hiring & Machinery Hubs')}
-                  {currentTab === 'pipeline' && t.navPipeline}
-                  {currentTab === 'marketplace' && t.navMarketplace}
-                  {currentTab === 'marketplace-products' && (language === 'te' ? 'వ్యవసాయ ఉత్పత్తుల అమ్మకం' : 'Selling Farming Products')}
-                  {currentTab === 'marketplace-machinery' && (language === 'te' ? 'రైతుల కోసం యంత్రాల హబ్' : 'Equipment Hub for Farmers')}
-                  {currentTab === 'carbon' && (t.navCarbon || 'Carbon & Climate Engine')}
-                  {currentTab === 'rotation' && t.navRotation}
-                  {currentTab === 'schemes' && t.navSchemes}
-                  {currentTab === 'impact' && t.navImpact}
-                  {currentTab === 'maps' && t.navMaps}
-                  {currentTab === 'search' && t.navSearch}
-                  {currentTab === 'helpline' && t.navHelpline}
+                  {currentTab === 'process' && (m.servicePipelineTitle || 'Our Process: Waste Collection to Organic Yield')}
+                  {currentTab === 'ap-pilot' && (m.serviceMachineryTitle || 'Custom Hiring & Machinery Hubs')}
+                  {currentTab === 'pipeline' && (m.servicePipelineTitle || t.navPipeline)}
+                  {currentTab === 'marketplace' && (m.serviceMarketplaceTitle || t.navMarketplace)}
+                  {currentTab === 'marketplace-products' && (m.flagshipProduct || 'Selling Farming Products')}
+                  {currentTab === 'marketplace-machinery' && (m.serviceMachineryTitle || 'Equipment Hub for Farmers')}
+                  {currentTab === 'carbon' && (m.serviceCarbonTitle || t.navCarbon || 'Carbon & Climate Engine')}
+                  {currentTab === 'rotation' && (m.serviceRotationTitle || t.navRotation)}
+                  {currentTab === 'schemes' && (m.serviceSchemesTitle || t.navSchemes)}
+                  {currentTab === 'impact' && (m.serviceImpactTitle || t.navImpact)}
+                  {currentTab === 'maps' && (t.navMaps || m.region)}
+                  {currentTab === 'search' && (t.navSearch || 'Smart Agro Search')}
+                  {currentTab === 'helpline' && (m.serviceHelplineTitle || t.navHelpline)}
                 </span>
               </div>
               <button

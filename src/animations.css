@@ -83,9 +83,19 @@
 .kg-ticker-track {
   display: flex;
   white-space: nowrap;
-  animation: kgTicker 28s linear infinite;
+  width: max-content;
+  animation: kgTicker 35s linear infinite;
 }
 .kg-ticker-track:hover {
+  animation-play-state: paused;
+}
+.kg-ticker-track-fast {
+  display: flex;
+  white-space: nowrap;
+  width: max-content;
+  animation: kgTicker 24s linear infinite;
+}
+.kg-ticker-track-fast:hover {
   animation-play-state: paused;
 }
 

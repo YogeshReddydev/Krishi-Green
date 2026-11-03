@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   ArrowRight,
   Phone,
@@ -6,7 +6,6 @@ import {
   RotateCcw,
   FileCheck2,
   TrendingUp,
-  MapPin,
   Flame,
   Layers,
   Bot,
@@ -15,12 +14,24 @@ import {
   Sparkles,
   CheckCircle2,
   Award,
+  Calculator,
+  ShieldCheck,
+  Droplets,
+  Scale,
+  XCircle,
+  HelpCircle,
+  ChevronRight,
+  Leaf,
+  Sun,
 } from 'lucide-react';
 import { SupportedLanguage } from '../types';
 import { UI_TRANSLATIONS } from '../data/translations';
+import { getMultiTranslations } from '../utils/multiLang';
 import { AnimatedEcosystemModel } from './AnimatedEcosystemModel';
 import { SeasonalCropAdvice } from './SeasonalCropAdvice';
 import { ScrollReveal } from './ScrollReveal';
+import { AnimatedNewsTicker } from './AnimatedNewsTicker';
+import { FarmerInteractivePanel } from './FarmerInteractivePanel';
 import farmerWelcomeImg from '../assets/images/krishigreen_farmer_welcome_1791353512681.jpg';
 
 interface HomeIntroProps {
@@ -35,139 +46,166 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
   language,
 }) => {
   const t = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.en;
+  const m = getMultiTranslations(language);
+
+  // Interactive Product Station states
+  const [productTab, setProductTab] = useState<'benefits' | 'calculator' | 'lab'>('benefits');
+  const [calcCrop, setCalcCrop] = useState<string>('chilli');
+  const [calcAcres, setCalcAcres] = useState<number>(2);
+
+  // Category filter state for ecosystem cards
+  const [serviceCategory, setServiceCategory] = useState<'all' | 'biomass' | 'marketplace' | 'schemes'>('all');
+
+  // Interactive Method Comparison Tab
+  const [comparisonMetric, setComparisonMetric] = useState<'all' | 'costs' | 'soil' | 'income'>('all');
+
+  // Crop dosage configurations for interactive station
+  const cropDosageMap: Record<string, { name: string; nameTe: string; bagsPerAcre: number; dapCut: number }> = {
+    chilli: { name: 'Chilli / Pepper', nameTe: 'మిరప తోట', bagsPerAcre: 5, dapCut: 1950 },
+    cotton: { name: 'Cotton', nameTe: 'పత్తి', bagsPerAcre: 6, dapCut: 2200 },
+    paddy: { name: 'Paddy / Rice', nameTe: 'వరి', bagsPerAcre: 4, dapCut: 1600 },
+    tomato: { name: 'Tomato / Veg', nameTe: 'టమోటా & కూరగాయలు', bagsPerAcre: 5, dapCut: 1850 },
+    groundnut: { name: 'Groundnut', nameTe: 'వేరుశనగ', bagsPerAcre: 4, dapCut: 1500 },
+  };
+
+  const currentCropInfo = cropDosageMap[calcCrop] || cropDosageMap.chilli;
+  const totalBagsNeeded = currentCropInfo.bagsPerAcre * calcAcres;
+  const totalWeightKg = totalBagsNeeded * 50;
+  const totalProductCost = totalBagsNeeded * 399;
+  const estimatedDapSavings = currentCropInfo.dapCut * calcAcres;
 
   const ecosystemServices = [
     {
       tab: 'marketplace-machinery',
-      title: language === 'te' ? 'కస్టమ్ హైరింగ్ & వ్యవసాయ యంత్రాలు' : 'Custom Hiring Machinery Hub',
-      desc: language === 'te'
-        ? 'ఆంధ్రప్రదేశ్ గైడ్ నుండి ట్రాక్టర్లు, పవర్ టిల్లర్లు, డ్రోన్లు, హార్వెస్టర్ల గంటకు సగటు అద్దె మరియు రాయితీ కొనుగోలు.'
-        : 'AP Guide machinery catalog with average rent per hour, SMAM 40-50% subsidy discounts, and certified operators.',
+      category: 'marketplace',
+      title: m.serviceMachineryTitle,
+      shortBenefit: language === 'te' ? 'రైతులకు 50% సబ్సిడీతో ష్రెడ్డర్లు & ట్రాక్టర్లు' : 'Subsidized custom-hiring balers & shredders',
       icon: Tractor,
+      tags: ['50% Subsidy', 'Zero Deposit'],
       color: 'from-amber-600 to-orange-600',
-      actionLabel: language === 'te' ? 'యంత్రాల హబ్ & గంట అద్దె చూడండి' : 'Browse Machinery & Hourly Rent',
+      actionLabel: m.serviceMachineryAction,
     },
     {
       tab: 'pipeline',
-      title: language === 'te' ? 'వ్యర్థాల నుండి సంపద పైప్‌లైన్' : 'Waste-to-Wealth Conversion Pipeline',
-      desc: language === 'te'
-        ? 'మండి ఆహార వ్యర్థాల డిక్లరేషన్, కాటా బరువు స్లిప్పులు, రవాణా ట్రాకింగ్ మరియు ల్యాబ్ పరీక్షల 16-దశల నివేదిక.'
-        : 'Transparent 16-stage conversion workflow from mandi collection, weighbridge slips, and bio-fermentation to FCO 1985 certified batches.',
+      category: 'biomass',
+      title: m.servicePipelineTitle,
+      shortBenefit: language === 'te' ? 'ద్వారపు వద్దనే బరువు చూసి తక్షణ చెల్లింపు' : 'Doorstep biomass weighing with instant DBT',
       icon: Layers,
+      tags: ['Geotagged', '₹750/MT'],
       color: 'from-teal-600 to-emerald-600',
-      actionLabel: language === 'te' ? 'పైప్‌లైన్ రికార్డులను చూడండి' : 'View Conversion Lifecycle',
+      actionLabel: m.servicePipelineAction,
     },
     {
       tab: 'marketplace-products',
-      title: language === 'te' ? 'సేంద్రీయ ఎరువుల మార్కెట్‌ప్లేస్' : 'Selling Farming Products',
-      desc: language === 'te'
-        ? 'ల్యాబ్ పరీక్షించిన నాణ్యమైన వర్మీకంపోస్ట్, జీవామృతం, బయో-ఎంజైమ్‌ల నేరుగా కొనుగోలు మరియు రైతు ఉత్పత్తుల అమ్మకం.'
-        : 'Direct farmer-to-producer commerce for certified organic vermicompost, bio-stimulants, and microbial bio-enzymes.',
+      category: 'marketplace',
+      title: m.serviceMarketplaceTitle,
+      shortBenefit: language === 'te' ? 'FCO ధృవీకరించిన సేంద్రీయ ఎరువుల విక్రయం' : 'Direct certified input marketplace for growers',
       icon: ShoppingBag,
+      tags: ['FCO 1985', '₹399/Bag'],
       color: 'from-emerald-700 to-green-600',
-      actionLabel: language === 'te' ? 'సేంద్రీయ ఉత్పత్తులు చూడండి' : 'Browse Verified Inputs',
+      actionLabel: m.serviceMarketplaceAction,
     },
     {
       tab: 'carbon',
-      title: language === 'te' ? 'కార్బన్ క్రెడిట్ & క్లైమేట్ ఇంజిన్' : 'Carbon Credit & Climate Engine',
-      desc: language === 'te'
-        ? 'వ్యర్థాల దహన నివారణ ద్వారా అధికారిక BEE/ICM కార్బన్ క్రెడిట్లు మరియు 70% ప్రత్యక్ష రైతు ఖాతా జమ (DBT).'
-        : 'Deterministic emissions avoidance under the Bureau of Energy Efficiency (BEE) with transparent 70% direct farmer revenue waterfall.',
+      category: 'schemes',
+      title: m.serviceCarbonTitle,
+      shortBenefit: language === 'te' ? '70% కార్బన్ క్రెడిట్ నగదు నేరుగా బ్యాంకులో' : '70% verified carbon revenue credited to DBT',
       icon: Flame,
+      tags: ['BEE / CCTS', '70% DBT'],
       color: 'from-teal-700 to-green-600',
-      actionLabel: language === 'te' ? 'కార్బన్ లబ్ధి లెక్కించండి' : 'Calculate Carbon Payout',
+      actionLabel: m.serviceCarbonAction,
     },
     {
       tab: 'rotation',
-      title: language === 'te' ? 'శాస్త్రీయ పంట మార్పిడి ప్రణాళిక' : 'Crop Rotation & Soil Nutrition',
-      desc: language === 'te'
-        ? 'సేంద్రీయ ఎరువుల ఎన్‌పికె విలువల ఆధారంగా ఖరీఫ్, రబీ మరియు జాయెద్ పంటల శాస్త్రీయ మార్పిడి పట్టిక.'
-        : 'Plan sustainable Kharif → Rabi → Zaid crop sequences matched to organic compost batch nutrients and soil moisture.',
+      category: 'biomass',
+      title: m.serviceRotationTitle,
+      shortBenefit: language === 'te' ? 'నేల సారాన్ని పెంచే శాస్త్రీయ పంట ప్రణాళిక' : 'Crop calendar matched to residual soil moisture',
       icon: RotateCcw,
+      tags: ['Agromet AI', 'Moisture Map'],
       color: 'from-blue-600 to-cyan-500',
-      actionLabel: language === 'te' ? 'పంట పట్టిక తెరవండి' : 'Open Rotation Scheduler',
+      actionLabel: m.serviceRotationAction,
     },
     {
       tab: 'schemes',
-      title: language === 'te' ? 'ప్రభుత్వ సబ్సిడీలు & పథకాలు' : 'Government Agricultural Subsidies',
-      desc: language === 'te'
-        ? 'పీఎం-ప్రణామ్, పీకేవీవై సేంద్రీయ గ్రాంట్లు మరియు ఎస్ఎంఏఎం 50% యంత్రాల రాయితీ అర్హత తనిఖీ.'
-        : 'Eligibility guidelines and application assistance for PM-PRANAM, PKVY organic grants, and SMAM farm machinery subsidies up to 50%.',
+      category: 'schemes',
+      title: m.serviceSchemesTitle,
+      shortBenefit: language === 'te' ? 'పీఎం-కుసుమ్ & పీఎం-ప్రణామ్ రాయితీలు' : 'PM-PRANAM & PM-KUSUM grant navigators',
       icon: FileCheck2,
+      tags: ['Govt Grants', '1-Click Apply'],
       color: 'from-purple-600 to-indigo-500',
-      actionLabel: language === 'te' ? 'రాయితీల అర్హత చూడండి' : 'Check Subsidy Eligibility',
+      actionLabel: m.serviceSchemesAction,
     },
     {
       tab: 'impact',
-      title: language === 'te' ? 'ప్రత్యక్ష ప్రభావ నివేదిక & లెడ్జర్' : 'Audited Impact Ledger & Analytics',
-      desc: language === 'te'
-        ? 'ల్యాండ్‌ఫిల్ నుండి మళ్లించిన వ్యర్థాలు, తగ్గిన రసాయన ఖర్చులు మరియు ధృవీకరించిన రైతు బ్యాంక్ జమల లైవ్ లెడ్జర్.'
-        : 'Audited ledger of cumulative bio-waste diverted, methane avoided, and verified farmer DBT payouts strictly from database records.',
+      category: 'schemes',
+      title: m.serviceImpactTitle,
+      shortBenefit: language === 'te' ? 'వాస్తవ ల్యాబ్ డేటా మరియు క్షేత్రస్థాయి విశ్లేషణ' : 'Real-time ledger of diverted methane & humus',
       icon: TrendingUp,
+      tags: ['Audited Data', 'Live Ledger'],
       color: 'from-green-600 to-emerald-600',
-      actionLabel: language === 'te' ? 'ఆడిట్ లెడ్జర్ డౌన్‌లోడ్' : 'Export Audited Ledger',
+      actionLabel: m.serviceImpactAction,
     },
     {
       tab: 'helpline',
-      title: language === 'te' ? '24×7 రైతు మద్దతు & ఏఐ సలహాదారు' : '24x7 Agronomy Helpline & AI',
-      desc: language === 'te'
-        ? '1800-కృషి-గ్రీన్ ఉచిత టోల్‌ఫ్రీ కాల్, జెమినీ ఏఐ సలహాదారు మరియు ఫీల్డ్ టెక్నీషియన్ టిక్కెట్ల ట్రాకింగ్.'
-        : 'Dial 1800-KRISHI-GRN, interact with 24x7 regional voice AI Advisor, and track field technician resolution tickets.',
+      category: 'schemes',
+      title: m.serviceHelplineTitle,
+      shortBenefit: language === 'te' ? '13 భాషలలో ఉచిత 24×7 వ్యవసాయ సలహా' : 'Toll-free voice advisor in 13 Indian languages',
       icon: Bot,
+      tags: ['24×7 Free', '13 Languages'],
       color: 'from-rose-600 to-amber-600',
-      actionLabel: language === 'te' ? 'హెల్ప్‌లైన్‌ను సంప్రదించండి' : 'Connect with Advisor',
+      actionLabel: m.serviceHelplineAction,
     },
   ];
+
+  const filteredServices = ecosystemServices.filter((s) => {
+    if (serviceCategory === 'all') return true;
+    return s.category === serviceCategory;
+  });
 
   return (
     <div className="space-y-8 animate-fadeIn">
       {/* 
         ======================================================================
-        HERO SECTION:
-        Professional, futuristic, non-AI-slop framing with real Indian agriculture imagery
+        1. ACTION-ORIENTED HERO COCKPIT:
+        Tactile, visual, zero-fatigue entry point for farmers
         ======================================================================
       */}
       <section className="relative rounded-3xl overflow-hidden shadow-lg border border-emerald-900/20 text-white p-6 sm:p-8 lg:p-10 w-full flex flex-col justify-between">
-        {/* Background Image */}
+        {/* Background photo */}
         <div
           className="absolute inset-0 bg-cover bg-right sm:bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url('${farmerWelcomeImg}')`,
-          }}
+          style={{ backgroundImage: `url('${farmerWelcomeImg}')` }}
         />
-
-        {/* Ambient Gradient Overlays for High-Contrast Text Legibility */}
-        <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/98 via-emerald-950/85 to-transparent sm:w-2/3" />
+        {/* Measured dark scrim for high contrast */}
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/98 via-emerald-950/90 to-transparent sm:w-2/3" />
         <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-transparent to-black/30" />
 
-        {/* Main Hero Content */}
-        <div className="relative z-10 max-w-xl space-y-3.5">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-black uppercase tracking-widest text-emerald-300 font-mono">
-              {language === 'te' ? 'జాతీయ వ్యవసాయ పర్యావరణ వేదిక' : 'National Agri-Ecological Infrastructure'}
-            </span>
+        <div className="relative z-10 max-w-xl space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold tracking-wide">
+            <Leaf className="w-3.5 h-3.5 text-emerald-400" />
+            <span>{m.nationalAgriInfra}</span>
           </div>
 
-          <h1 className="kg-hero-title text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
             Krishi<span className="text-emerald-400">Green</span>
           </h1>
 
-          <p className="kg-hero-sub text-base sm:text-lg font-bold text-emerald-200/95 leading-snug">
-            {t.tagline}
+          <p className="text-base sm:text-lg font-bold text-emerald-200/95 leading-snug">
+            {t.tagline || m.heroTagline}
           </p>
 
-          <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed font-normal">
-            {t.oneLiner}
+          <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed max-w-lg">
+            {t.oneLiner || m.heroOneLiner}
           </p>
 
-          {/* Core Direct Action Buttons */}
-          <div className="kg-hero-cta flex flex-wrap items-center gap-2.5 pt-2">
+          {/* Quick-Action Launch Buttons */}
+          <div className="flex flex-wrap items-center gap-2.5 pt-2">
             <button
               onClick={() => onNavigate('pipeline')}
               className="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-emerald-950 rounded-xl font-black text-xs sm:text-sm shadow-md transition flex items-center gap-2 active:scale-98 cursor-pointer"
             >
               <Truck className="w-4 h-4" />
-              <span>{language === 'te' ? 'వ్యర్థాల సేకరణ బుక్ చేయండి' : 'Schedule Waste Collection'}</span>
+              <span>{m.scheduleWasteCollection}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
 
@@ -176,7 +214,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
               className="px-4 py-2.5 bg-emerald-800/90 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs sm:text-sm shadow-md transition flex items-center gap-2 active:scale-98 cursor-pointer border border-emerald-500/40"
             >
               <ShoppingBag className="w-4 h-4 text-emerald-300" />
-              <span>{language === 'te' ? 'సేంద్రీయ ఎరువుల మార్కెట్' : 'Organic Marketplace'}</span>
+              <span>{m.organicMarketplace}</span>
             </button>
 
             <button
@@ -189,134 +227,392 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
           </div>
         </div>
 
+        {/* Tactile 4-Card Action Dock */}
+        <div className="relative z-10 w-full mt-6 pt-4 border-t border-emerald-800/50">
+          <p className="text-[11px] font-mono uppercase tracking-wider text-emerald-300/80 mb-2.5">
+            {language === 'te' ? 'రైతు తక్షణ చర్యలు:' : 'Quick Farmer Actions:'}
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 text-xs">
+            <button
+              onClick={() => onNavigate('pipeline')}
+              className="p-3 bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-700/50 hover:border-emerald-400 rounded-2xl text-left transition group cursor-pointer shadow-sm"
+            >
+              <div className="flex items-center justify-between mb-1.5">
+                <Truck className="w-4 h-4 text-amber-400 group-hover:scale-110 transition" />
+                <ArrowRight className="w-3 h-3 text-emerald-400 group-hover:translate-x-1 transition" />
+              </div>
+              <strong className="text-white block font-black text-xs">
+                {language === 'te' ? 'వ్యర్థాల సేకరణ' : 'Pickup Request'}
+              </strong>
+              <span className="text-[10px] text-emerald-200/80 block mt-0.5 truncate">
+                {language === 'te' ? 'కాటా బరువు & తక్షణ DBT' : 'Doorstep tare & direct DBT'}
+              </span>
+            </button>
+
+            <button
+              onClick={() => onNavigate('marketplace-products')}
+              className="p-3 bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-700/50 hover:border-emerald-400 rounded-2xl text-left transition group cursor-pointer shadow-sm"
+            >
+              <div className="flex items-center justify-between mb-1.5">
+                <ShoppingBag className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition" />
+                <ArrowRight className="w-3 h-3 text-emerald-400 group-hover:translate-x-1 transition" />
+              </div>
+              <strong className="text-white block font-black text-xs">
+                {language === 'te' ? 'వర్మికంపోస్ట్ ఆర్డర్' : 'Order Bio-Humus'}
+              </strong>
+              <span className="text-[10px] text-emerald-200/80 block mt-0.5 truncate">
+                {language === 'te' ? '₹399 / 50 కిలోల సంచి' : 'FCO Grade-1 @ ₹399/bag'}
+              </span>
+            </button>
+
+            <button
+              onClick={() => onNavigate('marketplace-machinery')}
+              className="p-3 bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-700/50 hover:border-emerald-400 rounded-2xl text-left transition group cursor-pointer shadow-sm"
+            >
+              <div className="flex items-center justify-between mb-1.5">
+                <Tractor className="w-4 h-4 text-sky-400 group-hover:scale-110 transition" />
+                <ArrowRight className="w-3 h-3 text-emerald-400 group-hover:translate-x-1 transition" />
+              </div>
+              <strong className="text-white block font-black text-xs">
+                {language === 'te' ? 'యంత్రాల అద్దె హబ్' : 'Custom Hiring Hub'}
+              </strong>
+              <span className="text-[10px] text-emerald-200/80 block mt-0.5 truncate">
+                {language === 'te' ? '50% సబ్సిడీ బేలర్లు' : 'Shredders & Balers rental'}
+              </span>
+            </button>
+
+            <button
+              onClick={() => {
+                const el = document.getElementById('seasonal-advice-block');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+                else onNavigate('search');
+              }}
+              className="p-3 bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-700/50 hover:border-emerald-400 rounded-2xl text-left transition group cursor-pointer shadow-sm"
+            >
+              <div className="flex items-center justify-between mb-1.5">
+                <Sun className="w-4 h-4 text-amber-300 group-hover:scale-110 transition" />
+                <ArrowRight className="w-3 h-3 text-emerald-400 group-hover:translate-x-1 transition" />
+              </div>
+              <strong className="text-white block font-black text-xs">
+                {language === 'te' ? 'సీజనల్ పంటల సలహా' : 'Cropping Advisory'}
+              </strong>
+              <span className="text-[10px] text-emerald-200/80 block mt-0.5 truncate">
+                {language === 'te' ? 'ఈ నెలకు అనువైన పంటలు' : 'Best crops for this month'}
+              </span>
+            </button>
+          </div>
+        </div>
+
         {/* Real-World National Infrastructure Metrics */}
-        <div className="relative z-10 w-full rounded-2xl bg-emerald-950/80 backdrop-blur-md border border-emerald-700/50 p-3.5 sm:p-4 mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+        <div className="relative z-10 w-full rounded-2xl bg-black/40 backdrop-blur-md border border-emerald-700/40 p-3 sm:p-4 mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
           <div>
             <span className="text-emerald-300 uppercase block font-bold text-[10px] tracking-wide">
-              {language === 'te' ? 'పరిధి' : 'Geographic Reach'}
+              {m.geographicReach}
             </span>
-            <strong className="text-sm sm:text-base font-black font-mono text-white">Pan-India Network</strong>
+            <strong className="text-sm sm:text-base font-black font-mono text-white">{m.panIndiaNetwork}</strong>
           </div>
           <div>
             <span className="text-emerald-300 uppercase block font-bold text-[10px] tracking-wide">
-              {language === 'te' ? 'రైతు రాబడి వాటా' : 'Farmer Revenue Share'}
+              {m.farmerRevenueShare}
             </span>
-            <strong className="text-sm sm:text-base font-black font-mono text-white">70% Direct DBT</strong>
+            <strong className="text-sm sm:text-base font-black font-mono text-white">{m.directDbt70}</strong>
           </div>
           <div>
             <span className="text-emerald-300 uppercase block font-bold text-[10px] tracking-wide">
-              {language === 'te' ? 'నాణ్యతా ప్రమాణాలు' : 'Quality Standards'}
+              {m.qualityStandards}
             </span>
-            <strong className="text-sm sm:text-base font-black font-mono text-white">FCO 1985 & BEE CCTS</strong>
+            <strong className="text-sm sm:text-base font-black font-mono text-white">{m.fcoAndBee}</strong>
           </div>
           <div>
             <span className="text-emerald-300 uppercase block font-bold text-[10px] tracking-wide">
-              {language === 'te' ? 'సహాయ కేంద్రం' : 'Helpline Support'}
+              {m.helplineSupport}
             </span>
-            <strong className="text-sm sm:text-base font-black font-mono text-white">24×7 • 13 Languages</strong>
+            <strong className="text-sm sm:text-base font-black font-mono text-white">{m.helpline24x7}</strong>
           </div>
         </div>
       </section>
 
-
       {/* 
         ======================================================================
-        FLAGSHIP STORE VISUAL SPOTLIGHT:
-        Real product photo high-lifted for verified farmer input commerce
+        2. LIVE TELEMETRY STREAM & MANDI RATES
         ======================================================================
       */}
       <ScrollReveal>
-        <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-950 via-teal-950 to-emerald-900 border-2 border-emerald-500/40 p-6 sm:p-8 text-white shadow-xl">
+        <AnimatedNewsTicker
+          language={language}
+          districtName="Palnadu / Guntur Hub"
+          onScrollToNext={() => {
+            const el = document.getElementById('flagship-station');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
+        />
+      </ScrollReveal>
+
+      {/* 
+        ======================================================================
+        3. INTERACTIVE FLAGSHIP PRODUCT STATION:
+        Zero "Book to Read" fatigue — Real visuals + Interactive dosage tool
+        ======================================================================
+      */}
+      <ScrollReveal>
+        <section id="flagship-station" className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-950 via-teal-950 to-emerald-900 border-2 border-emerald-500/40 p-5 sm:p-7 text-white shadow-xl">
           <div className="absolute -right-24 -top-24 w-72 h-72 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+
+          {/* Header pill & title */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-emerald-800/60 pb-3 mb-5">
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-400/30">
+                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                <span>{m.flagshipProduct}</span>
+                <span className="text-emerald-400/60">·</span>
+                <span>{m.officialStoreVisual}</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-white mt-1">
+                {m.flagshipTitle}
+              </h2>
+            </div>
+
+            {/* Interactive Mode Tabs */}
+            <div className="flex items-center gap-1 bg-black/40 p-1 rounded-xl border border-emerald-700/50 self-start sm:self-auto text-xs font-bold">
+              <button
+                onClick={() => setProductTab('benefits')}
+                className={`px-3 py-1.5 rounded-lg transition cursor-pointer ${
+                  productTab === 'benefits'
+                    ? 'bg-emerald-500 text-emerald-950 font-black shadow-xs'
+                    : 'text-emerald-200 hover:text-white'
+                }`}
+              >
+                {language === 'te' ? 'ముఖ్యాంశాలు' : 'Key Highlights'}
+              </button>
+              <button
+                onClick={() => setProductTab('calculator')}
+                className={`px-3 py-1.5 rounded-lg transition cursor-pointer flex items-center gap-1 ${
+                  productTab === 'calculator'
+                    ? 'bg-emerald-500 text-emerald-950 font-black shadow-xs'
+                    : 'text-emerald-200 hover:text-white'
+                }`}
+              >
+                <Calculator className="w-3.5 h-3.5" />
+                <span>{language === 'te' ? 'మోతాదు కాలిక్యులేటర్' : 'Dosage Calc'}</span>
+              </button>
+              <button
+                onClick={() => setProductTab('lab')}
+                className={`px-3 py-1.5 rounded-lg transition cursor-pointer flex items-center gap-1 ${
+                  productTab === 'lab'
+                    ? 'bg-emerald-500 text-emerald-950 font-black shadow-xs'
+                    : 'text-emerald-200 hover:text-white'
+                }`}
+              >
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>{language === 'te' ? 'ల్యాబ్ రిపోర్ట్' : 'Lab Certificate'}</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            {/* Visual Store Box */}
             <div className="lg:col-span-5 space-y-2">
-              <div className="relative rounded-2xl overflow-hidden border-2 border-emerald-400/50 shadow-2xl group aspect-[4/5] bg-gradient-to-b from-[#03190f] to-[#010c07] flex items-center justify-center">
+              <div className="relative rounded-2xl overflow-hidden border border-emerald-400/50 shadow-2xl aspect-[4/3] sm:aspect-[4/5] bg-gradient-to-b from-[#03190f] to-[#010c07] flex items-center justify-center group">
                 <img
                   src="/assets/aistudio/image_d4f93b65.png"
                   alt="KrishiGreen Flagship Grade-A Vermicompost"
-                  className="w-full h-full object-contain transition-transform duration-300"
+                  className="w-full h-full object-contain p-2"
                 />
-                <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
-                <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-black/75 to-transparent pointer-events-none" />
-                <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-                  <span className="px-3 py-1 rounded-full bg-emerald-500 text-white text-xs font-black tracking-wide shadow-md flex items-center gap-1.5 backdrop-blur-xs">
-                    <Sparkles className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
-                    <span>{language === 'te' ? 'మా ప్రధాన ఉత్పత్తి' : 'Our Flagship Product'}</span>
-                  </span>
-                  <span className="px-2.5 py-1 rounded-full bg-black/60 text-emerald-300 text-[11px] font-bold border border-emerald-400/30 backdrop-blur-xs">
-                    Official Store Visual
-                  </span>
+                <div className="absolute top-2 left-2 px-2.5 py-0.5 rounded-full bg-emerald-500 text-emerald-950 text-[10px] font-black uppercase tracking-wider">
+                  FCO 1985 Grade 1
                 </div>
-                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-emerald-100">
-                  <span className="flex items-center gap-1 font-semibold">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                    100% Real Handcrafted Bio-Humus
-                  </span>
-                  <span className="text-[10px] font-mono bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-400/30">
-                    Batch: KG-VERMI-2026-08
-                  </span>
+                <div className="absolute bottom-2 left-2 right-2 bg-black/75 backdrop-blur-xs p-2 rounded-xl border border-white/10 flex items-center justify-between text-xs text-white">
+                  <span className="font-bold">₹399 / 50 kg</span>
+                  <span className="text-[10px] text-emerald-300 font-mono">Batch: KG-2026-B08</span>
                 </div>
               </div>
-              <p className="text-[11px] text-emerald-300 text-center font-medium">
-                📸 Actual physical product output produced from segregated mandi food waste
-              </p>
             </div>
 
+            {/* Interactive Tab Body */}
             <div className="lg:col-span-7 space-y-4">
-              <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-400/30 mb-2">
-                  <Award className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{language === 'te' ? 'స్టోర్ విజువల్స్ & ప్రధాన ఉత్పత్తి' : 'High-Lifted in Store Visuals • FCO 1985 Grade-A'}</span>
-                </div>
-                <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-                  {language === 'te'
-                    ? 'కృషిగ్రీన్ ప్రీమియం ఎన్రిచ్డ్ వర్మీకంపోస్ట్'
-                    : 'KrishiGreen™ Grade-A Enriched Vermicompost'}
-                </h3>
-                <p className="text-xs sm:text-sm text-emerald-100/90 mt-1.5 leading-relaxed">
-                  {language === 'te'
-                    ? 'మండి సేంద్రీయ వ్యర్థాల నుండి 60 రోజుల ఎర్త్‌వార్మ్ జీర్ణక్రియ ద్వారా తయారైన సహజ హ్యూమస్. 18.4% సేంద్రీయ కార్బన్ కలిగి, 40% రసాయన డీఏపీ ఎరువులను సురక్షితంగా భర్తీ చేస్తుంది.'
-                    : 'Handcrafted, nutrient-dense granular humus converted from segregated vegetable mandi bio-waste through 60-day Eisenia fetida digestion. Delivers 18.4% organic carbon, balances soil pH to 7.2, and safely replaces 40% chemical DAP.'}
-                </p>
-              </div>
+              {/* TAB 1: BENEFITS & SPECIFICATIONS */}
+              {productTab === 'benefits' && (
+                <div className="space-y-4 animate-fadeIn">
+                  <div className="grid grid-cols-2 gap-3 text-xs">
+                    <div className="p-3 rounded-2xl bg-black/30 border border-emerald-500/30 flex items-start gap-2.5">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                      <div>
+                        <strong className="text-white block font-bold text-xs">18.4% Living Bio-Humus</strong>
+                        <p className="text-[11px] text-emerald-200/80 mt-0.5">
+                          {language === 'te' ? 'నేలలో సేంద్రీయ కర్బనాన్ని వేగంగా పునరుద్ధరిస్తుంది' : 'Rapidly activates depleted soil microbial biology'}
+                        </p>
+                      </div>
+                    </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
-                <div className="p-2.5 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
-                  <span className="text-[10px] text-emerald-300 block uppercase font-bold tracking-wider">Organic Carbon</span>
-                  <span className="text-base font-black text-white mt-0.5 block">18.4%</span>
-                  <span className="text-[9px] text-emerald-200/80">Living Micro-Humus</span>
-                </div>
-                <div className="p-2.5 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
-                  <span className="text-[10px] text-emerald-300 block uppercase font-bold tracking-wider">NPK Analysis</span>
-                  <span className="text-base font-black text-white mt-0.5 block">1.8 - 1.2 - 1.4</span>
-                  <span className="text-[9px] text-emerald-200/80">Complete Nutrition</span>
-                </div>
-                <div className="p-2.5 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
-                  <span className="text-[10px] text-emerald-300 block uppercase font-bold tracking-wider">Soil pH</span>
-                  <span className="text-base font-black text-white mt-0.5 block">7.2</span>
-                  <span className="text-[9px] text-emerald-200/80">Optimum Neutral</span>
-                </div>
-                <div className="p-2.5 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
-                  <span className="text-[10px] text-emerald-300 block uppercase font-bold tracking-wider">Farmer Direct</span>
-                  <span className="text-base font-black text-amber-300 mt-0.5 block">₹399</span>
-                  <span className="text-[9px] text-emerald-200/80">per 50 kg Bag</span>
-                </div>
-              </div>
+                    <div className="p-3 rounded-2xl bg-black/30 border border-emerald-500/30 flex items-start gap-2.5">
+                      <Droplets className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                      <div>
+                        <strong className="text-white block font-bold text-xs">3.2x Water Sponge</strong>
+                        <p className="text-[11px] text-emerald-200/80 mt-0.5">
+                          {language === 'te' ? 'వర్షాభావ పరిస్థితుల్లో 10 రోజుల వరకు తేమ సంరక్షణ' : 'Holds dew and irrigation moisture for 8-10 dry days'}
+                        </p>
+                      </div>
+                    </div>
 
+                    <div className="p-3 rounded-2xl bg-black/30 border border-emerald-500/30 flex items-start gap-2.5">
+                      <Scale className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                      <div>
+                        <strong className="text-white block font-bold text-xs">40% Chemical DAP Cut</strong>
+                        <p className="text-[11px] text-emerald-200/80 mt-0.5">
+                          {language === 'te' ? 'ఖరీదైన రసాయన ఎరువుల ఖర్చును సగానికి తగ్గిస్తుంది' : 'Substitutes costly chemical fertilizer bags safely'}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="p-3 rounded-2xl bg-black/30 border border-emerald-500/30 flex items-start gap-2.5">
+                      <Award className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
+                      <div>
+                        <strong className="text-white block font-bold text-xs">100% Odorless & Pure</strong>
+                        <p className="text-[11px] text-emerald-200/80 mt-0.5">
+                          {language === 'te' ? 'కలుపు విత్తనాలు లేని నాణ్యమైన గ్రాన్యూల్స్' : 'Zero weed seeds, lab-certified non-toxic formula'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 4 Quantitative badges */}
+                  <div className="grid grid-cols-4 gap-2 text-center text-xs pt-1">
+                    <div className="p-2 bg-white/5 rounded-xl border border-white/10">
+                      <span className="text-[10px] text-emerald-300 block font-mono">Organic Carbon</span>
+                      <strong className="text-sm font-black text-white">18.4%</strong>
+                    </div>
+                    <div className="p-2 bg-white/5 rounded-xl border border-white/10">
+                      <span className="text-[10px] text-emerald-300 block font-mono">NPK Ratio</span>
+                      <strong className="text-sm font-black text-white">1.8-1.2-1.4</strong>
+                    </div>
+                    <div className="p-2 bg-white/5 rounded-xl border border-white/10">
+                      <span className="text-[10px] text-emerald-300 block font-mono">Moisture</span>
+                      <strong className="text-sm font-black text-white">18.2%</strong>
+                    </div>
+                    <div className="p-2 bg-white/5 rounded-xl border border-white/10">
+                      <span className="text-[10px] text-emerald-300 block font-mono">pH Balance</span>
+                      <strong className="text-sm font-black text-amber-300">7.2 Neutral</strong>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 2: INTERACTIVE DOSAGE & SAVINGS CALCULATOR */}
+              {productTab === 'calculator' && (
+                <div className="space-y-4 p-4 rounded-2xl bg-black/40 border border-emerald-500/40 animate-fadeIn text-xs">
+                  <div>
+                    <label className="text-[11px] text-emerald-300 font-bold block mb-1.5">
+                      {language === 'te' ? 'మీ పంటను ఎంచుకోండి:' : 'Select Your Target Crop:'}
+                    </label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {Object.entries(cropDosageMap).map(([key, crop]) => (
+                        <button
+                          key={key}
+                          onClick={() => setCalcCrop(key)}
+                          className={`px-3 py-1.5 rounded-xl font-bold transition cursor-pointer text-xs ${
+                            calcCrop === key
+                              ? 'bg-emerald-400 text-emerald-950 font-black shadow-xs'
+                              : 'bg-white/10 text-white hover:bg-white/20'
+                          }`}
+                        >
+                          {language === 'te' ? crop.nameTe : crop.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-[11px] text-emerald-300 font-bold block mb-1.5">
+                      {language === 'te' ? 'పొలం విస్తీర్ణం (ఎకరాలు):' : 'Farm Acreage:'}
+                    </label>
+                    <div className="flex gap-2">
+                      {[1, 2, 5, 10].map((acres) => (
+                        <button
+                          key={acres}
+                          onClick={() => setCalcAcres(acres)}
+                          className={`flex-1 py-1.5 rounded-xl font-mono font-bold transition cursor-pointer text-xs ${
+                            calcAcres === acres
+                              ? 'bg-amber-400 text-amber-950 font-black shadow-xs'
+                              : 'bg-white/10 text-white hover:bg-white/20'
+                          }`}
+                        >
+                          {acres} {acres === 1 ? 'Acre' : 'Acres'}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Calculated Output Summary Strip */}
+                  <div className="grid grid-cols-3 gap-2 p-3 rounded-xl bg-emerald-950/90 border border-emerald-500/40 text-center">
+                    <div>
+                      <span className="text-[10px] text-emerald-300/80 block uppercase font-mono">Bags Required</span>
+                      <strong className="text-base font-black text-white">{totalBagsNeeded} Bags</strong>
+                      <span className="text-[10px] text-emerald-200/70 block">({totalWeightKg} kg)</span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-emerald-300/80 block uppercase font-mono">Investment</span>
+                      <strong className="text-base font-black text-amber-300">₹{totalProductCost.toLocaleString('en-IN')}</strong>
+                      <span className="text-[10px] text-emerald-200/70 block">@ ₹399/bag</span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-emerald-300/80 block uppercase font-mono">Est. DAP Saved</span>
+                      <strong className="text-base font-black text-emerald-300">₹{estimatedDapSavings.toLocaleString('en-IN')}</strong>
+                      <span className="text-[10px] text-emerald-200/70 block">Chemical cut</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 3: LAB QA CERTIFICATE PREVIEW */}
+              {productTab === 'lab' && (
+                <div className="space-y-3 p-4 rounded-2xl bg-black/40 border border-emerald-500/40 animate-fadeIn text-xs">
+                  <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                    <span className="font-mono text-emerald-300 font-bold">QA Lab Audit: KG-VERMI-2026-B08</span>
+                    <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[10px] border border-emerald-400/30">
+                      PASSED (FCO 1985)
+                    </span>
+                  </div>
+
+                  <div className="space-y-1.5 font-mono text-[11px]">
+                    <div className="flex justify-between py-1 border-b border-white/5">
+                      <span className="text-gray-300">Total Organic Carbon:</span>
+                      <span className="text-white font-bold">18.4% (Standard min 16.0%)</span>
+                    </div>
+                    <div className="flex justify-between py-1 border-b border-white/5">
+                      <span className="text-gray-300">Total Nitrogen (as N):</span>
+                      <span className="text-white font-bold">1.82% (Standard min 1.0%)</span>
+                    </div>
+                    <div className="flex justify-between py-1 border-b border-white/5">
+                      <span className="text-gray-300">C:N Ratio:</span>
+                      <span className="text-white font-bold">14.1 (Ideal 12 - 18)</span>
+                    </div>
+                    <div className="flex justify-between py-1 border-b border-white/5">
+                      <span className="text-gray-300">Heavy Metals (Pb, Cd, As):</span>
+                      <span className="text-emerald-400 font-bold">ND (Below Detection Limits)</span>
+                    </div>
+                    <div className="flex justify-between py-1">
+                      <span className="text-gray-300">Pathogens (Salmonella / E. coli):</span>
+                      <span className="text-emerald-400 font-bold">Absent (100% Sterile)</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Direct Actions */}
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <button
                   onClick={() => onNavigate('marketplace-products')}
                   className="px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-amber-950 font-black rounded-xl text-xs sm:text-sm transition shadow-lg flex items-center gap-2 cursor-pointer"
                 >
                   <ShoppingBag className="w-4 h-4" />
-                  <span>{language === 'te' ? 'స్టోర్‌లో కొనండి (యూపీఐ)' : 'View in Store & Buy via UPI'}</span>
+                  <span>{m.requestBioSupply}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => onNavigate('pipeline')}
                   className="px-5 py-3 bg-white/15 hover:bg-white/25 text-white font-bold rounded-xl text-xs sm:text-sm transition border border-white/20 flex items-center gap-2 cursor-pointer"
                 >
-                  <span>{language === 'te' ? 'ఉత్పత్తి పైప్‌లైన్ చూడండి' : 'Trace Mandi-to-Bag Pipeline'}</span>
+                  <span>{m.viewLabCertificate}</span>
                 </button>
               </div>
             </div>
@@ -326,18 +622,185 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
 
       {/* 
         ======================================================================
-        SEASONAL CROP ADVICE: WHAT TO PLANT NEXT
-        Real-time, region-specific cropping suggestions based on current month
+        4. FARMER INTERACTIVE TOOLS: EARNINGS CALCULATOR & QUICK PICKUP
         ======================================================================
       */}
       <ScrollReveal>
-        <SeasonalCropAdvice language={language} onNavigate={onNavigate} />
+        <div className="w-full">
+          <FarmerInteractivePanel
+            language={language}
+            onOpenHelpline={onOpenHelpline}
+            onNavigate={onNavigate}
+            weatherTemp="28°C"
+            weatherRain="15%"
+          />
+        </div>
       </ScrollReveal>
 
       {/* 
         ======================================================================
-        INTERACTIVE ANIMATED WEB MODEL:
-        Dynamic visual representation of the closed-loop bio-economy
+        5. SEASONAL CROP ADVICE: WHAT TO PLANT NEXT
+        ======================================================================
+      */}
+      <div id="seasonal-advice-block">
+        <ScrollReveal>
+          <SeasonalCropAdvice language={language} onNavigate={onNavigate} />
+        </ScrollReveal>
+      </div>
+
+      {/* 
+        ======================================================================
+        6. VISUAL COMPARISON: TRADITIONAL CHEMICAL FARMING vs KRISHIGREEN
+        Replaces the boring "Three Pillars" reading text with a visual decision matrix
+        ======================================================================
+      */}
+      <ScrollReveal>
+        <section className="bg-white rounded-3xl border border-emerald-900/10 shadow-sm p-6 sm:p-8 space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-100">
+            <div>
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-800">
+                {language === 'te' ? 'వాస్తవ పోలిక' : 'THE REAL DIFFERENCE'}
+              </span>
+              <h3 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
+                {language === 'te'
+                  ? 'రసాయన సేద్యం vs కృషిగ్రీన్ సేంద్రీయ చక్రం'
+                  : 'Conventional Chemical Farming vs. KrishiGreen Bio-Loop'}
+              </h3>
+            </div>
+
+            {/* Quick Filter Switch */}
+            <div className="flex items-center gap-1 bg-gray-100 p-1 rounded-xl text-xs font-bold">
+              <button
+                onClick={() => setComparisonMetric('all')}
+                className={`px-3 py-1.5 rounded-lg transition cursor-pointer ${
+                  comparisonMetric === 'all' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                {language === 'te' ? 'అన్నీ' : 'Full Matrix'}
+              </button>
+              <button
+                onClick={() => setComparisonMetric('costs')}
+                className={`px-3 py-1.5 rounded-lg transition cursor-pointer ${
+                  comparisonMetric === 'costs' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                {language === 'te' ? 'ఖర్చులు' : 'Input Costs'}
+              </button>
+              <button
+                onClick={() => setComparisonMetric('soil')}
+                className={`px-3 py-1.5 rounded-lg transition cursor-pointer ${
+                  comparisonMetric === 'soil' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                {language === 'te' ? 'నేల సారం' : 'Soil Health'}
+              </button>
+            </div>
+          </div>
+
+          {/* 2-Column Side-by-Side Visual Comparison Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {/* Conventional Chemical Approach */}
+            <div className="p-5 rounded-2xl bg-rose-50/60 border border-rose-200/70 space-y-3.5">
+              <div className="flex items-center justify-between">
+                <span className="px-2.5 py-0.5 rounded-full bg-rose-200/80 text-rose-900 text-xs font-black">
+                  {language === 'te' ? 'రసాయన పద్ధతి' : 'Conventional Chemical Approach'}
+                </span>
+                <XCircle className="w-5 h-5 text-rose-600" />
+              </div>
+
+              <div className="space-y-2.5 text-xs text-rose-950">
+                {(comparisonMetric === 'all' || comparisonMetric === 'costs') && (
+                  <div className="p-2.5 rounded-xl bg-white/80 border border-rose-100 flex items-start gap-2">
+                    <span className="text-rose-600 font-bold shrink-0">✕</span>
+                    <div>
+                      <strong>{language === 'te' ? 'ఖరీదైన రసాయనాలు:' : 'High Input Cost:'}</strong>
+                      <span className="block text-[11px] text-gray-600">
+                        {language === 'te' ? 'ఎకరాకు ₹4,500 - ₹6,000 వరకు ఖర్చు' : '₹4,500 - ₹6,000/acre on DAP & chemical fertilizers'}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {(comparisonMetric === 'all' || comparisonMetric === 'soil') && (
+                  <div className="p-2.5 rounded-xl bg-white/80 border border-rose-100 flex items-start gap-2">
+                    <span className="text-rose-600 font-bold shrink-0">✕</span>
+                    <div>
+                      <strong>{language === 'te' ? 'నేల క్షీణత:' : 'Depleted Soil Biology:'}</strong>
+                      <span className="block text-[11px] text-gray-600">
+                        {language === 'te' ? 'సేంద్రీయ కర్బనం <0.3% కు పడిపోయి గట్టిపడుతుంది' : 'Soil Organic Carbon <0.3%, hardpan soil crusting'}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {(comparisonMetric === 'all' || comparisonMetric === 'income') && (
+                  <div className="p-2.5 rounded-xl bg-white/80 border border-rose-100 flex items-start gap-2">
+                    <span className="text-rose-600 font-bold shrink-0">✕</span>
+                    <div>
+                      <strong>{language === 'te' ? 'వ్యర్థాలు దహనం:' : 'Stubble Burning:'}</strong>
+                      <span className="block text-[11px] text-gray-600">
+                        {language === 'te' ? 'జీరో ఆదాయం, కాలుష్యం & జరిమానాలు' : 'Crop residues burned or dumped with zero revenue'}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* KrishiGreen Bio-Loop Approach */}
+            <div className="p-5 rounded-2xl bg-emerald-50/70 border border-emerald-300 space-y-3.5 shadow-xs">
+              <div className="flex items-center justify-between">
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white text-xs font-black shadow-xs">
+                  {language === 'te' ? 'కృషిగ్రీన్ సేంద్రీయ చక్రం' : 'KrishiGreen Closed-Loop Bio-Model'}
+                </span>
+                <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+              </div>
+
+              <div className="space-y-2.5 text-xs text-emerald-950">
+                {(comparisonMetric === 'all' || comparisonMetric === 'costs') && (
+                  <div className="p-2.5 rounded-xl bg-white border border-emerald-200/80 flex items-start gap-2 shadow-2xs">
+                    <span className="text-emerald-600 font-bold shrink-0">✓</span>
+                    <div>
+                      <strong>{language === 'te' ? '40% తక్కువ ఖర్చు:' : '40% Lower Input Cost:'}</strong>
+                      <span className="block text-[11px] text-gray-600">
+                        {language === 'te' ? 'ఎకరాకు ₹2,200 మాత్రమే ఖర్చు అవుతుంది' : 'Only ~₹2,200/acre; displaces costly chemical DAP'}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {(comparisonMetric === 'all' || comparisonMetric === 'soil') && (
+                  <div className="p-2.5 rounded-xl bg-white border border-emerald-200/80 flex items-start gap-2 shadow-2xs">
+                    <span className="text-emerald-600 font-bold shrink-0">✓</span>
+                    <div>
+                      <strong>{language === 'te' ? 'సజీవ నేల సారం:' : '18.4% Organic Carbon:'}</strong>
+                      <span className="block text-[11px] text-gray-600">
+                        {language === 'te' ? '3.2 రెట్ల నీటి నిల్వ సామర్థ్యంతో కరువు తట్టుకుంటుంది' : '3.2x water sponge protects crops through 10 dry days'}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {(comparisonMetric === 'all' || comparisonMetric === 'income') && (
+                  <div className="p-2.5 rounded-xl bg-white border border-emerald-200/80 flex items-start gap-2 shadow-2xs">
+                    <span className="text-emerald-600 font-bold shrink-0">✓</span>
+                    <div>
+                      <strong>{language === 'te' ? 'వ్యర్థాల నుండి ఆదాయం:' : 'Waste-to-Wealth & Carbon:'}</strong>
+                      <span className="block text-[11px] text-gray-600">
+                        {language === 'te' ? 'టన్నుకు ₹750 రాబడి + 70% కార్బన్ క్రెడిట్ జమ' : '₹750/MT aggregation revenue + 70% direct DBT'}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+      </ScrollReveal>
+
+      {/* 
+        ======================================================================
+        7. BIOLOGICAL CONVERSION PROCESS ANIMATION (Streamlined)
         ======================================================================
       */}
       <ScrollReveal>
@@ -350,36 +813,74 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
 
       {/* 
         ======================================================================
-        ECOSYSTEM SERVICES & OPERATIONS:
-        Real working modules for lakhs of farmers and agri-entrepreneurs
+        8. ECOSYSTEM SERVICES & OPERATIONS (Filterable, Actionable Hub)
         ======================================================================
       */}
       <section className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-gray-200">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-gray-200">
           <div>
             <span className="text-xs font-black uppercase tracking-wider text-emerald-800 font-mono">
-              {language === 'te' ? 'సేవలు & నిర్వహణ' : 'OPERATIONAL ECOSYSTEM'}
+              {t.platformModules || 'OPERATIONAL ECOSYSTEM'}
             </span>
             <h3 className="font-black text-lg sm:text-xl text-gray-900">
-              {language === 'te' ? 'వ్యవసాయ సేవలు & నిర్వహణ సాధనాలు' : 'Ecosystem Services & Agricultural Tools'}
+              {t.platformModulesDesc || 'Ecosystem Services & Agricultural Tools'}
             </h3>
-            <p className="text-xs text-gray-600">
-              {language === 'te'
-                ? 'వ్యర్థాల సేకరణ నుండి ఎరువుల కొనుగోలు, యంత్రాల అద్దె మరియు కార్బన్ క్రెడిట్ రాబడి వరకు ప్రతి సేవను ప్రారంభించండి:'
-                : 'Directly access bio-waste aggregation, custom machinery rental, certified input sales, and carbon dividend management:'}
-            </p>
+          </div>
+
+          {/* Category Filter Chips */}
+          <div className="flex items-center gap-1.5 flex-wrap text-xs font-bold">
+            <button
+              onClick={() => setServiceCategory('all')}
+              className={`px-3 py-1 rounded-xl transition cursor-pointer ${
+                serviceCategory === 'all'
+                  ? 'bg-emerald-800 text-white shadow-xs'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              All Tools (8)
+            </button>
+            <button
+              onClick={() => setServiceCategory('biomass')}
+              className={`px-3 py-1 rounded-xl transition cursor-pointer ${
+                serviceCategory === 'biomass'
+                  ? 'bg-emerald-800 text-white shadow-xs'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Biomass & Soil (2)
+            </button>
+            <button
+              onClick={() => setServiceCategory('marketplace')}
+              className={`px-3 py-1 rounded-xl transition cursor-pointer ${
+                serviceCategory === 'marketplace'
+                  ? 'bg-emerald-800 text-white shadow-xs'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Machinery & Market (2)
+            </button>
+            <button
+              onClick={() => setServiceCategory('schemes')}
+              className={`px-3 py-1 rounded-xl transition cursor-pointer ${
+                serviceCategory === 'schemes'
+                  ? 'bg-emerald-800 text-white shadow-xs'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Grants & Help (4)
+            </button>
           </div>
         </div>
 
         <ScrollReveal stagger>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {ecosystemServices.map((service) => {
+            {filteredServices.map((service) => {
               const Icon = service.icon;
               return (
                 <div
                   key={service.tab}
                   onClick={() => onNavigate(service.tab)}
-                  className="kg-card relative rounded-3xl border border-emerald-900/10 bg-white/98 backdrop-blur-md p-5 shadow-xs hover:border-emerald-500 hover:shadow-lg cursor-pointer flex flex-col justify-between group active:scale-98"
+                  className="kg-card relative rounded-3xl border border-emerald-900/10 bg-white p-5 shadow-xs hover:border-emerald-500 hover:shadow-lg cursor-pointer flex flex-col justify-between group active:scale-98 transition"
                 >
                   <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${service.color} rounded-t-3xl`} />
 
@@ -390,14 +891,21 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                       >
                         <Icon className="w-5 h-5" />
                       </div>
+                      <div className="flex gap-1">
+                        {service.tags.map((tag) => (
+                          <span key={tag} className="px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 text-[10px] font-mono font-bold">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
                     </div>
 
                     <h4 className="font-black text-gray-900 text-sm sm:text-base group-hover:text-emerald-700 transition">
                       {service.title}
                     </h4>
 
-                    <p className="text-xs text-gray-600 leading-relaxed line-clamp-3">
-                      {service.desc}
+                    <p className="text-xs text-gray-600 leading-relaxed">
+                      {service.shortBenefit}
                     </p>
                   </div>
 
@@ -410,99 +918,6 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                 </div>
               );
             })}
-          </div>
-        </ScrollReveal>
-      </section>
-
-      {/* 
-        ======================================================================
-        THE THREE PILLARS OF KRISHIGREEN:
-        Editorial clarity on the core mission
-        ======================================================================
-      */}
-      <section className="space-y-4">
-        <div className="text-center max-w-xl mx-auto space-y-1">
-          <span className="text-xs font-black uppercase tracking-wider text-emerald-800 font-mono">
-            {t.threePillars}
-          </span>
-          <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
-            {t.threePillarsDesc}
-          </h2>
-        </div>
-
-        <ScrollReveal stagger>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="kg-card bg-white/98 backdrop-blur-md rounded-2xl border border-gray-200 p-5 shadow-xs space-y-2.5 hover:border-emerald-400 transition">
-              <div className="flex items-center justify-between">
-                <span className="w-8 h-8 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center font-black text-xs font-mono">
-                  01
-                </span>
-                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
-                  Decentralized Bioprocessing
-                </span>
-              </div>
-              <h3 className="font-black text-gray-900 text-sm sm:text-base">
-                {t.pillar1Title}
-              </h3>
-              <p className="text-xs text-gray-600 leading-relaxed">
-                {t.pillar1Desc}
-              </p>
-              <button
-                onClick={() => onNavigate('pipeline')}
-                className="text-xs font-black text-emerald-700 hover:text-emerald-900 flex items-center gap-1.5 pt-1 cursor-pointer"
-              >
-                <span>{language === 'te' ? 'పైప్‌లైన్ వివరాలు' : 'Explore Bioprocessing'}</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-
-            <div className="kg-card bg-white/98 backdrop-blur-md rounded-2xl border-2 border-emerald-300 p-5 shadow-xs space-y-2.5 ring-2 ring-emerald-500/10 transition">
-              <div className="flex items-center justify-between">
-                <span className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-900 flex items-center justify-center font-black text-xs font-mono">
-                  02
-                </span>
-                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
-                  Commerce & Machinery
-                </span>
-              </div>
-              <h3 className="font-black text-gray-900 text-sm sm:text-base">
-                {t.pillar2Title}
-              </h3>
-              <p className="text-xs text-gray-600 leading-relaxed">
-                {t.pillar2Desc}
-              </p>
-              <button
-                onClick={() => onNavigate('marketplace')}
-                className="text-xs font-black text-emerald-700 hover:text-emerald-900 flex items-center gap-1.5 pt-1 cursor-pointer"
-              >
-                <span>{language === 'te' ? 'మార్కెట్ & యంత్రాలు' : 'Access Commerce Hub'}</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-
-            <div className="kg-card bg-white/98 backdrop-blur-md rounded-2xl border border-gray-200 p-5 shadow-xs space-y-2.5 hover:border-emerald-400 transition">
-              <div className="flex items-center justify-between">
-                <span className="w-8 h-8 rounded-xl bg-teal-100 text-teal-900 flex items-center justify-center font-black text-xs font-mono">
-                  03
-                </span>
-                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
-                  Carbon & Climate
-                </span>
-              </div>
-              <h3 className="font-black text-gray-900 text-sm sm:text-base">
-                {t.pillar3Title}
-              </h3>
-              <p className="text-xs text-gray-600 leading-relaxed">
-                {t.pillar3Desc}
-              </p>
-              <button
-                onClick={() => onNavigate('carbon')}
-                className="text-xs font-black text-emerald-700 hover:text-emerald-900 flex items-center gap-1.5 pt-1 cursor-pointer"
-              >
-                <span>{language === 'te' ? 'కార్బన్ క్రెడిట్ లెడ్జర్' : 'View Carbon Protocol'}</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
           </div>
         </ScrollReveal>
       </section>

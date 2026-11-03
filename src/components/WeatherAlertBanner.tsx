@@ -24,6 +24,7 @@ import {
   IconRupee,
 } from './Icons';
 import { SupportedLanguage } from '../types';
+import { getMultiTranslations } from '../utils/multiLang';
 import { SpeechListenButton } from './SpeechListenButton';
 
 export interface WeatherAlertInfo {
@@ -186,6 +187,7 @@ interface WeatherAlertBannerProps {
 }
 
 export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language }) => {
+  const m = getMultiTranslations(language);
   const [selectedDistrict, setSelectedDistrict] = useState<DistrictCoords>(AP_PILOT_DISTRICTS[0]);
   const [alert, setAlert] = useState<WeatherAlertInfo | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -623,47 +625,16 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* ============================================================== */}
-      {/* 1. TOP INDETERMINATE HORIZONTAL LINEAR PROGRESS INDICATOR BAR */}
+      {/* COMPACT TOP STRIP: LOCATION + PROTOTYPE + WEATHER SEGMENT      */}
       {/* ============================================================== */}
-      <div
-        className="relative w-full h-[3px] bg-[#091a11] overflow-hidden"
-        title={
-          isStreaming
-            ? 'Indeterminate Linear Progress Indicator: Real-time agricultural stream active'
-            : 'Linear Progress Paused'
-        }
-      >
-        {isStreaming ? (
-          indicatorStyle === 'material' ? (
-            <>
-              {/* Dual-bar Material Design Indeterminate Linear Progress Indicator */}
-              <div
-                className="absolute top-0 bottom-0 bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400 animate-indeterminate-1 rounded-full shadow-[0_0_8px_rgba(52,211,153,0.8)]"
-              />
-              <div
-                className="absolute top-0 bottom-0 bg-gradient-to-r from-emerald-400 to-amber-300 animate-indeterminate-2 rounded-full shadow-[0_0_8px_rgba(52,211,153,0.8)]"
-              />
-            </>
-          ) : (
-            /* Continuous sweeping laser beam linear progress indicator */
-            <div className="w-full h-full animate-linear-stream shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-          )
-        ) : (
-          <div className="w-full h-full bg-amber-500/50" />
-        )}
-      </div>
-
-      {/* ============================================================== */}
-      {/* 2. PRIMARY LIVE AGRICULTURAL STREAM TICKER BAR                 */}
-      {/* ============================================================== */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-2.5">
-        {/* Left Section: Region Selector & Category Filter Pills */}
-        <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 flex-1 min-w-0">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-1.5 flex items-center justify-between gap-3 text-xs">
+        {/* Left Section: Location Hub Selector & Prototype Indicator */}
+        <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
           {/* Region Hub Selector */}
           <div className="flex items-center gap-1.5 bg-[#091a11] border border-[#1d4530] rounded-full px-2.5 py-1 text-xs shrink-0 shadow-2xs">
             <IconMapPin className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
             <span className="text-[10px] font-bold text-emerald-300 uppercase hidden sm:inline">
-              {language === 'te' ? 'ప్రాంతం:' : 'REGION:'}
+              {m.region}:
             </span>
             <select
               value={selectedDistrict.id}
@@ -690,254 +661,39 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
             </button>
           </div>
 
-          {/* Indeterminate Status & Streaming Pulse Indicator Chip */}
-          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#052e16]/80 border border-emerald-600/40 text-[10px] font-mono text-emerald-300 shrink-0 shadow-2xs">
-            <span
-              className={`w-1.5 h-1.5 rounded-full ${
-                isStreaming ? 'bg-emerald-400 animate-pulse-dot shadow-[0_0_6px_#34d399]' : 'bg-amber-400'
-              }`}
-            />
-            <span className="font-extrabold tracking-wider">
-              {isStreaming ? 'LIVE STREAM' : 'STREAM PAUSED'}
-            </span>
+          {/* Prototype Notice Pill */}
+          <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-amber-500/50 bg-amber-500/15 text-amber-300 font-bold text-[10px] tracking-wide uppercase shrink-0">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+            <span>{m.prototypePilot}</span>
           </div>
 
-          {/* Category Filter Pills (Weather, Mandi, Schemes, Fleet) */}
-          <div className="flex items-center gap-1 bg-[#091a11]/90 rounded-full p-0.5 border border-[#1d4530] text-[10px] font-bold shrink-0">
-            <button
-              onClick={() => {
-                setSelectedCategoryFilter('all');
-                setActiveItemIndex(0);
-              }}
-              className={`px-2 py-0.5 rounded-full transition cursor-pointer ${
-                selectedCategoryFilter === 'all'
-                  ? 'bg-emerald-600 text-white font-extrabold shadow-xs'
-                  : 'text-stone-300 hover:text-white'
-              }`}
-            >
-              {language === 'te' ? 'అన్నీ' : 'All'}
-            </button>
-            <button
-              onClick={() => {
-                setSelectedCategoryFilter('weather');
-                setActiveItemIndex(0);
-              }}
-              className={`px-2 py-0.5 rounded-full flex items-center gap-1 transition cursor-pointer ${
-                selectedCategoryFilter === 'weather'
-                  ? 'bg-sky-600 text-white font-extrabold shadow-xs'
-                  : 'text-stone-300 hover:text-white'
-              }`}
-            >
-              <IconCloudSun className="w-2.5 h-2.5" />
-              <span>{language === 'te' ? 'వాతావరణం' : 'Weather'}</span>
-            </button>
-            <button
-              onClick={() => {
-                setSelectedCategoryFilter('mandi');
-                setActiveItemIndex(0);
-              }}
-              className={`px-2 py-0.5 rounded-full flex items-center gap-1 transition cursor-pointer ${
-                selectedCategoryFilter === 'mandi'
-                  ? 'bg-amber-600 text-white font-extrabold shadow-xs'
-                  : 'text-stone-300 hover:text-white'
-              }`}
-            >
-              <IconTrendingUp className="w-2.5 h-2.5" />
-              <span>{language === 'te' ? 'మార్కెట్' : 'Mandi'}</span>
-            </button>
-            <button
-              onClick={() => {
-                setSelectedCategoryFilter('schemes');
-                setActiveItemIndex(0);
-              }}
-              className={`px-2 py-0.5 rounded-full flex items-center gap-1 transition cursor-pointer ${
-                selectedCategoryFilter === 'schemes'
-                  ? 'bg-purple-600 text-white font-extrabold shadow-xs'
-                  : 'text-stone-300 hover:text-white'
-              }`}
-            >
-              <IconShield className="w-2.5 h-2.5" />
-              <span>{language === 'te' ? 'పథకాలు' : 'Schemes'}</span>
-            </button>
-          </div>
+          <span className="text-[11px] text-stone-300 hidden md:inline truncate">
+            {m.prototypeNotice}
+          </span>
         </div>
 
-        {/* Center / Feed Live Item Area */}
-        <div className="flex items-center gap-2 overflow-hidden min-w-0 flex-1 w-full lg:w-auto">
-          {/* Logo Badge based on Category */}
-          <div className="flex items-center gap-1.5 shrink-0">
-            {currentItem.category === 'weather' && (
-              <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-sky-950 border border-sky-600/60 text-sky-300 text-[10px] font-bold uppercase shadow-2xs">
-                <IMDLogoSvg className="w-3.5 h-3.5 shrink-0" />
-                <span className="hidden sm:inline">IMD MAUSAM</span>
-                <span className="sm:hidden">IMD</span>
-              </span>
-            )}
-            {currentItem.category === 'mandi' && (
-              <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#3d1a04]/90 border border-[#7c2d12] text-[#fb923c] text-[10px] font-bold uppercase shadow-2xs">
-                <APMCLogoSvg className="w-3.5 h-3.5 shrink-0" />
-                <span className="hidden sm:inline">APMC MANDI</span>
-                <span className="sm:hidden">MANDI</span>
-              </span>
-            )}
-            {currentItem.category === 'schemes' && (
-              <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-950/90 border border-amber-600/60 text-amber-300 text-[10px] font-bold uppercase shadow-2xs">
-                <GovtEmblemSvg className="w-3.5 h-3.5 shrink-0" />
-                <span className="hidden sm:inline">GOVT SCHEME</span>
-                <span className="sm:hidden">SCHEME</span>
-              </span>
-            )}
-            {currentItem.category === 'logistics' && (
-              <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-950/90 border border-emerald-600/60 text-emerald-300 text-[10px] font-bold uppercase shadow-2xs">
-                <KrishiLeafLogoSvg className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
-                <span className="hidden sm:inline">KRISHI LOGISTICS</span>
-                <span className="sm:hidden">LOGISTICS</span>
-              </span>
-            )}
-
-            {/* Stepper Navigator (< 2/12 >) */}
-            <div className="flex items-center bg-[#091a11] rounded-full border border-[#1d4530] px-1 py-0.5">
-              <button
-                type="button"
-                onClick={handlePrev}
-                className="px-1.5 hover:bg-[#133827] text-stone-300 hover:text-white text-[11px] rounded-full cursor-pointer transition"
-                title="Previous item"
-              >
-                &lt;
-              </button>
-              <span className="text-[10px] font-bold px-1 text-emerald-300 font-mono">
-                {activeItemIndex + 1}/{filteredFeedItems.length}
-              </span>
-              <button
-                type="button"
-                onClick={handleNext}
-                className="px-1.5 hover:bg-[#133827] text-stone-300 hover:text-white text-[11px] rounded-full cursor-pointer transition"
-                title="Next item"
-              >
-                &gt;
-              </button>
-            </div>
-          </div>
-
-          {/* Interactive Clickable Headline */}
-          <div
-            onClick={() => setIsModalOpen(true)}
-            className="cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap min-w-0 flex-1 hover:underline flex items-center gap-2 group"
-            title={language === 'te' ? 'పూర్తి మార్కెట్ ధరలు & వాతావరణ నివేదిక చూడండి' : 'Click to inspect full Market Rates & Weather Advisory ledger'}
-          >
-            {currentItem.changePercent !== undefined && (
-              <span
-                className={`text-[10px] font-mono font-bold px-1.5 py-0.2 rounded shrink-0 flex items-center gap-0.5 ${
-                  currentItem.changePercent >= 0
-                    ? 'bg-emerald-900/80 text-emerald-300 border border-emerald-700/60'
-                    : 'bg-rose-950/80 text-rose-300 border border-rose-800/60'
-                }`}
-              >
-                {currentItem.changePercent >= 0 ? (
-                  <IconTrendingUp className="w-2.5 h-2.5" />
-                ) : (
-                  <IconTrendingDown className="w-2.5 h-2.5" />
-                )}
-                <span>{currentItem.changePercent > 0 ? `+${currentItem.changePercent}%` : `${currentItem.changePercent}%`}</span>
-              </span>
-            )}
-            <span className="text-xs text-stone-200 tracking-tight font-medium group-hover:text-emerald-300 transition">
-              {language === 'te' && currentItem.headlineTe ? currentItem.headlineTe : currentItem.headline}
-            </span>
-          </div>
-        </div>
-
-        {/* Right Section: Real-time Weather Badges, Stream Pause/Play & View All */}
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 self-end lg:self-center">
-          {/* Weather telemetry pill (Temperature, Humidity, Wind) */}
-          {alert && !loading && (
+        {/* Right Section: One Small Weather Segment */}
+        <div className="flex items-center gap-2 shrink-0">
+          {alert && !loading ? (
             <div
               onClick={() => {
                 setModalActiveTab('weather');
                 setIsModalOpen(true);
               }}
               className="kg-weather-glow flex items-center gap-2 text-[11px] text-emerald-200 bg-[#091a11] px-2.5 py-1 rounded-full border border-[#1d4530] cursor-pointer hover:border-emerald-500 transition"
-              title="Click to view full IMD Weather Advisory"
+              title="Click to view detailed agromet advisory"
             >
-              <span className="flex items-center gap-1 font-semibold">🌡 {alert.temp || '31°C'}</span>
+              <span className="flex items-center gap-1 font-semibold">🌡️ {alert.temp || '28°C'}</span>
               <span className="text-emerald-700 hidden sm:inline">•</span>
               <span className="hidden sm:flex items-center gap-1 font-semibold text-cyan-300">💧 {alert.humidity || '62%'}</span>
               <span className="text-emerald-700 hidden md:inline">•</span>
               <span className="hidden md:flex items-center gap-1 font-semibold text-emerald-300">💨 {alert.windSpeed || '16 km/h'}</span>
             </div>
+          ) : (
+            <div className="flex items-center gap-1.5 text-[11px] text-emerald-200 bg-[#091a11] px-2.5 py-1 rounded-full border border-[#1d4530]">
+              <span>🌤️ 28°C • Palnadu Hub</span>
+            </div>
           )}
-
-          {/* Audio Speech Listen Button */}
-          <SpeechListenButton
-            text={`${currentItem.headline}. ${currentItem.detail}`}
-            textTe={currentItem.headlineTe && currentItem.detailTe ? `${currentItem.headlineTe}. ${currentItem.detailTe}` : undefined}
-            language={language}
-            size="xs"
-            variant="outline"
-            className="bg-[#133827] hover:bg-[#1b4b35] text-emerald-300 border-[#1d4530] rounded-full px-2.5 py-1 font-semibold text-xs"
-          />
-
-          {/* Pause / Resume Linear Stream Button */}
-          <button
-            onClick={() => setIsStreaming((prev) => !prev)}
-            className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold border transition cursor-pointer ${
-              isStreaming
-                ? 'bg-[#133827] hover:bg-[#1b4b35] text-stone-300 border-[#1d4530]'
-                : 'bg-amber-900/60 hover:bg-amber-800/70 text-amber-200 border-amber-600'
-            }`}
-            title={isStreaming ? 'Pause Indeterminate Linear Stream' : 'Resume Indeterminate Linear Stream'}
-          >
-            {isStreaming ? (
-              <>
-                <IconPause className="w-3 h-3 text-emerald-400" />
-                <span className="hidden sm:inline">Pause</span>
-              </>
-            ) : (
-              <>
-                <IconPlay className="w-3 h-3 text-amber-400" />
-                <span className="hidden sm:inline">Resume</span>
-              </>
-            )}
-          </button>
-
-          {/* Toggle Indicator Mode (Material Dual Bar vs Laser Sweep) */}
-          <button
-            onClick={() => setIndicatorStyle((prev) => (prev === 'material' ? 'laser' : 'material'))}
-            className="hidden sm:flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-mono text-stone-400 bg-[#091a11] hover:text-white border border-[#1d4530] transition cursor-pointer"
-            title="Toggle Linear Progress Style (Material Dual-Bar vs Laser Stream)"
-          >
-            <IconActivity className="w-3 h-3 text-emerald-400" />
-            <span>{indicatorStyle === 'material' ? 'Dual-Bar' : 'Laser'}</span>
-          </button>
-
-          {/* View All Details Modal Trigger */}
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-xs cursor-pointer transition"
-            title="Open comprehensive Mandi Rates, Weather radar & Govt Schemes portal"
-          >
-            <span>{language === 'te' ? 'పూర్తి డేటా' : 'All Data'}</span>
-            <IconChevronDown className="w-3 h-3" />
-          </button>
-
-          {/* Refresh via Live Meteorological Radar & Search Grounding */}
-          <button
-            onClick={() => fetchWeatherAlert(selectedDistrict, true)}
-            disabled={loading}
-            className="p-1 text-emerald-400 hover:text-white rounded-full hover:bg-[#133827] cursor-pointer transition"
-            title="Force refresh live weather radar & market data"
-          >
-            <IconRefresh className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-          </button>
-
-          {/* Minimize Banner */}
-          <button
-            onClick={() => setDismissed(true)}
-            className="p-1 text-stone-400 hover:text-white rounded-full hover:bg-[#133827] cursor-pointer transition"
-            title="Minimize alert strip"
-          >
-            <IconClose className="w-3.5 h-3.5" />
-          </button>
         </div>
       </div>
 
