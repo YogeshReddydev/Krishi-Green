@@ -160,27 +160,27 @@ export const WeatherWidget: React.FC = () => {
   const getAgriAdvisory = (w: WeatherData) => {
     if (w.weatherCode >= 61) {
       return {
-        badge: '⚠ Heavy Rain / Showers',
+        badge: 'Heavy Rain / Showers',
         type: 'warning',
         tip: 'Delay open-field foliar bio-enzyme spraying. Ensure outdoor vermicompost beds are covered to prevent nutrient runoff.',
       };
     }
     if (w.windSpeed > 20) {
       return {
-        badge: '🌬 High Wind Velocity',
+        badge: 'High Wind Velocity',
         type: 'caution',
         tip: 'Avoid botanical spray application today to prevent spray drift. Good aeration for aerobic compost windrows.',
       };
     }
     if (w.currentTemp > 36) {
       return {
-        badge: '☀ High Heat Advisory',
+        badge: 'High Heat Advisory',
         type: 'caution',
         tip: 'Sprinkle water on vermi-beds to maintain 55-60% moisture. Earthworms require shade and cool compost cores.',
       };
     }
     return {
-      badge: '✓ Optimal Farming Weather',
+      badge: 'Optimal Farming Weather',
       type: 'optimal',
       tip: 'Ideal conditions for applying liquid Jeevamrutha, foliar bio-enzymes, and field tilling with machinery.',
     };

@@ -164,7 +164,7 @@ export const QRTraceabilityModal: React.FC<QRModalProps> = ({ isOpen, onClose, b
           </div>
 
           <div className="p-3.5 bg-amber-50/80 rounded-xl border border-amber-200/60 text-xs text-amber-900 flex items-start gap-2.5">
-            <span className="text-base">🛡️</span>
+            <ShieldCheck className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
             <div>
               <strong className="block text-amber-950 font-semibold mb-0.5">Trust & Organic Certification Guarantee</strong>
               <span>

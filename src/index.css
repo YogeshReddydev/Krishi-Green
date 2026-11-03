@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --color-primary: #15803d;
-  --color-primary-hover: #166534;
-  --color-secondary: #22c55e;
-  --color-accent: #a16207;
-  --color-background: #f8faf6;
-  --color-foreground: #0f172a;
+  --color-primary: #059669;
+  --color-primary-hover: #047857;
+  --color-secondary: #0284c7;
+  --color-accent: #f59e0b;
+  --color-background: #f8faf8;
+  --color-foreground: #111827;
   --color-card: #ffffff;
-  --color-card-border: #e2e8f0;
-  --color-ring: #15803d;
+  --color-card-border: #e5e7eb;
+  --color-ring: #059669;
 }
 
 @layer base {
@@ -18,9 +18,9 @@
   }
 
   html, body {
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: var(--color-background);
-    color: var(--color-foreground);
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: #f8faf8;
+    color: #111827;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -31,7 +31,7 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
   }
-  
+
   *, *::before, *::after {
     box-sizing: border-box;
   }
@@ -41,58 +41,59 @@
     max-width: 100vw;
     overflow-x: hidden;
     min-height: 100vh;
+    background-color: #f8faf8;
   }
 
   /* Accessible focus indicators */
   :focus-visible {
-    outline: 2px solid #15803d;
+    outline: 2px solid #059669;
     outline-offset: 2px;
   }
 
-  /* Interactive button active feedback */
+  /* Clean interactive button active feedback without hover jump */
   button:not(:disabled), a:not(:disabled) {
     cursor: pointer;
   }
 }
 
-/* Custom smooth scrollbars */
+/* Custom editorial scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f0;
+  background: #edeae1;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
+  background: #c5bfb2;
+  border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #a9a293;
 }
 
-/* Pulse animation for live collection / alerts */
-@keyframes pulse-ring {
-  0% { transform: scale(0.95); opacity: 0.8; }
-  50% { transform: scale(1.08); opacity: 0.3; }
-  100% { transform: scale(0.95); opacity: 0.8; }
+/* Shimmer skeleton loader for async data states */
+@keyframes skeletonShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
-.animate-pulse-ring {
-  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #edeae1 25%, #f4f2eb 50%, #edeae1 75%);
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.5s infinite;
 }
 
-/* Subtle fade in keyframe */
+/* Subtle fade in keyframe without transform jumps */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .animate-fadeIn {
-  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeIn 0.2s ease-out forwards;
 }
 
-/* Respect user's motion preferences per UI-UX Pro Max skill */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -102,7 +103,6 @@
   }
 }
 
-/* Dedicated print styling for Agricultural Impact Ledger & PDF Certificate */
 @media print {
   body {
     background: #ffffff !important;
@@ -118,23 +118,4 @@
   .print-hide {
     display: none !important;
   }
-
-  .printable-document {
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    background: #ffffff !important;
-    box-shadow: none !important;
-    border: none !important;
-    overflow: visible !important;
-  }
-
-  @page {
-    size: A4 portrait;
-    margin: 10mm;
-  }
 }
-

@@ -414,7 +414,7 @@ export const RealtimeWeatherDashboardWidget: React.FC<RealtimeWeatherDashboardWi
             </span>
             {weatherData?.isLiveGrounded && (
               <span className="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full border border-emerald-200 font-mono font-normal">
-                ⚡ Search-Grounded
+                Search-Grounded
               </span>
             )}
           </h3>
@@ -573,7 +573,7 @@ export const RealtimeWeatherDashboardWidget: React.FC<RealtimeWeatherDashboardWi
 
             <div className="text-right">
               <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold border ${rainRisk.badgeBg}`}>
-                {weatherData && weatherData.rainProbability > 50 ? '🌧 Rain Expected' : '⛅ Rain Unlikely'}
+                {weatherData && weatherData.rainProbability > 50 ? 'Rain Expected' : 'Rain Unlikely'}
               </span>
             </div>
           </div>

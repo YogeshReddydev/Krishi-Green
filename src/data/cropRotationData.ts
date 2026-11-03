@@ -20,13 +20,13 @@ export const CROP_ROTATION_PATTERNS: CropRotationPattern[] = [
         cropCategory: 'Heavy Feeder',
         durationDays: 120,
         fertilizerBatchUsed: 'KrishiGreen Grade-A Vermicompost',
-        recommendedDosage: '2.0 – 2.5 Tonnes per Acre (Basal tilling)',
+        recommendedDosage: '2.0 - 2.5 Tonnes per Acre (Basal tilling)',
         applicationSchedule: [
           'Day 0 (Basal): Incorporate 2 tonnes vermicompost with rotavator before transplanting',
           'Day 25 (Tillering): Apply 200 kg vermicompost top dressing + Jeevamrutha irrigation',
           'Day 50 (Panicle Initiation): Foliar bio-enzyme spray (5ml/L) for grain filling',
         ],
-        expectedYieldPerAcre: '22 – 26 Quintals',
+        expectedYieldPerAcre: '22 - 26 Quintals',
         soilBenefits: [
           'Humic substances retain moisture in paddy puddling layer',
           'Supplies organic phosphorus, cutting DAP usage by 40%',
@@ -45,7 +45,7 @@ export const CROP_ROTATION_PATTERNS: CropRotationPattern[] = [
           'Day 30 (Branching): Foliar spray of Citrus Bio-Enzyme to stimulate nodulation',
           'Day 60 (Pod Formation): Botanical neem spray for pod borer prevention',
         ],
-        expectedYieldPerAcre: '8 – 11 Quintals',
+        expectedYieldPerAcre: '8 - 11 Quintals',
         soilBenefits: [
           'Fixes 35-40 kg atmospheric nitrogen per acre through Rhizobium nodules',
           'Deep tap roots aerate the subsoil compacted by kharif puddling',
@@ -64,7 +64,7 @@ export const CROP_ROTATION_PATTERNS: CropRotationPattern[] = [
           'Day 25: Apply 100L Jeevamrutha with light sprinkler irrigation',
           'Day 50: Plough entire biomass into topsoil at 50% flowering stage with tractor rotavator',
         ],
-        expectedYieldPerAcre: '5 – 6 Tonnes Fresh Green Biomass incorporated',
+        expectedYieldPerAcre: '5 - 6 Tonnes Fresh Green Biomass incorporated',
         soilBenefits: [
           'Adds 5,000 kg organic green biomass directly back into the field',
           'Breaks weed seed germination cycles through summer shading',
@@ -98,7 +98,7 @@ export const CROP_ROTATION_PATTERNS: CropRotationPattern[] = [
           'Vegetative: Foliar Bio-Enzyme spray (5ml/L) every 14 days',
           'Fruit Setting: Apply Jeevamrutha through fertigation line',
         ],
-        expectedYieldPerAcre: '180 – 220 Quintals (Tomato)',
+        expectedYieldPerAcre: '180 - 220 Quintals (Tomato)',
         soilBenefits: [
           'Bio-enzyme citric and acetic acids mobilize bound calcium & iron',
           'Strengthens cellular wall thickness against fungal blast',
@@ -116,7 +116,7 @@ export const CROP_ROTATION_PATTERNS: CropRotationPattern[] = [
           'Transplanting: Soil bed enriched with aged vermicompost',
           'Bulb Formation: Drench root zone with Jeevamrutha liquid brew',
         ],
-        expectedYieldPerAcre: '120 – 150 Quintals (Onion)',
+        expectedYieldPerAcre: '120 - 150 Quintals (Onion)',
         soilBenefits: [
           'Natural allicin in onion root exudates kills soil nematodes',
           'Different root architecture taps middle soil strata',
@@ -134,7 +134,7 @@ export const CROP_ROTATION_PATTERNS: CropRotationPattern[] = [
           'Pit preparation: 2 kg vermicompost per sowing pit',
           'Flowering: Weekly drench of Jeevamrutha brew (1:10 dilution)',
         ],
-        expectedYieldPerAcre: '70 – 90 Quintals',
+        expectedYieldPerAcre: '70 - 90 Quintals',
         soilBenefits: [
           'Rapid summer canopy covers soil, reducing evaporation loss by 35%',
           'Fibrous surface roots condition top 15cm soil crumb structure',
@@ -167,7 +167,7 @@ export const CROP_ROTATION_PATTERNS: CropRotationPattern[] = [
           'Square formation: Spray botanical Brahmastra for bollworm control',
           'Post-harvest: Shred cotton stalks with 5HP mobile shredder and compost',
         ],
-        expectedYieldPerAcre: '10 – 14 Quintals (Seed Cotton)',
+        expectedYieldPerAcre: '10 - 14 Quintals (Seed Cotton)',
         soilBenefits: [
           'Shredded biomass recycled into next batch instead of field burning',
           'Substantial tap root channel creation for rainwater infiltration',
@@ -184,7 +184,7 @@ export const CROP_ROTATION_PATTERNS: CropRotationPattern[] = [
           'Crown Root Initiation (CRI): Flood irrigation with Jeevamrutha',
           'Jointing Stage: Light top dress with humic compost',
         ],
-        expectedYieldPerAcre: '18 – 22 Quintals (Wheat)',
+        expectedYieldPerAcre: '18 - 22 Quintals (Wheat)',
         soilBenefits: [
           'Mustard root bio-fumigation suppresses soil-borne pathogens',
           'Restores phosphorus availability through rhizosphere acidification',
@@ -201,7 +201,7 @@ export const CROP_ROTATION_PATTERNS: CropRotationPattern[] = [
           'Seed coating with liquid Jeevamrutha before drilling',
           'Harvest pods for grain sales, incorporate stover back into soil',
         ],
-        expectedYieldPerAcre: '4 – 6 Quintals Grain + 2 Tonnes Stover',
+        expectedYieldPerAcre: '4 - 6 Quintals Grain + 2 Tonnes Stover',
         soilBenefits: [
           'Generates quick farmer revenue in April-May summer months',
           'Direct biological nitrogen enrichment for the upcoming kharif crop',

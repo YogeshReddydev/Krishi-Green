@@ -706,7 +706,7 @@ export const AndhraPradeshDiscoveryMap: React.FC<AndhraPradeshDiscoveryMapProps>
 
                     <div className="pt-2 border-t border-gray-100">
                       <span className="text-[11px] text-emerald-800 font-bold block">
-                        💡 Click on any marker on the map to view phone numbers, equipment inventory, and request quotations.
+                        Tip: Click on any marker on the map to view phone numbers, equipment inventory, and request quotations.
                       </span>
                     </div>
                   </div>

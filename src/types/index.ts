@@ -80,6 +80,7 @@ export interface OrganicProduct {
   ingredients: string;
   applicationGuideline: string;
   image: string;
+  isFlagship?: boolean;
 }
 
 export type EquipmentScale =

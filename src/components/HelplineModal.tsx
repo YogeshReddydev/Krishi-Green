@@ -270,11 +270,11 @@ export const HelplineModal: React.FC<HelplineModalProps> = ({
   };
 
   const ivrOptions = [
-    { key: 'Crop Advice', label: '1. Crop & Organic Bio-Fertilizer Advice', icon: '🌱' },
-    { key: 'Waste Collection', label: '2. Waste Collection & Pickup Request', icon: '♻️' },
-    { key: 'Equipment Breakdown', label: '3. Equipment Breakdown & Rental', icon: '🚜' },
-    { key: 'Government Subsidy', label: '4. PM-PRANAM & SMAM Subsidies', icon: '🏛️' },
-    { key: 'Pest Emergency', label: '5. Emergency Pest / Disease Alert', icon: '🚨' },
+    { key: 'Crop Advice', label: '1. Crop & Organic Bio-Fertilizer Advice', icon: '01' },
+    { key: 'Waste Collection', label: '2. Waste Collection & Pickup Request', icon: '02' },
+    { key: 'Equipment Breakdown', label: '3. Equipment Breakdown & Rental', icon: '03' },
+    { key: 'Government Subsidy', label: '4. PM-PRANAM & SMAM Subsidies', icon: '04' },
+    { key: 'Pest Emergency', label: '5. Emergency Pest / Disease Alert', icon: '05' },
   ];
 
   return (

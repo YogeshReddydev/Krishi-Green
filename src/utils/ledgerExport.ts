@@ -185,11 +185,11 @@ export function downloadOfflineHTMLReport(
 </head>
 <body>
   <div style="text-align: right; max-width: 800px; margin: 0 auto;">
-    <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+    <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
   </div>
   <div class="cert-container">
     <div class="header">
-      <div class="emblem">🌾</div>
+      <div class="emblem" style="font-weight: bold; font-family: serif; font-size: 14px; letter-spacing: 2px;">KG</div>
       <div class="dept-title">Government of Andhra Pradesh • Department of Agriculture & RySS</div>
       <div class="main-title">Official Agricultural Impact & Circular Biomass Ledger</div>
       <div class="cert-sub">Rythu Bharosa Kendra (RBK) Verified Circular Economy & Carbon Avoidance Record</div>

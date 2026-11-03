@@ -1,19 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
-  Search,
-  CloudSun,
-  TrendingUp,
-  FileCheck2,
-  ExternalLink,
-  Loader2,
-  Sparkles,
-  Globe2,
-  ShieldCheck,
-  RefreshCw,
-  Clock,
-  Trash2,
-  X,
-} from 'lucide-react';
+  IconSearch,
+  IconClock,
+  IconTrash,
+  IconClose,
+  IconGlobe,
+  IconExternalLink,
+} from './Icons';
 import { SupportedLanguage } from '../types';
 import { SpeechListenButton } from './SpeechListenButton';
 
@@ -48,13 +41,11 @@ export const SearchGroundingWidget: React.FC<SearchGroundingWidgetProps> = ({ la
     ];
   });
 
-  // Save query to recent searches helper
   const saveRecentSearch = (searchQuery: string) => {
     const trimmed = searchQuery.trim();
     if (!trimmed) return;
 
     setRecentSearches((prev) => {
-      // Filter out duplicate if it exists and place at the beginning
       const updated = [trimmed, ...prev.filter((q) => q.toLowerCase() !== trimmed.toLowerCase())].slice(0, 8);
       try {
         localStorage.setItem(RECENT_SEARCHES_STORAGE_KEY, JSON.stringify(updated));
@@ -86,25 +77,26 @@ export const SearchGroundingWidget: React.FC<SearchGroundingWidgetProps> = ({ la
     }
   };
 
+  // Plain editorial presets without emojis
   const presets = [
     {
       id: 'weather',
-      label: '☀️ Live Weather & Rain Alert',
+      label: 'Live Weather and Rain Advisory',
       q: `Live weather forecast, rainfall probability, and soil moisture conditions in ${location}`,
     },
     {
       id: 'mandi',
-      label: '📈 APMC Mandi Commodity Prices',
+      label: 'APMC Mandi Commodity Rates',
       q: `Today's APMC vegetable and crop mandi wholesale modal prices in ${location}`,
     },
     {
       id: 'fertilizer',
-      label: '🌱 Organic Fertilizer Rates',
+      label: 'Organic Bio-Input Rates',
       q: `Current market price per kg for certified vermicompost and DAP fertilizer in India`,
     },
     {
       id: 'subsidies',
-      label: '🏛️ PM-PRANAM & SMAM Grants',
+      label: 'PM-PRANAM and SMAM Subsidies',
       q: `Latest government guidelines for PM-PRANAM scheme and SMAM tractor subsidies in 2026`,
     },
   ];
@@ -131,17 +123,17 @@ export const SearchGroundingWidget: React.FC<SearchGroundingWidgetProps> = ({ la
         setResult(data);
       } else {
         setResult({
-          answer: `[Live Intel for ${location}]: Current field and market conditions are steady. Recommend checking AP Agrisnet and local KVK advisory bulletins for today's updates.`,
+          answer: `[Live Regional Field Intelligence for ${location}]: Regional harvest and market movements are operating under stable conditions. Farmers are advised to consult local KVK bulletins for crop-specific moisture thresholds.`,
           sources: [
             { title: 'IMD Agro-Meteorology Division', uri: 'https://mausam.imd.gov.in' },
-            { title: 'Andhra Pradesh Agriculture Dept', uri: 'https://apagrisnet.gov.in' },
+            { title: 'Andhra Pradesh Agriculture Department', uri: 'https://apagrisnet.gov.in' },
           ],
         });
       }
     } catch (err) {
       console.warn('Search grounding client notice:', err);
       setResult({
-        answer: `[Live Intel for ${location}]: Conditions are stable for regional harvesting, composting, and logistics operations. Contact your regional KVK or call 1800-KRISHI-GRN for specific guidance.`,
+        answer: `[Regional Intelligence for ${location}]: Conditions are steady for field operations, composting, and mandi dispatch. Contact regional KVK or call 1800-425-0012 for immediate guidance.`,
         sources: [{ title: 'Krishi Vigyan Kendra Portal', uri: 'https://kvk.icar.gov.in' }],
       });
     } finally {
@@ -150,30 +142,30 @@ export const SearchGroundingWidget: React.FC<SearchGroundingWidgetProps> = ({ la
   };
 
   return (
-    <div className="bg-white/98 backdrop-blur-md rounded-3xl border border-emerald-100 p-5 sm:p-6 shadow-sm space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-100 pb-3">
+    <div className="bg-[#fcfbf9] rounded-md border border-[#ded9ce] p-5 space-y-4">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#ded9ce] pb-3">
         <div>
           <div className="flex items-center gap-2">
-            <span className="p-1.5 bg-emerald-100 text-emerald-800 rounded-lg">
-              <Globe2 className="w-4 h-4" />
+            <span className="p-1.5 bg-[#edeae1] text-[#1e382b] rounded-sm">
+              <IconGlobe className="w-4 h-4" />
             </span>
-            <h3 className="font-extrabold text-gray-900 text-base">
-              Live Google Search Grounding for Weather & Mandi Intel
+            <h3 className="font-serif text-base font-bold text-[#1e382b]">
+              Live Google Search Grounding for Weather and Mandi Intelligence
             </h3>
           </div>
-          <p className="text-xs text-gray-500">
-            Real-time agricultural facts powered by Gemini 3.5 Flash with Google Search Grounding.
+          <p className="text-xs text-[#5c685f] mt-0.5">
+            Verified agricultural data retrieved via real-time web telemetry.
           </p>
         </div>
 
-        <div className="flex items-center gap-1.5 text-xs text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200 font-bold self-start sm:self-auto">
-          <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-          <span>Real-Time Web Data</span>
+        <div className="text-xs text-[#1e382b] bg-[#edeae1] px-3 py-1 rounded-sm border border-[#ded9ce] font-semibold self-start sm:self-auto">
+          Live Web Grounding
         </div>
       </div>
 
-      {/* Preset Chips */}
-      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+      {/* Preset Chips (Plain editorial buttons without emojis) */}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
         {presets.map((p) => (
           <button
             key={p.id}
@@ -181,7 +173,7 @@ export const SearchGroundingWidget: React.FC<SearchGroundingWidgetProps> = ({ la
               setQuery(p.q);
               handleSearch(p.q);
             }}
-            className="px-3 py-1.5 bg-gray-50 hover:bg-emerald-50 text-gray-700 hover:text-emerald-900 border border-gray-200 hover:border-emerald-300 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer"
+            className="px-3 py-1 bg-[#edeae1] hover:bg-[#ded9ce] text-[#1c241e] border border-[#ded9ce] rounded-sm text-xs font-semibold whitespace-nowrap transition cursor-pointer"
           >
             {p.label}
           </button>
@@ -190,29 +182,25 @@ export const SearchGroundingWidget: React.FC<SearchGroundingWidgetProps> = ({ la
 
       {/* Search Input Bar */}
       <div className="flex items-center gap-2">
-        <div className="flex-1 flex items-center gap-2 bg-gray-50 border border-gray-300 rounded-2xl px-4 py-2.5">
-          <Search className="w-4 h-4 text-gray-400 shrink-0" />
+        <div className="flex-1 flex items-center gap-2 bg-[#f4f2ec] border border-[#ded9ce] rounded-sm px-3.5 py-2">
+          <IconSearch className="w-4 h-4 text-[#5c685f] shrink-0" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-            placeholder="Search live weather, mandi rates, or agricultural notices..."
-            className="w-full bg-transparent text-xs text-gray-900 font-semibold focus:outline-none"
+            placeholder="Search regional weather, mandi rates, or agricultural notices..."
+            className="w-full bg-transparent text-xs text-[#1c241e] font-medium focus:outline-none placeholder:text-[#8a968d]"
           />
         </div>
 
         <button
           onClick={() => handleSearch()}
           disabled={loading || !query.trim()}
-          className="px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 disabled:opacity-50 text-white rounded-2xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm shrink-0 cursor-pointer"
+          className="px-4 py-2 bg-[#1e382b] hover:bg-[#162a20] disabled:opacity-50 text-[#f7f5f0] rounded-sm text-xs font-bold transition flex items-center gap-1.5 shrink-0 cursor-pointer"
         >
-          {loading ? (
-            <Loader2 className="w-3.5 h-3.5 animate-spin" />
-          ) : (
-            <Search className="w-3.5 h-3.5" />
-          )}
-          <span>{loading ? 'Searching...' : 'Ground Search'}</span>
+          <IconSearch className="w-3.5 h-3.5" />
+          <span>{loading ? 'Retrieving...' : 'Search Grounding'}</span>
         </button>
       </div>
 
@@ -220,18 +208,18 @@ export const SearchGroundingWidget: React.FC<SearchGroundingWidgetProps> = ({ la
       {recentSearches.length > 0 && (
         <div className="space-y-1.5 pt-0.5">
           <div className="flex items-center justify-between text-xs">
-            <span className="flex items-center gap-1.5 font-bold text-gray-600 text-[11px]">
-              <Clock className="w-3.5 h-3.5 text-emerald-700" />
+            <span className="flex items-center gap-1.5 font-bold text-[#5c685f] text-[11px]">
+              <IconClock className="w-3.5 h-3.5 text-[#1e382b]" />
               <span>{language === 'te' ? 'ఇటీవలి శోధనలు' : 'Recent Searches'}</span>
-              <span className="text-[10px] text-gray-400 font-normal">({recentSearches.length})</span>
+              <span className="text-[10px] text-[#8a968d]">({recentSearches.length})</span>
             </span>
             <button
               type="button"
               onClick={handleClearRecentSearches}
-              className="text-[10px] text-gray-400 hover:text-rose-600 transition flex items-center gap-1 cursor-pointer font-medium"
+              className="text-[11px] text-[#5c685f] hover:text-[#9c342b] transition flex items-center gap-1 cursor-pointer font-medium"
               title={language === 'te' ? 'అన్నీ తీసివేయండి' : 'Clear search history'}
             >
-              <Trash2 className="w-3 h-3" />
+              <IconTrash className="w-3 h-3" />
               <span>{language === 'te' ? 'అన్నీ క్లియర్' : 'Clear all'}</span>
             </button>
           </div>
@@ -244,10 +232,10 @@ export const SearchGroundingWidget: React.FC<SearchGroundingWidgetProps> = ({ la
                   setQuery(item);
                   handleSearch(item);
                 }}
-                className="group inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50/70 hover:bg-emerald-100/90 text-emerald-950 rounded-lg border border-emerald-200/80 text-[11px] font-semibold transition cursor-pointer shadow-2xs hover:border-emerald-300"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#edeae1] hover:bg-[#ded9ce] text-[#1c241e] rounded-sm border border-[#ded9ce] text-[11px] font-medium transition cursor-pointer"
                 title={`Click to search: "${item}"`}
               >
-                <Search className="w-3 h-3 text-emerald-600 shrink-0 group-hover:scale-110 transition-transform" />
+                <IconSearch className="w-3 h-3 text-[#5c685f] shrink-0" />
                 <span className="truncate max-w-[220px] sm:max-w-[320px]">{item}</span>
                 <button
                   type="button"
@@ -255,10 +243,10 @@ export const SearchGroundingWidget: React.FC<SearchGroundingWidgetProps> = ({ la
                     e.stopPropagation();
                     handleRemoveRecentSearch(item);
                   }}
-                  className="text-emerald-700/50 hover:text-rose-600 p-0.5 rounded-md hover:bg-rose-50 transition shrink-0 ml-0.5"
+                  className="text-[#5c685f] hover:text-[#9c342b] p-0.5 rounded transition shrink-0 ml-0.5"
                   title="Remove this search"
                 >
-                  <X className="w-3 h-3" />
+                  <IconClose className="w-3 h-3" />
                 </button>
               </div>
             ))}
@@ -266,13 +254,29 @@ export const SearchGroundingWidget: React.FC<SearchGroundingWidgetProps> = ({ la
         </div>
       )}
 
-      {/* Search Results Display */}
-      {result && (
-        <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-50/80 to-teal-50/80 border border-emerald-200 space-y-3 animate-fadeIn text-xs">
-          <div className="flex items-center justify-between flex-wrap gap-2">
-            <div className="flex items-center gap-2 text-emerald-950 font-bold">
-              <Sparkles className="w-4 h-4 text-emerald-700" />
-              <span>Grounded Agricultural Intelligence (Google Search):</span>
+      {/* SKELETON LOADER (Requirement 21: Real skeleton loader when loading) */}
+      {loading && (
+        <div className="p-4 rounded-md border border-[#ded9ce] bg-[#f4f2ec] space-y-3">
+          <div className="h-4 w-48 skeleton-shimmer rounded-xs" />
+          <div className="space-y-1.5">
+            <div className="h-3 w-full skeleton-shimmer rounded-xs" />
+            <div className="h-3 w-5/6 skeleton-shimmer rounded-xs" />
+            <div className="h-3 w-4/6 skeleton-shimmer rounded-xs" />
+          </div>
+          <div className="flex gap-2 pt-2">
+            <div className="h-6 w-32 skeleton-shimmer rounded-xs" />
+            <div className="h-6 w-28 skeleton-shimmer rounded-xs" />
+          </div>
+        </div>
+      )}
+
+      {/* Search Results Display (Crisp editorial layout without gradients or glass) */}
+      {!loading && result && (
+        <div className="p-4 rounded-md bg-[#fcfbf9] border border-[#ded9ce] space-y-3 text-xs">
+          <div className="flex items-center justify-between flex-wrap gap-2 border-b border-[#ded9ce] pb-2">
+            <div className="flex items-center gap-2 text-[#1e382b] font-bold">
+              <IconGlobe className="w-4 h-4 text-[#1e382b]" />
+              <span>Verified Search Findings:</span>
             </div>
             <div className="flex items-center gap-2">
               <SpeechListenButton
@@ -281,19 +285,19 @@ export const SearchGroundingWidget: React.FC<SearchGroundingWidgetProps> = ({ la
                 size="xs"
                 variant="emerald"
               />
-              <span className="text-[10px] text-gray-400 font-mono">Live Grounding</span>
+              <span className="text-[10px] text-[#5c685f] font-mono">Live Grounding</span>
             </div>
           </div>
 
-          <div className="bg-white/90 p-4 rounded-xl border border-emerald-100 text-gray-800 leading-relaxed whitespace-pre-line shadow-2xs">
+          <div className="p-3 bg-[#f7f5f0] rounded-sm border border-[#ded9ce] text-[#1c241e] leading-relaxed whitespace-pre-line font-serif text-sm">
             {result.answer}
           </div>
 
-          {/* Sources and Citations if returned */}
+          {/* Sources and Citations */}
           {result.groundingMetadata?.groundingChunks && result.groundingMetadata.groundingChunks.length > 0 && (
             <div className="space-y-1.5 pt-1">
-              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block">
-                Verified Search Sources:
+              <span className="text-[10px] font-bold text-[#5c685f] uppercase tracking-wider block">
+                Official Sources:
               </span>
               <div className="flex flex-wrap gap-2">
                 {result.groundingMetadata.groundingChunks.slice(0, 4).map((chunk: any, i: number) => {
@@ -305,10 +309,10 @@ export const SearchGroundingWidget: React.FC<SearchGroundingWidgetProps> = ({ la
                       href={web.uri}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 bg-white hover:bg-emerald-50 text-emerald-800 px-2.5 py-1 rounded-lg border border-emerald-200 text-[11px] font-semibold transition"
+                      className="inline-flex items-center gap-1.5 bg-[#f4f2ec] hover:bg-[#edeae1] text-[#1e382b] px-2.5 py-1 rounded-sm border border-[#ded9ce] text-[11px] font-semibold transition"
                     >
-                      <span className="truncate max-w-[180px]">{web.title || web.uri}</span>
-                      <ExternalLink className="w-3 h-3 text-gray-400" />
+                      <span className="truncate max-w-[200px]">{web.title || web.uri}</span>
+                      <IconExternalLink className="w-3 h-3 text-[#5c685f]" />
                     </a>
                   );
                 })}

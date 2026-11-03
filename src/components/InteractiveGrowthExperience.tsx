@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, RotateCcw, Droplets, Sun, Sparkles, Sprout, ArrowRight, CheckCircle2, ShieldCheck } from 'lucide-react';
+import {
+  IconPlay,
+  IconPause,
+  IconRefresh,
+  IconDroplets,
+  IconCheck,
+  IconSprout,
+  IconShield,
+} from './Icons';
 import { SupportedLanguage } from '../types';
 
 interface InteractiveGrowthExperienceProps {
@@ -54,41 +62,26 @@ export const InteractiveGrowthExperience: React.FC<InteractiveGrowthExperiencePr
   const fruitProgress = progress > 0.68 ? Math.min(1, (progress - 0.68) * 3.2) : 0;
   const fruitSize = fruitProgress * 34;
 
-  // Fruit ripening color: vibrant olive green -> ripening yellow -> radiant sun-ripe vermilion
   const fruitColor =
     progress < 0.78
-      ? '#4d7c0f' // lively green
+      ? '#4d7c0f'
       : progress < 0.91
-      ? '#ca8a04' // ripening warm amber
-      : '#dc2626'; // lush harvest red
+      ? '#ca8a04'
+      : '#dc2626';
 
   return (
-    <section className="relative w-full rounded-[36px] overflow-hidden bg-[#35441d] text-[#f4efe6] p-6 sm:p-10 lg:p-14 shadow-2xl border border-[#485c28] select-none transition-colors duration-300">
-      {/* Ambient Olive Velvet Shadows & Soft Drifting Botanical Silhouettes */}
-      <div className="absolute inset-0 pointer-events-none opacity-25 overflow-hidden">
-        <div className="absolute -top-20 -left-20 w-[480px] h-[480px] bg-[#222c12] rounded-full blur-3xl animate-pulse" />
-        <div className="absolute top-1/2 -right-24 w-[520px] h-[520px] bg-[#1a230d] rounded-full blur-3xl" />
-        {/* Decorative foliage shadow overlay */}
-        <svg
-          className="absolute -top-12 right-12 w-96 h-96 text-[#1c240e]/50 pointer-events-none transform rotate-45"
-          viewBox="0 0 200 200"
-          fill="currentColor"
-        >
-          <path d="M45,100 C20,60 70,10 120,40 C170,70 160,130 110,150 C60,170 70,140 45,100 Z" />
-        </svg>
-      </div>
-
+    <section className="relative w-full rounded-sm overflow-hidden bg-[#243317] text-[#f4efe6] p-6 sm:p-8 lg:p-10 border border-[#3b5226] select-none">
       <div className="relative z-10 space-y-6">
         {/* Top Header Row of the Growth Showcase */}
-        <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 pb-2 border-b border-[#4d612e]">
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 pb-3 border-b border-[#3b5226]">
           <div className="max-w-xl space-y-2">
-            <div className="flex items-center gap-2 text-xs font-mono text-[#a3b885]">
-              <span className="w-2 h-2 rounded-full bg-[#84cc16] animate-ping" />
-              <span className="font-bold uppercase tracking-widest">
+            <div className="flex items-center gap-2 text-xs font-mono text-stone-300">
+              <span className="w-1.5 h-1.5 rounded-sm bg-[#84cc16]" />
+              <span className="font-bold uppercase tracking-wider">
                 {isTe ? 'బయో-న్యూట్రియెంట్ వృద్ధి నమూనా' : 'BIO-NUTRIENT ACCELERATION TIMELAPSE'}
               </span>
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#f9f7f2] leading-tight font-sans">
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
               {growthStage > 85
                 ? isTe
                   ? 'ఇప్పుడు పూర్తి ఫలితాలు మీ కళ్ళముందే.'
@@ -97,7 +90,7 @@ export const InteractiveGrowthExperience: React.FC<InteractiveGrowthExperiencePr
                 ? 'మీరే స్వయంగా మార్పును చూడండి'
                 : 'See the Difference for Yourself'}
             </h2>
-            <p className="text-xs sm:text-sm text-[#cbd8b5] font-medium leading-relaxed max-w-lg">
+            <p className="text-xs sm:text-sm text-stone-300 leading-relaxed font-sans max-w-lg">
               {isTe
                 ? 'సేంద్రీయ కార్బన్ క్యాప్సూల్ నేలలోని సూక్ష్మజీవులను మేల్కొల్పి, విత్తనం నుండి అధిక దిగుబడి వరకు మొక్క పెరుగుదలను ఎలా వేగవంతం చేస్తుందో స్వయంగా పరీక్షించండి.'
                 : 'Experience how bio-carbon nutrient mobilization awakens depleted soil biology. Drag the nutrient slider below to simulate real vegetative expansion from germinating seed to harvest.'}
@@ -105,47 +98,42 @@ export const InteractiveGrowthExperience: React.FC<InteractiveGrowthExperiencePr
           </div>
 
           {/* Right Kicker & Impact Pill */}
-          <div className="max-w-xs text-right hidden sm:flex flex-col items-end gap-2">
-            <span className="text-[10px] font-bold tracking-widest uppercase text-[#a3b885] font-mono block leading-relaxed">
+          <div className="max-w-xs text-right hidden sm:flex flex-col items-end gap-2 font-mono">
+            <span className="text-[10px] tracking-wider uppercase text-stone-300 block leading-relaxed">
               {isTe
-                ? 'ఎలాంటి నిబద్ధత అవసరం లేదు — కేవలం సేంద్రీయ బయో-ట్యాబ్ సామర్థ్యాన్ని మీరే చూడండి.'
-                : 'SEE IT FOR YOURSELF, NO COMMITMENT NEEDED — WITNESS HOW MUCH BETTER YOUR BIO-FERTILIZER CAN PERFORM.'}
+                ? 'సేంద్రీయ బయో-ట్యాబ్ సామర్థ్యాన్ని మీరే ప్రత్యక్షంగా చూడండి.'
+                : 'SEE IT FOR YOURSELF: WITNESS REAL VEGETATIVE EXPANSION.'}
             </span>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#283515] rounded-full border border-[#485c28] text-[10px] font-mono text-[#bef264]">
-              <Sparkles className="w-3 h-3 text-[#84cc16]" />
-              <span>+42% Yield • FCO 1985 Grade 1</span>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#1a2610] rounded-sm border border-[#3b5226] text-[10px] text-stone-200">
+              <IconCheck className="w-3 h-3 text-[#84cc16]" />
+              <span>+42% Yield | FCO 1985 Grade 1</span>
             </div>
           </div>
         </div>
 
-        {/* 
-          ======================================================================
-          CENTRAL INTERACTIVE PLANT VISUAL CANVAS:
-          Smooth vector plant responsive to growth stage with bio-nutrient root rhizosphere
-          ======================================================================
-        */}
-        <div className="relative flex flex-col items-center justify-center min-h-[380px] sm:min-h-[440px] my-2">
-          {/* Floating Impact Stats Card (Top Left of Canvas) */}
-          <div className="absolute top-2 left-2 sm:left-6 z-20 bg-[#253114]/85 backdrop-blur-md p-3 rounded-2xl border border-[#485c28] shadow-lg max-w-[210px] space-y-1.5">
-            <span className="text-[9px] font-mono uppercase text-[#a3b885] block font-bold">
+        {/* Central Plant Canvas */}
+        <div className="relative flex flex-col items-center justify-center min-h-[360px] sm:min-h-[420px] my-2">
+          {/* Floating Impact Stats Card */}
+          <div className="absolute top-2 left-2 sm:left-6 z-20 bg-[#1a2610] p-3 rounded-sm border border-[#3b5226] max-w-[210px] space-y-1.5 font-mono">
+            <span className="text-[9px] uppercase text-stone-400 block font-bold">
               {isTe ? 'సేంద్రీయ పోషక ప్రభావం' : 'BIO-NUTRIENT UPTAKE'}
             </span>
             <div className="space-y-1 text-[11px]">
               <div className="flex items-center justify-between">
-                <span className="text-[#cbd8b5]">{isTe ? 'వేరు వ్యాప్తి:' : 'Root Expansion:'}</span>
-                <span className="font-mono font-bold text-[#bef264]">
+                <span className="text-stone-300">{isTe ? 'వేరు వ్యాప్తి:' : 'Root Expansion:'}</span>
+                <span className="font-bold text-[#bef264]">
                   +{Math.round(20 + progress * 280)}%
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-[#cbd8b5]">{isTe ? 'నత్రజని లభ్యత:' : 'Active NPK:'}</span>
-                <span className="font-mono font-bold text-[#84cc16]">
+                <span className="text-stone-300">{isTe ? 'నత్రజని లభ్యత:' : 'Active NPK:'}</span>
+                <span className="font-bold text-[#84cc16]">
                   {Math.round(15 + progress * 80)} ppm
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-[#cbd8b5]">{isTe ? 'మొక్కల బలం:' : 'Vigor Index:'}</span>
-                <span className="font-mono font-bold text-white">
+                <span className="text-stone-300">{isTe ? 'మొక్కల బలం:' : 'Vigor Index:'}</span>
+                <span className="font-bold text-white">
                   {(1.0 + progress * 3.8).toFixed(1)}x
                 </span>
               </div>
@@ -155,55 +143,36 @@ export const InteractiveGrowthExperience: React.FC<InteractiveGrowthExperiencePr
           {/* SVG Plant Timelapse Canvas */}
           <svg
             viewBox="0 0 500 500"
-            className="w-full max-w-[500px] h-[360px] sm:h-[440px] overflow-visible drop-shadow-2xl"
+            className="w-full max-w-[500px] h-[360px] sm:h-[420px] overflow-visible"
           >
             <defs>
-              {/* Stem Gradient */}
               <linearGradient id="stemGrad" x1="0" y1="1" x2="0" y2="0">
-                <stop offset="0%" stopColor="#283515" />
+                <stop offset="0%" stopColor="#1a2610" />
                 <stop offset="50%" stopColor="#4d7c0f" />
                 <stop offset="100%" stopColor="#84cc16" />
               </linearGradient>
 
-              {/* Leaf Gradient */}
               <linearGradient id="leafGrad" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0%" stopColor="#84cc16" />
                 <stop offset="45%" stopColor="#4d7c0f" />
                 <stop offset="100%" stopColor="#1e3a10" />
               </linearGradient>
 
-              {/* Fruit Radial Gradient */}
               <radialGradient id="fruitGrad" cx="35%" cy="30%" r="65%">
                 <stop offset="0%" stopColor="#fef08a" />
                 <stop offset="45%" stopColor={fruitColor} />
                 <stop offset="100%" stopColor="#7f1d1d" />
               </radialGradient>
-
-              {/* Glowing Bio-Nutrient Root Flare */}
-              <radialGradient id="soilGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#84cc16" stopOpacity="0.4" />
-                <stop offset="60%" stopColor="#35441d" stopOpacity="0.1" />
-                <stop offset="100%" stopColor="#1e2710" stopOpacity="0" />
-              </radialGradient>
-
-              {/* Soft Specular Filter */}
-              <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="6" result="blur" />
-                <feComposite in="SourceGraphic" in2="blur" operator="over" />
-              </filter>
             </defs>
 
-            {/* Sub-surface Root Rhizosphere Glow */}
-            <circle cx="250" cy="460" r={40 + progress * 45} fill="url(#soilGlow)" />
-
             {/* Fertile Soil Bed & Base Mound */}
-            <ellipse cx="250" cy="460" rx="95" ry="18" fill="#1b230d" opacity="0.9" />
+            <ellipse cx="250" cy="460" rx="95" ry="18" fill="#141c0c" opacity="0.9" />
             <path
               d="M165,450 C210,440 290,440 335,450 C325,482 175,482 165,450 Z"
-              fill="#263314"
+              fill="#1e2912"
             />
 
-            {/* Root network radiating into living soil (Responsive to progress) */}
+            {/* Root network radiating into living soil */}
             <g opacity={0.4 + progress * 0.5}>
               <path
                 d={`M250,455 Q${240 - progress * 40},475 ${220 - progress * 50},490`}
@@ -227,17 +196,10 @@ export const InteractiveGrowthExperience: React.FC<InteractiveGrowthExperiencePr
 
             {/* Sprouting Seed Pod / Carbon Pellet at Base */}
             <g transform="translate(250, 446)">
-              <ellipse cx="0" cy="0" rx="14" ry="7" fill="#4d6328" stroke="#84cc16" strokeWidth="1" />
-              {/* Nutrient emission particles */}
-              {showBioNutrientOverlay && (
-                <>
-                  <circle cx="-6" cy="-4" r="1.5" fill="#bef264" className="animate-ping" />
-                  <circle cx="6" cy="-3" r="1.5" fill="#bef264" className="animate-pulse" />
-                </>
-              )}
+              <ellipse cx="0" cy="0" rx="14" ry="7" fill="#3b5226" stroke="#84cc16" strokeWidth="1" />
             </g>
 
-            {/* Main Growing Stem (Curves organically with progress) */}
+            {/* Main Growing Stem */}
             <path
               d={`M250,446 C248,${446 - stemHeight * 0.4} ${252 + Math.sin(progress * 4) * 8},${
                 446 - stemHeight * 0.72
@@ -248,13 +210,12 @@ export const InteractiveGrowthExperience: React.FC<InteractiveGrowthExperiencePr
               strokeLinecap="round"
             />
 
-            {/* Lower Leaf Pair (Early Stage Unfurling) */}
+            {/* Lower Leaf Pair */}
             {progress > 0.08 && (
               <g
                 transform={`translate(248, ${446 - stemHeight * 0.3}) scale(${leafScale * 0.9})`}
                 className="transition-transform duration-300"
               >
-                {/* Left Leaf */}
                 <path
                   d="M0,0 C-40,-15 -70,5 -85,30 C-65,35 -20,25 0,0 Z"
                   fill="url(#leafGrad)"
@@ -262,7 +223,6 @@ export const InteractiveGrowthExperience: React.FC<InteractiveGrowthExperiencePr
                   strokeWidth="1.2"
                 />
                 <path d="M0,0 C-35,10 -65,22 -85,30" stroke="#bef264" strokeWidth="1" fill="none" opacity="0.75" />
-                {/* Right Leaf */}
                 <path
                   d="M0,0 C40,-15 70,5 85,30 C65,35 20,25 0,0 Z"
                   fill="url(#leafGrad)"
@@ -273,13 +233,12 @@ export const InteractiveGrowthExperience: React.FC<InteractiveGrowthExperiencePr
               </g>
             )}
 
-            {/* Middle Foliage Cluster (Mid Vegetative Stage) */}
+            {/* Middle Foliage Cluster */}
             {progress > 0.3 && (
               <g
                 transform={`translate(251, ${446 - stemHeight * 0.6}) scale(${leafScale})`}
                 className="transition-transform duration-300"
               >
-                {/* Left Middle Leaf */}
                 <path
                   d="M0,0 C-50,-25 -95,-10 -115,20 C-85,28 -30,15 0,0 Z"
                   fill="url(#leafGrad)"
@@ -287,7 +246,6 @@ export const InteractiveGrowthExperience: React.FC<InteractiveGrowthExperiencePr
                   strokeWidth="1.4"
                 />
                 <path d="M0,0 C-45,3 -85,12 -115,20" stroke="#bef264" strokeWidth="1.2" fill="none" opacity="0.8" />
-                {/* Right Middle Leaf */}
                 <path
                   d="M0,0 C50,-25 95,-10 115,20 C85,28 30,15 0,0 Z"
                   fill="url(#leafGrad)"
@@ -298,7 +256,7 @@ export const InteractiveGrowthExperience: React.FC<InteractiveGrowthExperiencePr
               </g>
             )}
 
-            {/* Top Canopy Leaves (Full Sunlight Absorption) */}
+            {/* Top Canopy Leaves */}
             {progress > 0.5 && (
               <g
                 transform={`translate(250, ${446 - stemHeight}) scale(${leafScale * 1.1})`}
@@ -325,7 +283,7 @@ export const InteractiveGrowthExperience: React.FC<InteractiveGrowthExperiencePr
               </g>
             )}
 
-            {/* Yellow Flower Blossoms (Emerge during flowering stage) */}
+            {/* Yellow Flower Blossoms */}
             {flowerOpacity > 0 && progress < 0.85 && (
               <g
                 opacity={flowerOpacity * (1 - fruitProgress * 0.8)}
@@ -347,21 +305,18 @@ export const InteractiveGrowthExperience: React.FC<InteractiveGrowthExperiencePr
               </g>
             )}
 
-            {/* Fruit Cluster (Developing from green to radiant harvest red) */}
+            {/* Fruit Cluster */}
             {fruitSize > 0 && (
               <g
                 transform={`translate(250, ${446 - stemHeight * 0.72})`}
                 className="transition-all duration-300"
               >
-                {/* Calyx Star sepals */}
                 <path
                   d="M-4,-2 L-12,-8 L-6,1 L-10,9 L0,3 L10,9 L6,1 L12,-8 L4,-2 Z"
                   fill="#4d7c0f"
                 />
 
-                {/* Left Fruit */}
                 <g transform="translate(-24, 18)">
-                  <circle cx="0" cy="0" r={fruitSize * 0.9} fill="url(#fruitGrad)" filter="url(#softGlow)" />
                   <circle cx="0" cy="0" r={fruitSize * 0.9} fill="url(#fruitGrad)" />
                   <ellipse
                     cx={-fruitSize * 0.28}
@@ -374,9 +329,7 @@ export const InteractiveGrowthExperience: React.FC<InteractiveGrowthExperiencePr
                   />
                 </g>
 
-                {/* Right Fruit */}
                 <g transform="translate(24, 18)">
-                  <circle cx="0" cy="0" r={fruitSize} fill="url(#fruitGrad)" filter="url(#softGlow)" />
                   <circle cx="0" cy="0" r={fruitSize} fill="url(#fruitGrad)" />
                   <ellipse
                     cx={-fruitSize * 0.3}
@@ -389,7 +342,6 @@ export const InteractiveGrowthExperience: React.FC<InteractiveGrowthExperiencePr
                   />
                 </g>
 
-                {/* Vine connector */}
                 <path
                   d="M0,0 C-10,8 -24,18 -24,18 M0,0 C10,8 24,18 24,18"
                   stroke="#3f6212"
@@ -398,40 +350,26 @@ export const InteractiveGrowthExperience: React.FC<InteractiveGrowthExperiencePr
                 />
               </g>
             )}
-
-            {/* Morning Dew Droplets */}
-            {progress > 0.4 && (
-              <>
-                <circle cx="210" cy={`${446 - stemHeight * 0.58}`} r="2" fill="#e0f2fe" opacity="0.8" />
-                <circle cx="295" cy={`${446 - stemHeight * 0.55}`} r="2.5" fill="#e0f2fe" opacity="0.8" />
-                <circle cx="265" cy={`${446 - stemHeight * 0.88}`} r="1.8" fill="#e0f2fe" opacity="0.9" />
-              </>
-            )}
           </svg>
         </div>
 
-        {/* 
-          ======================================================================
-          INTERACTIVE SCRUB PILL SLIDER:
-          Matching pill slider from reference video ("Add bio-nutrient & water" / "Harvest Ready • FCO 1985")
-          ======================================================================
-        */}
-        <div className="max-w-lg mx-auto bg-[#293516]/95 backdrop-blur-md p-4 sm:p-5 rounded-3xl border border-[#485c28] shadow-2xl space-y-3.5">
+        {/* Scrub Slider Container */}
+        <div className="max-w-lg mx-auto bg-[#1a2610] p-4 rounded-sm border border-[#3b5226] space-y-3 font-mono">
           <div className="flex items-center justify-between text-xs">
             <div className="flex items-center gap-2">
-              <Droplets className="w-4 h-4 text-[#84cc16]" />
-              <span className="font-extrabold text-[#f4efe6] tracking-wide">
+              <IconDroplets className="w-4 h-4 text-[#84cc16]" />
+              <span className="font-bold text-stone-200">
                 {growthStage > 85
                   ? isTe
                     ? 'పూర్తి పంట సిద్ధం (100% సేంద్రీయ దిగుబడి)'
-                    : 'Harvest Ready • FCO 1985'
+                    : 'Harvest Ready: FCO 1985'
                   : isTe
-                  ? 'సేంద్రీయ పోషకాలను & నీటిని జోడించండి'
-                  : 'Add bio-nutrient & water'}
+                  ? 'సేంద్రీయ పోషకాలను జోడించండి'
+                  : 'Add Bio-Nutrient & Water'}
               </span>
             </div>
 
-            <span className="text-[11px] font-mono font-bold text-[#bef264] bg-[#1e2710] px-2 py-0.5 rounded-md border border-[#485c28]">
+            <span className="text-[11px] font-bold text-[#bef264] bg-[#121c0b] px-2 py-0.5 rounded-sm border border-[#3b5226]">
               {Math.round(growthStage)}% Vitality
             </span>
           </div>
@@ -447,13 +385,13 @@ export const InteractiveGrowthExperience: React.FC<InteractiveGrowthExperiencePr
                 setGrowthStage(Number(e.target.value));
                 if (isPlaying) setIsPlaying(false);
               }}
-              className="w-full h-3 bg-[#18200c] rounded-xl appearance-none cursor-pointer accent-[#84cc16] shadow-inner"
+              className="w-full h-2.5 bg-[#121c0b] rounded-sm appearance-none cursor-pointer accent-[#84cc16]"
               title="Drag horizontally to simulate vegetative and fruit development"
             />
           </div>
 
-          {/* Preset Stage Jump Pills */}
-          <div className="grid grid-cols-4 gap-1.5 pt-1 text-[10px] font-mono">
+          {/* Preset Stage Jump Buttons */}
+          <div className="grid grid-cols-4 gap-1.5 pt-1 text-[10px]">
             {[
               { label: isTe ? 'మొలక' : 'Seedling', val: 12 },
               { label: isTe ? 'శాకీయ' : 'Vegetative', val: 38 },
@@ -466,10 +404,10 @@ export const InteractiveGrowthExperience: React.FC<InteractiveGrowthExperiencePr
                   setGrowthStage(st.val);
                   setIsPlaying(false);
                 }}
-                className={`py-1 rounded-lg border transition font-bold cursor-pointer ${
+                className={`py-1 rounded-sm border transition-colors font-bold cursor-pointer ${
                   Math.abs(growthStage - st.val) < 15
-                    ? 'bg-[#4d6328] text-white border-[#84cc16]'
-                    : 'bg-[#1e2710]/70 text-[#a3b885] border-white/5 hover:bg-[#283515]'
+                    ? 'bg-[#3b5226] text-white border-[#84cc16]'
+                    : 'bg-[#121c0b] text-stone-400 border-[#243317] hover:bg-[#1a2610]'
                 }`}
               >
                 {st.label}
@@ -478,14 +416,14 @@ export const InteractiveGrowthExperience: React.FC<InteractiveGrowthExperiencePr
           </div>
 
           {/* Autoplay & Controls Row */}
-          <div className="flex items-center justify-between pt-2 border-t border-[#3e4f24] text-[11px]">
+          <div className="flex items-center justify-between pt-2 border-t border-[#2d3f1d] text-[11px]">
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setIsPlaying(!isPlaying)}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#435725] hover:bg-[#526a2e] text-white rounded-xl font-bold transition active:scale-95 cursor-pointer border border-[#638038]"
+                className="flex items-center gap-1.5 px-3 py-1 bg-[#2d3f1d] hover:bg-[#3b5226] text-white rounded-sm font-bold transition-colors cursor-pointer border border-[#4d662b]"
               >
-                {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-                <span>{isPlaying ? 'Pause' : 'Autoplay Timelapse'}</span>
+                {isPlaying ? <IconPause className="w-3.5 h-3.5" /> : <IconPlay className="w-3.5 h-3.5" />}
+                <span>{isPlaying ? 'Pause' : 'Autoplay'}</span>
               </button>
 
               <button
@@ -493,18 +431,18 @@ export const InteractiveGrowthExperience: React.FC<InteractiveGrowthExperiencePr
                   setGrowthStage(12);
                   setIsPlaying(false);
                 }}
-                className="p-1.5 hover:text-[#bef264] text-[#a3b885] transition rounded-lg hover:bg-[#1e2710]"
+                className="p-1 text-stone-400 hover:text-white rounded-sm hover:bg-[#121c0b] transition-colors"
                 title="Reset to seedling"
               >
-                <RotateCcw className="w-3.5 h-3.5" />
+                <IconRefresh className="w-3.5 h-3.5" />
               </button>
             </div>
 
             <button
               onClick={() => setShowBioNutrientOverlay(!showBioNutrientOverlay)}
-              className="text-[10px] font-mono text-[#a3b885] hover:text-white underline cursor-pointer"
+              className="text-[10px] text-stone-400 hover:text-white underline cursor-pointer"
             >
-              {showBioNutrientOverlay ? 'Hide Nutrient Flare' : 'Show Nutrient Flare'}
+              {showBioNutrientOverlay ? 'Hide Flare' : 'Show Flare'}
             </button>
           </div>
         </div>

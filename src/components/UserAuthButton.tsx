@@ -43,7 +43,7 @@ export const UserAuthButton: React.FC<UserAuthButtonProps> = ({ language }) => {
       <button
         onClick={handleSignIn}
         disabled={isSigningIn}
-        className="flex items-center gap-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border border-emerald-300 font-black px-3 py-1.5 rounded-xl text-xs shadow-2xs transition active:scale-98 cursor-pointer"
+        className="flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 font-semibold px-3.5 py-1.5 rounded-full text-xs shadow-2xs transition active:scale-98 cursor-pointer"
         title="Sign in with Google"
       >
         {isSigningIn ? (
@@ -68,7 +68,7 @@ export const UserAuthButton: React.FC<UserAuthButtonProps> = ({ language }) => {
             />
           </svg>
         )}
-        <span className="font-bold">{language === 'te' ? 'ప్రొఫైల్' : 'Profile'}</span>
+        <span className="font-semibold">{language === 'te' ? 'ప్రొఫైల్' : 'Profile'}</span>
       </button>
     );
   }
@@ -77,7 +77,7 @@ export const UserAuthButton: React.FC<UserAuthButtonProps> = ({ language }) => {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 rounded-xl border border-emerald-300 transition text-xs cursor-pointer shadow-2xs"
+        className="flex items-center gap-2 px-3 py-1.5 bg-white hover:bg-gray-50 rounded-full border border-gray-200 transition text-xs cursor-pointer shadow-2xs"
         title="Open Farmer Profile"
       >
         {user.photoURL ? (
@@ -121,7 +121,7 @@ export const UserAuthButton: React.FC<UserAuthButtonProps> = ({ language }) => {
               </strong>
               <span className="text-gray-500 text-[11px] block truncate">{user.email}</span>
               <span className="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
-                ✓ Verified Farmer Node
+                Verified Farmer Node
               </span>
             </div>
           </div>

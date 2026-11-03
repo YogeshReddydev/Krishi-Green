@@ -64,12 +64,11 @@ export const PrototypeNoticeModal: React.FC<PrototypeNoticeModalProps> = ({
                 className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-2"
               >
                 <span>{isTe ? 'కృషిగ్రీన్ వేదికకు స్వాగతం' : 'Welcome to KrishiGreen'}</span>
-                <span className="text-emerald-300">🌱</span>
               </h2>
               <p className="text-xs sm:text-sm text-emerald-100 font-medium leading-snug">
                 {isTe
-                  ? 'ఆహార వ్యర్థాల నుండి సేంద్రీయ ఎరువుల ఉత్పత్తి — ఆంధ్రప్రదేశ్ పైలట్ ప్రదర్శన వేదిక'
-                  : 'Food Waste to Farmer Wealth Ecosystem — Andhra Pradesh Pilot Demonstration'}
+                  ? 'ఆహార వ్యర్థాల నుండి సేంద్రీయ ఎరువుల ఉత్పత్తి: ఆంధ్రప్రదేశ్ పైలట్ ప్రదర్శన వేదిక'
+                  : 'Food Waste to Farmer Wealth Ecosystem: Andhra Pradesh Pilot Demonstration'}
               </p>
             </div>
 
@@ -169,7 +168,7 @@ export const PrototypeNoticeModal: React.FC<PrototypeNoticeModalProps> = ({
           {/* Pilot Scope & Simulation Note */}
           <div className="p-3 bg-gray-50 rounded-xl border border-gray-200 text-[11px] text-gray-600 space-y-1">
             <span className="font-bold text-gray-800 block">
-              📍 {isTe ? 'పైలట్ పరిధి & డేటా గమనిక:' : 'Pilot Coverage & Demonstration Data Note:'}
+              {isTe ? 'పైలట్ పరిధి & డేటా గమనిక:' : 'Pilot Coverage & Demonstration Data Note:'}
             </span>
             <p>
               {isTe

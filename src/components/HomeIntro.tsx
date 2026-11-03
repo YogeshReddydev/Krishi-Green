@@ -12,14 +12,15 @@ import {
   Bot,
   Truck,
   Tractor,
+  Sparkles,
+  CheckCircle2,
+  Award,
 } from 'lucide-react';
 import { SupportedLanguage } from '../types';
 import { UI_TRANSLATIONS } from '../data/translations';
 import { AnimatedEcosystemModel } from './AnimatedEcosystemModel';
 import { InteractiveGrowthExperience } from './InteractiveGrowthExperience';
-import { Interactive3DCapsule } from './Interactive3DCapsule';
-import { EditorialImpactHero } from './EditorialImpactHero';
-import { ProductFormatsCarousel } from './ProductFormatsCarousel';
+import { SeasonalCropAdvice } from './SeasonalCropAdvice';
 import farmerWelcomeImg from '../assets/images/krishigreen_farmer_welcome_1791353512681.jpg';
 
 interface HomeIntroProps {
@@ -225,29 +226,118 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
       */}
       <InteractiveGrowthExperience language={language} />
 
-      {/* 
-        ======================================================================
-        INTERACTIVE 3D BIO-TABLET MODULE (100 kg bio-waste -> 13 g carbon tablet)
-        3D rotating perspective tablet with embossed lotus/leaf insignia
-        ======================================================================
-      */}
-      <Interactive3DCapsule language={language} onNavigate={onNavigate} />
+
 
       {/* 
         ======================================================================
-        EDITORIAL IMPACT HERO (Less in, same out)
-        Scenic rolling farmland, 3D NPK box, floating frosted metric cards
+        FLAGSHIP STORE VISUAL SPOTLIGHT:
+        Real product photo high-lifted for verified farmer input commerce
         ======================================================================
       */}
-      <EditorialImpactHero language={language} onNavigate={onNavigate} />
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-950 via-teal-950 to-emerald-900 border-2 border-emerald-500/40 p-6 sm:p-8 text-white shadow-xl">
+        <div className="absolute -right-24 -top-24 w-72 h-72 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <div className="lg:col-span-5 space-y-2">
+            <div className="relative rounded-2xl overflow-hidden border-2 border-emerald-400/50 shadow-2xl group aspect-[4/5] bg-gradient-to-b from-[#03190f] to-[#010c07] flex items-center justify-center">
+              <img
+                src="/assets/aistudio/image_d4f93b65.png"
+                alt="KrishiGreen Flagship Grade-A Vermicompost"
+                className="w-full h-full object-contain transition-transform duration-300"
+              />
+              <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
+              <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-black/75 to-transparent pointer-events-none" />
+              <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+                <span className="px-3 py-1 rounded-full bg-emerald-500 text-white text-xs font-black tracking-wide shadow-md flex items-center gap-1.5 backdrop-blur-xs">
+                  <Sparkles className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
+                  <span>{language === 'te' ? 'మా ప్రధాన ఉత్పత్తి' : 'Our Flagship Product'}</span>
+                </span>
+                <span className="px-2.5 py-1 rounded-full bg-black/60 text-emerald-300 text-[11px] font-bold border border-emerald-400/30 backdrop-blur-xs">
+                  Official Store Visual
+                </span>
+              </div>
+              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-emerald-100">
+                <span className="flex items-center gap-1 font-semibold">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  100% Real Handcrafted Bio-Humus
+                </span>
+                <span className="text-[10px] font-mono bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-400/30">
+                  Batch: KG-VERMI-2026-08
+                </span>
+              </div>
+            </div>
+            <p className="text-[11px] text-emerald-300 text-center font-medium">
+              📸 Actual physical product output produced from segregated mandi food waste
+            </p>
+          </div>
+
+          <div className="lg:col-span-7 space-y-4">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-400/30 mb-2">
+                <Award className="w-3.5 h-3.5 text-amber-400" />
+                <span>{language === 'te' ? 'స్టోర్ విజువల్స్ & ప్రధాన ఉత్పత్తి' : 'High-Lifted in Store Visuals • FCO 1985 Grade-A'}</span>
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                {language === 'te'
+                  ? 'కృషిగ్రీన్ ప్రీమియం ఎన్రిచ్డ్ వర్మీకంపోస్ట్'
+                  : 'KrishiGreen™ Grade-A Enriched Vermicompost'}
+              </h3>
+              <p className="text-xs sm:text-sm text-emerald-100/90 mt-1.5 leading-relaxed">
+                {language === 'te'
+                  ? 'మండి సేంద్రీయ వ్యర్థాల నుండి 60 రోజుల ఎర్త్‌వార్మ్ జీర్ణక్రియ ద్వారా తయారైన సహజ హ్యూమస్. 18.4% సేంద్రీయ కార్బన్ కలిగి, 40% రసాయన డీఏపీ ఎరువులను సురక్షితంగా భర్తీ చేస్తుంది.'
+                  : 'Handcrafted, nutrient-dense granular humus converted from segregated vegetable mandi bio-waste through 60-day Eisenia fetida digestion. Delivers 18.4% organic carbon, balances soil pH to 7.2, and safely replaces 40% chemical DAP.'}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+              <div className="p-2.5 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
+                <span className="text-[10px] text-emerald-300 block uppercase font-bold tracking-wider">Organic Carbon</span>
+                <span className="text-base font-black text-white mt-0.5 block">18.4%</span>
+                <span className="text-[9px] text-emerald-200/80">Living Micro-Humus</span>
+              </div>
+              <div className="p-2.5 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
+                <span className="text-[10px] text-emerald-300 block uppercase font-bold tracking-wider">NPK Analysis</span>
+                <span className="text-base font-black text-white mt-0.5 block">1.8 - 1.2 - 1.4</span>
+                <span className="text-[9px] text-emerald-200/80">Complete Nutrition</span>
+              </div>
+              <div className="p-2.5 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
+                <span className="text-[10px] text-emerald-300 block uppercase font-bold tracking-wider">Soil pH</span>
+                <span className="text-base font-black text-white mt-0.5 block">7.2</span>
+                <span className="text-[9px] text-emerald-200/80">Optimum Neutral</span>
+              </div>
+              <div className="p-2.5 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
+                <span className="text-[10px] text-emerald-300 block uppercase font-bold tracking-wider">Farmer Direct</span>
+                <span className="text-base font-black text-amber-300 mt-0.5 block">₹399</span>
+                <span className="text-[9px] text-emerald-200/80">per 50 kg Bag</span>
+              </div>
+            </div>
+
+            <div className="pt-2 flex flex-wrap items-center gap-3">
+              <button
+                onClick={() => onNavigate('marketplace-products')}
+                className="px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-amber-950 font-black rounded-xl text-xs sm:text-sm transition shadow-lg flex items-center gap-2 cursor-pointer"
+              >
+                <ShoppingBag className="w-4 h-4" />
+                <span>{language === 'te' ? 'స్టోర్‌లో కొనండి (యూపీఐ)' : 'View in Store & Buy via UPI'}</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => onNavigate('pipeline')}
+                className="px-5 py-3 bg-white/15 hover:bg-white/25 text-white font-bold rounded-xl text-xs sm:text-sm transition border border-white/20 flex items-center gap-2 cursor-pointer"
+              >
+                <span>{language === 'te' ? 'ఉత్పత్తి పైప్‌లైన్ చూడండి' : 'Trace Mandi-to-Bag Pipeline'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* 
         ======================================================================
-        FORMATS & ACCESS (3D Product Packaging Carousel)
-        CropTab K, CropTab N, CropTab NPK, BioEnzyme Gold with tabs & arrows
+        SEASONAL CROP ADVICE: WHAT TO PLANT NEXT
+        Real-time, region-specific cropping suggestions based on current month
         ======================================================================
       */}
-      <ProductFormatsCarousel language={language} onNavigate={onNavigate} />
+      <SeasonalCropAdvice language={language} onNavigate={onNavigate} />
 
       {/* 
         ======================================================================

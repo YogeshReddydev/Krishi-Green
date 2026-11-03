@@ -1,24 +1,22 @@
 import React from 'react';
 import {
-  Home,
-  MapPin,
-  Layers,
-  ShoppingBag,
-  Flame,
-  RotateCcw,
-  FileCheck2,
-  TrendingUp,
-  Compass,
-  CloudSun,
-  Bot,
-  X,
-  Phone,
-  Sprout,
-  ShieldCheck,
-  ChevronRight,
-  RefreshCw,
-  Tractor,
-} from 'lucide-react';
+  IconHome,
+  IconMapPin,
+  IconLayers,
+  IconBag,
+  IconFlame,
+  IconRefresh,
+  IconFileText,
+  IconTrendingUp,
+  IconCompass,
+  IconCloudSun,
+  IconTractor,
+  IconClose,
+  IconPhone,
+  IconSprout,
+  IconShield,
+  IconChevronRight,
+} from './Icons';
 import { SupportedLanguage } from '../types';
 import { UI_TRANSLATIONS } from '../data/translations';
 
@@ -29,6 +27,7 @@ interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenHelpline: () => void;
+  onOpenLegal?: (type: 'tos' | 'privacy') => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -38,6 +37,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isOpen,
   onClose,
   onOpenHelpline,
+  onOpenLegal,
 }) => {
   const t = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.en;
 
@@ -48,17 +48,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {
           id: 'home',
           label: t.navHome || 'Home / Overview',
-          subLabel: language === 'te' ? 'ప్రధాన ముఖచిత్రం & రైతు స్వాగతం' : 'Entrance Hero & Circular Flow',
-          icon: Home,
+          subLabel: language === 'te' ? 'ప్రధాన ముఖచిత్రం: రైతు స్వాగతం' : 'Entrance Hero: Circular Flow',
+          icon: IconHome,
           badge: null,
         },
         {
           id: 'process',
           label: language === 'te' ? 'మా విధానం (ప్రక్రియ)' : 'Our Process',
           subLabel: language === 'te' ? 'వ్యర్థాల సేకరణ నుండి సేంద్రీయ దిగుబడి' : 'Waste Collection to Organic Yield',
-          icon: RefreshCw,
+          icon: IconRefresh,
           badge: '6 Stages',
-          badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+          badgeColor: 'bg-stone-200 text-stone-800 border-stone-300',
         },
       ],
     },
@@ -69,49 +69,49 @@ export const Sidebar: React.FC<SidebarProps> = ({
           id: 'ap-pilot',
           label: language === 'te' ? 'కస్టమ్ హైరింగ్ & యంత్రాలు' : 'Custom Hiring & Machinery',
           subLabel: language === 'te' ? 'యంత్రాల అద్దె & సేవా కేంద్రాలు' : 'CHC Machinery Hubs & Rentals',
-          icon: MapPin,
+          icon: IconMapPin,
           badge: language === 'te' ? 'నెట్‌వర్క్' : 'Network',
-          badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+          badgeColor: 'bg-stone-200 text-stone-800 border-stone-300',
         },
         {
           id: 'pipeline',
           label: t.navPipeline || 'Waste-to-Wealth Pipeline',
           subLabel: language === 'te' ? '16 దశల క్యూఆర్ ట్రేసింగ్' : '16-Stage Traceable Batching',
-          icon: Layers,
+          icon: IconLayers,
           badge: '16 Stg',
-          badgeColor: 'bg-teal-100 text-teal-800 border-teal-200',
+          badgeColor: 'bg-stone-200 text-stone-800 border-stone-300',
         },
         {
           id: 'marketplace-products',
           label: language === 'te' ? 'వ్యవసాయ ఉత్పత్తుల అమ్మకం' : 'Selling Farming Products',
           subLabel: language === 'te' ? 'ధృవీకరించబడిన జీవ ఎరువులు & వర్మీకంపోస్ట్' : 'Certified Bio-Inputs & Organic Direct',
-          icon: ShoppingBag,
+          icon: IconBag,
           badge: language === 'te' ? 'సేంద్రీయ' : 'Organic',
-          badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+          badgeColor: 'bg-[#1e382b] text-[#fbfaf6] border-[#1e382b]',
         },
         {
           id: 'marketplace-machinery',
           label: language === 'te' ? 'రైతుల కోసం యంత్రాల హబ్' : 'Equipment Hub for Farmers',
           subLabel: language === 'te' ? 'గంటకు సగటు అద్దె & AP గైడ్ యంత్రాలు' : 'Hourly Rentals & AP Guide Machinery',
-          icon: Tractor,
+          icon: IconTractor,
           badge: 'AP Guide',
-          badgeColor: 'bg-amber-100 text-amber-800 border-amber-200',
+          badgeColor: 'bg-[#6b4f3b] text-[#fbfaf6] border-[#6b4f3b]',
         },
         {
           id: 'carbon',
           label: t.navCarbon || 'Carbon & Climate Engine',
-          subLabel: language === 'te' ? 'BEE / ICM కార్బన్ క్రెడిట్ లెడ్జర్' : 'BEE / ICM Registry (₹750/tCO2e)',
-          icon: Flame,
+          subLabel: language === 'te' ? 'BEE / ICM కార్బన్ క్రెడిట్ లెడ్జర్' : 'BEE / ICM Registry (Rs 750/tCO2e)',
+          icon: IconFlame,
           badge: 'BEE/ICM',
-          badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+          badgeColor: 'bg-stone-200 text-stone-800 border-stone-300',
         },
         {
           id: 'rotation',
           label: t.navRotation || 'Crop Rotation Scheduler',
-          subLabel: language === 'te' ? '5-దశల పంట వృద్ధి స్థితి & ఎమోజి ట్రాకర్' : 'Growth Sync & Emoji Status',
-          icon: RotateCcw,
+          subLabel: language === 'te' ? '5-దశల పంట వృద్ధి స్థితి ట్రాకర్' : 'Growth Sync & Status Matrix',
+          icon: IconRefresh,
           badge: language === 'te' ? 'వృద్ధి' : 'Active',
-          badgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
+          badgeColor: 'bg-stone-200 text-stone-800 border-stone-300',
         },
       ],
     },
@@ -122,33 +122,33 @@ export const Sidebar: React.FC<SidebarProps> = ({
           id: 'schemes',
           label: t.navSchemes || 'Govt Subsidies & Schemes',
           subLabel: language === 'te' ? 'PM-PRANAM, SMAM & డీబీటీ రాయితీలు' : 'PM-PRANAM & SMAM Subsidies',
-          icon: FileCheck2,
+          icon: IconFileText,
           badge: 'Official',
-          badgeColor: 'bg-indigo-100 text-indigo-800 border-indigo-200',
+          badgeColor: 'bg-stone-200 text-stone-800 border-stone-300',
         },
         {
           id: 'impact',
           label: t.navImpact || 'Live Impact Ledger',
           subLabel: language === 'te' ? 'ఆడిట్ లెడ్జర్ & పీడీఎఫ్ డౌన్‌లోడ్' : 'Audited Records & PDF Export',
-          icon: TrendingUp,
+          icon: IconTrendingUp,
           badge: 'Audited',
-          badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+          badgeColor: 'bg-[#1e382b] text-[#fbfaf6] border-[#1e382b]',
         },
         {
           id: 'maps',
           label: t.navMaps || 'Agri Maps Hub',
           subLabel: language === 'te' ? 'జీపీఎస్ & స్థానిక కేంద్రాలు' : 'GIS Field Location Finder',
-          icon: Compass,
+          icon: IconCompass,
           badge: 'GIS',
-          badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+          badgeColor: 'bg-stone-200 text-stone-800 border-stone-300',
         },
         {
           id: 'search',
           label: t.navSearch || 'Weather & Agro Intel',
           subLabel: language === 'te' ? 'వాతావరణం, వర్షపాతం & మండి ధరలు' : 'Rain Risk & IMD Agromet Advisory',
-          icon: CloudSun,
+          icon: IconCloudSun,
           badge: 'Live IMD',
-          badgeColor: 'bg-sky-100 text-sky-800 border-sky-200',
+          badgeColor: 'bg-stone-200 text-stone-800 border-stone-300',
         },
       ],
     },
@@ -157,11 +157,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
       items: [
         {
           id: 'helpline',
-          label: t.navHelpline || '24x7 Helpline & AI',
-          subLabel: language === 'te' ? 'ఉచిత టోల్‌ఫ్రీ కాల్ 1800-KRISHI-GRN' : 'Toll-Free & Telugu AI Advisor',
-          icon: Bot,
+          label: t.navHelpline || '24x7 Helpline & Advisory',
+          subLabel: language === 'te' ? 'ఉచిత టోల్‌ఫ్రీ కాల్ 1800-KRISHI-GRN' : 'Toll-Free & Telugu Agro Advisory',
+          icon: IconPhone,
           badge: '1800 Free',
-          badgeColor: 'bg-emerald-600 text-white border-transparent',
+          badgeColor: 'bg-[#1e382b] text-[#fbfaf6] border-[#1e382b]',
         },
       ],
     },
@@ -176,31 +176,34 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex">
-      {/* Dimmed Backdrop Overlay (Strictly Vertical - closes on tap) */}
+      {/* Dimmed Solid Overlay */}
       <div
-        className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
+        className="fixed inset-0 bg-stone-900/60 transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Slide-over Drawer Panel */}
-      <div className="relative w-full max-w-sm sm:max-w-md bg-white h-full shadow-2xl flex flex-col z-10 animate-in slide-in-from-left duration-250 border-r border-emerald-200">
+      <div className="relative w-full max-w-sm sm:max-w-md bg-white h-full flex flex-col z-10 border-r border-gray-200 shadow-2xl">
         {/* Drawer Header */}
-        <div className="p-4 sm:p-5 border-b border-emerald-100 bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 text-white flex items-center justify-between">
+        <div className="p-4 sm:p-5 border-b border-emerald-900/10 bg-[#064e3b] text-white flex items-center justify-between">
           <div
             onClick={() => handleItemClick('home')}
-            className="flex items-center gap-3 cursor-pointer group select-none"
+            className="flex items-center gap-3 cursor-pointer select-none"
           >
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-600 to-green-400 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition shrink-0">
-              <Sprout className="w-5 h-5 text-white" />
+            <div className="w-9 h-9 rounded-full bg-[#059669] flex items-center justify-center text-white shrink-0 shadow-xs">
+              <IconSprout className="w-5 h-5 text-white" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-black text-lg text-white tracking-tight leading-none">
-                  Krishi<span className="text-emerald-400">Green</span>
+                <span className="font-extrabold text-lg text-white tracking-tight leading-none">
+                  Krishi<span className="text-emerald-300">Green</span>
+                </span>
+                <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-emerald-800 border border-emerald-600 text-emerald-200">
+                  AP Pilot
                 </span>
               </div>
-              <p className="text-[10px] text-emerald-200/90 font-medium tracking-tight mt-0.5">
+              <p className="text-[11px] text-emerald-100/80 font-medium tracking-tight mt-0.5">
                 {t.tagline}
               </p>
             </div>
@@ -208,18 +211,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-emerald-200 hover:text-white hover:bg-white/10 transition active:scale-95"
+            className="p-1.5 rounded-full text-emerald-200 hover:text-white hover:bg-emerald-800 transition cursor-pointer"
             aria-label="Close navigation menu"
           >
-            <X className="w-5 h-5" />
+            <IconClose className="w-5 h-5" />
           </button>
         </div>
 
         {/* Scrollable Navigation Items */}
-        <div className="flex-1 overflow-y-auto p-3 space-y-4 scrollbar-thin scrollbar-thumb-emerald-200">
+        <div className="flex-1 overflow-y-auto p-3 space-y-4">
           {navSections.map((section, sIdx) => (
             <div key={sIdx} className="space-y-1">
-              <div className="px-3 pt-2 pb-1 text-[10px] font-black text-emerald-800 tracking-wider uppercase font-mono">
+              <div className="px-3 pt-2 pb-1 text-[10px] font-bold text-gray-500 tracking-wider uppercase font-mono">
                 {section.title}
               </div>
 
@@ -231,21 +234,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     <button
                       key={item.id}
                       onClick={() => handleItemClick(item.id)}
-                      className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-left transition-all duration-150 relative group ${
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition relative border ${
                         isActive
-                          ? 'bg-emerald-800 text-white font-bold shadow-sm'
-                          : 'text-gray-700 hover:bg-emerald-50 hover:text-emerald-950 font-medium'
+                          ? 'bg-[#064e3b] text-white border-[#064e3b] font-medium shadow-xs'
+                          : 'text-gray-800 hover:bg-emerald-50/70 hover:text-emerald-950 border-transparent'
                       }`}
                     >
-                      {isActive && (
-                        <span className="absolute left-0 top-2 bottom-2 w-1.5 bg-emerald-300 rounded-r-full" />
-                      )}
-
                       <div
-                        className={`p-2 rounded-xl shrink-0 transition-colors ${
+                        className={`p-1.5 rounded-lg shrink-0 border ${
                           isActive
-                            ? 'bg-emerald-700 text-emerald-100'
-                            : 'bg-emerald-50 text-emerald-700 group-hover:bg-emerald-100'
+                            ? 'bg-emerald-700 text-white border-emerald-600'
+                            : 'bg-gray-100 text-gray-700 border-gray-200'
                         }`}
                       >
                         <Icon className="w-4 h-4" />
@@ -253,14 +252,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-1">
-                          <span className="text-xs font-bold truncate tracking-tight">
+                          <span className="text-xs font-semibold truncate tracking-tight">
                             {item.label}
                           </span>
                           {item.badge && (
                             <span
-                              className={`text-[9px] font-extrabold px-1.5 py-0.2 rounded-md border shrink-0 ${
+                              className={`text-[9px] font-bold px-2 py-0.5 rounded-full border shrink-0 ${
                                 isActive
-                                  ? 'bg-emerald-700 text-emerald-100 border-emerald-600'
+                                  ? 'bg-[#2d523f] text-stone-200 border-[#3e6852]'
                                   : item.badgeColor
                               }`}
                             >
@@ -271,7 +270,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         {item.subLabel && (
                           <p
                             className={`text-[10px] truncate leading-tight mt-0.5 ${
-                              isActive ? 'text-emerald-200/90' : 'text-gray-500'
+                              isActive ? 'text-stone-300' : 'text-stone-500'
                             }`}
                           >
                             {item.subLabel}
@@ -279,9 +278,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         )}
                       </div>
 
-                      <ChevronRight
-                        className={`w-4 h-4 shrink-0 transition-transform group-hover:translate-x-0.5 ${
-                          isActive ? 'text-emerald-200' : 'text-gray-300'
+                      <IconChevronRight
+                        className={`w-4 h-4 shrink-0 ${
+                          isActive ? 'text-stone-300' : 'text-stone-400'
                         }`}
                       />
                     </button>
@@ -292,16 +291,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
           ))}
         </div>
 
-        {/* Drawer Footer with Helpline & Tagline */}
-        <div className="p-4 border-t border-emerald-100 bg-emerald-50/50 space-y-2.5">
-          <div className="bg-white p-3 rounded-2xl border border-emerald-200/80 shadow-2xs">
+        {/* Drawer Footer with Helpline & Legal Policies */}
+        <div className="p-3.5 border-t border-[#ded9ce] bg-stone-100 space-y-2.5">
+          <div className="bg-[#fdfcf9] p-3 rounded-sm border border-[#ded9ce]">
             <div className="flex items-center gap-2 mb-1">
-              <ShieldCheck className="w-4 h-4 text-emerald-700 shrink-0" />
-              <span className="text-[10px] font-black text-emerald-950 uppercase tracking-wider">
+              <IconShield className="w-4 h-4 text-[#1e382b] shrink-0" />
+              <span className="text-[10px] font-mono font-bold text-stone-800 uppercase tracking-wider">
                 {language === 'te' ? 'జాతీయ వ్యవసాయ పర్యావరణ వ్యవస్థ' : 'National Agri-Ecological Network'}
               </span>
             </div>
-            <p className="text-[10px] text-gray-600 leading-tight">
+            <p className="text-[11px] text-stone-600 leading-tight">
               {language === 'te'
                 ? 'భారతదేశ రైతులు, ఎఫ్‌పీఓలు మరియు సేంద్రీయ ఉత్పత్తిదారుల కొరకు'
                 : 'Serving farmers, FPOs & food-waste aggregators nationwide'}
@@ -311,16 +310,35 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onOpenHelpline();
                 onClose();
               }}
-              className="mt-2.5 w-full flex items-center justify-center gap-2 py-2 px-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-bold transition shadow-xs active:scale-98"
+              className="mt-2.5 w-full flex items-center justify-center gap-2 py-2 px-3 bg-[#1e382b] hover:bg-[#2d523f] text-[#fbfaf6] rounded-sm text-xs font-semibold border border-[#1e382b] transition-colors"
             >
-              <Phone className="w-3.5 h-3.5 text-emerald-200 animate-pulse" />
+              <IconPhone className="w-3.5 h-3.5 text-stone-200" />
               <span>{t.tollFree}: 1800-KRISHI-GRN</span>
             </button>
           </div>
 
-          <p className="text-[10px] text-center text-emerald-800 font-semibold italic">
-            "{t.tagline}"
-          </p>
+          {/* Legal Links (TOS and Privacy Policy) */}
+          <div className="flex items-center justify-between px-1 text-[11px] text-stone-600 font-mono">
+            <button
+              onClick={() => {
+                if (onOpenLegal) onOpenLegal('tos');
+                onClose();
+              }}
+              className="hover:text-stone-900 underline underline-offset-2"
+            >
+              Terms of Service
+            </button>
+            <span className="text-stone-400">|</span>
+            <button
+              onClick={() => {
+                if (onOpenLegal) onOpenLegal('privacy');
+                onClose();
+              }}
+              className="hover:text-stone-900 underline underline-offset-2"
+            >
+              Privacy Policy
+            </button>
+          </div>
         </div>
       </div>
     </div>

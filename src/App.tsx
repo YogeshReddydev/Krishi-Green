@@ -38,18 +38,13 @@ import {
   EquipmentItem,
   SupportTicket,
 } from './types';
+import { LegalModals } from './components/LegalModals';
 import {
-  Phone,
-  LifeBuoy,
-  Sprout,
-  ShieldCheck,
-  CheckCircle2,
-  MapPin,
-  ExternalLink,
-  Bot,
-  Compass,
-  Search,
-} from 'lucide-react';
+  IconPhone,
+  IconShield,
+  IconLayers,
+  IconClose,
+} from './components/Icons';
 import { UI_TRANSLATIONS } from './data/translations';
 import farmerWelcomeImg from './assets/images/krishigreen_farmer_welcome_1791353512681.jpg';
 
@@ -69,6 +64,7 @@ export default function App() {
   const [activeQRBatch, setActiveQRBatch] = useState<any | null>(null);
   const [showTicketsDrawer, setShowTicketsDrawer] = useState<boolean>(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+  const [legalModalType, setLegalModalType] = useState<'tos' | 'privacy' | null>(null);
   const [isPrototypeModalOpen, setIsPrototypeModalOpen] = useState<boolean>(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
       try {
@@ -287,30 +283,23 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col relative text-gray-800 bg-[#f7faf4]">
-      {/* Agricultural Farmland Framing & Textured Visual Background */}
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col relative text-gray-900 bg-[#f8faf8]">
+      {/* Subtle Farm Landscape Ambient Framing */}
       <div
-        className="fixed inset-0 pointer-events-none z-0 opacity-12 bg-cover bg-center bg-no-repeat"
+        className="fixed inset-0 pointer-events-none z-0 opacity-5 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: `url('${farmerWelcomeImg}')`,
         }}
       />
-      {/* Framing Ambient High-Contrast Overlay to guarantee 100% crystal-clear UI contrast */}
-      <div className="fixed inset-0 pointer-events-none z-0 bg-gradient-to-b from-[#f8faf6]/92 via-[#f8faf6]/96 to-[#f4f7ef]/98 backdrop-blur-[2px]" />
+      <div className="fixed inset-0 pointer-events-none z-0 bg-[#f8faf8]/95" />
 
-      {/* Decorative Agri Corner Framing Accents */}
-      <div className="fixed top-2 left-2 w-28 h-28 pointer-events-none z-10 border-t-2 border-l-2 border-emerald-600/30 rounded-tl-3xl hidden md:block" />
-      <div className="fixed top-2 right-2 w-28 h-28 pointer-events-none z-10 border-t-2 border-r-2 border-emerald-600/30 rounded-tr-3xl hidden md:block" />
-      <div className="fixed bottom-2 left-2 w-28 h-28 pointer-events-none z-10 border-b-2 border-l-2 border-emerald-600/30 rounded-bl-3xl hidden md:block" />
-      <div className="fixed bottom-2 right-2 w-28 h-28 pointer-events-none z-10 border-b-2 border-r-2 border-emerald-600/30 rounded-br-3xl hidden md:block" />
-
-      {/* Top Prototype Announcement Banner (Message on the top) */}
+      {/* Top Prototype Announcement Banner */}
       <PrototypeTopBanner
         language={language}
         onOpenDetails={() => setIsPrototypeModalOpen(true)}
       />
 
-      {/* Main App Navigation Header (PINNED sticky top-0: Includes Agri News & Weather Alert Sector + Navigation Board) */}
+      {/* Main App Navigation Header (PINNED sticky top-0) */}
       <Header
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
@@ -336,27 +325,33 @@ export default function App() {
           setIsHelplineOpen(true);
           setIsSidebarOpen(false);
         }}
+        onOpenLegal={(type) => {
+          setLegalModalType(type);
+          setIsSidebarOpen(false);
+        }}
       />
 
-      {/* Clean Vertical Main Content Container - Properly fitted for pages without awkward width boundaries */}
+      {/* Clean Vertical Main Content Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6 relative z-10">
         <div className="space-y-6">
           {/* Webpage Breadcrumb bar when on dedicated modules */}
           {currentTab !== 'home' && (
-            <div className="flex items-center justify-between bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-emerald-100 shadow-2xs text-xs">
+            <div className="flex items-center justify-between bg-white px-4 py-2.5 rounded-xl border border-gray-200 text-xs shadow-2xs">
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setCurrentTab('home')}
-                  className="font-bold text-emerald-700 hover:text-emerald-900 flex items-center gap-1 hover:underline"
+                  className="font-medium text-emerald-800 hover:underline flex items-center gap-1"
                 >
                   <span>{t.navHome}</span>
                 </button>
                 <span className="text-gray-400">/</span>
-                <span className="font-extrabold text-gray-900">
+                <span className="font-bold text-gray-900">
                   {currentTab === 'process' && (language === 'te' ? 'మా విధానం (వ్యర్థాల నుండి సేంద్రీయ దిగుబడి)' : 'Our Process: Waste Collection to Organic Yield')}
                   {currentTab === 'ap-pilot' && (language === 'te' ? 'కస్టమ్ హైరింగ్ & వ్యవసాయ యంత్రాలు' : 'Custom Hiring & Machinery Hubs')}
                   {currentTab === 'pipeline' && t.navPipeline}
                   {currentTab === 'marketplace' && t.navMarketplace}
+                  {currentTab === 'marketplace-products' && (language === 'te' ? 'వ్యవసాయ ఉత్పత్తుల అమ్మకం' : 'Selling Farming Products')}
+                  {currentTab === 'marketplace-machinery' && (language === 'te' ? 'రైతుల కోసం యంత్రాల హబ్' : 'Equipment Hub for Farmers')}
                   {currentTab === 'carbon' && (t.navCarbon || 'Carbon & Climate Engine')}
                   {currentTab === 'rotation' && t.navRotation}
                   {currentTab === 'schemes' && t.navSchemes}
@@ -368,7 +363,7 @@ export default function App() {
               </div>
               <button
                 onClick={() => setCurrentTab('home')}
-                className="text-[11px] font-extrabold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-3 py-1 rounded-xl transition border border-emerald-200"
+                className="text-[11px] font-mono text-stone-800 bg-stone-100 hover:bg-stone-200 px-3 py-1 rounded-sm border border-stone-300"
               >
                 {t.backToOverview}
               </button>
@@ -486,23 +481,34 @@ export default function App() {
         </div>
       </main>
 
-      {/* Footer inside main content column */}
-      <footer className="bg-white/95 backdrop-blur-md border-t border-gray-200/90 py-6 px-4 sm:px-6 text-xs text-gray-500 mt-12 relative z-10">
+      {/* Footer */}
+      <footer className="bg-white border-t border-gray-200 py-6 px-4 sm:px-6 text-xs text-gray-500 mt-12 relative z-10">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="font-extrabold text-emerald-950 text-sm">KrishiGreen</span>
-            <span className="text-gray-400">•</span>
-            <span className="text-gray-600">{t.tagline}</span>
+            <span className="font-extrabold text-[#047857] text-sm">KrishiGreen</span>
+            <span className="text-gray-300">•</span>
+            <span className="text-gray-500">{t.tagline}</span>
           </div>
           <div className="flex flex-wrap items-center gap-4 text-[11px]">
             <button
               onClick={() => setCurrentTab('helpline')}
-              className="font-medium text-emerald-800 hover:underline"
+              className="font-medium text-[#047857] hover:underline cursor-pointer"
             >
               {t.tollFree}: {t.tollFreeNumber}
             </button>
+            <button
+              onClick={() => setLegalModalType('tos')}
+              className="font-medium text-[#047857] hover:underline cursor-pointer"
+            >
+              Terms of Service
+            </button>
+            <button
+              onClick={() => setLegalModalType('privacy')}
+              className="font-medium text-[#047857] hover:underline cursor-pointer"
+            >
+              Privacy Policy
+            </button>
             <span>hello@krishigreen.in</span>
-            <span className="text-emerald-700 font-semibold">{t.villageNode}</span>
           </div>
         </div>
       </footer>
@@ -511,39 +517,39 @@ export default function App() {
       <div className="fixed bottom-5 right-5 z-40 flex items-center gap-2.5">
         <button
           onClick={() => setShowTicketsDrawer(!showTicketsDrawer)}
-          className="p-3 bg-white/95 backdrop-blur-md hover:bg-white text-emerald-950 rounded-2xl shadow-xl border border-emerald-200/90 transition flex items-center gap-2 text-xs font-bold"
+          className="px-4 py-2 bg-white hover:bg-gray-50 text-emerald-950 rounded-full border border-emerald-200 shadow-md transition flex items-center gap-2 text-xs font-bold cursor-pointer"
           title={t.tickets}
         >
-          <LifeBuoy className="w-4 h-4 text-emerald-700" />
-          <span className="hidden sm:inline">{t.tickets} ({tickets.length})</span>
+          <IconShield className="w-4 h-4 text-emerald-700" />
+          <span>{t.tickets} ({tickets.length})</span>
         </button>
 
         <button
           onClick={() => setIsHelplineOpen(true)}
-          className="px-4 py-3 bg-gradient-to-r from-emerald-800 to-green-700 hover:from-emerald-900 hover:to-green-800 text-white rounded-2xl shadow-xl transition flex items-center gap-2 text-xs font-bold border border-emerald-600/50"
+          className="px-4 py-2 bg-[#047857] hover:bg-[#065f46] text-white rounded-full shadow-md transition flex items-center gap-2 text-xs font-bold cursor-pointer"
         >
-          <Phone className="w-4 h-4 text-emerald-200 animate-bounce" />
+          <IconPhone className="w-4 h-4" />
           <span>{t.tollFreeNumber}</span>
         </button>
       </div>
 
-      {/* Slide-over Tickets Drawer (Fully localized) */}
+      {/* Slide-over Tickets Drawer */}
       {showTicketsDrawer && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-black/50 backdrop-blur-2xs animate-fadeIn">
-          <div className="bg-white w-full max-w-md h-full p-5 shadow-2xl flex flex-col justify-between overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex justify-end bg-black/60 animate-fadeIn">
+          <div className="bg-white text-gray-900 w-full max-w-md h-full p-5 border-l border-gray-200 flex flex-col justify-between overflow-y-auto shadow-2xl">
             <div className="space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+              <div className="flex items-center justify-between pb-3 border-b border-gray-200">
                 <div className="flex items-center gap-2">
-                  <span className="p-1.5 bg-emerald-100 text-emerald-800 rounded-lg">
-                    <LifeBuoy className="w-4 h-4" />
+                  <span className="p-1.5 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-200">
+                    <IconShield className="w-4 h-4" />
                   </span>
-                  <h3 className="font-bold text-gray-900 text-base">{t.tickets}</h3>
+                  <h3 className="font-extrabold text-gray-900 text-base">{t.tickets}</h3>
                 </div>
                 <button
                   onClick={() => setShowTicketsDrawer(false)}
-                  className="text-gray-400 hover:text-gray-600 text-sm font-bold p-1 rounded-lg hover:bg-gray-100"
+                  className="text-gray-400 hover:text-gray-700 p-1"
                 >
-                  ✕
+                  <IconClose className="w-4 h-4" />
                 </button>
               </div>
 
@@ -627,6 +633,13 @@ export default function App() {
 
       {/* Subtle Offline Mode & Paused Sync Notification Toast */}
       <OfflineSyncToast language={language} />
+
+      {/* Official Terms of Service and Privacy Policy Modals */}
+      <LegalModals
+        type={legalModalType}
+        onClose={() => setLegalModalType(null)}
+        language={language}
+      />
 
     </div>
   );

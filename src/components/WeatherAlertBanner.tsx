@@ -1,30 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  AlertTriangle,
-  CloudRain,
-  CloudLightning,
-  Wind,
-  Sun,
-  ShieldAlert,
-  ChevronDown,
-  ChevronUp,
-  RefreshCw,
-  MapPin,
-  ExternalLink,
-  Sparkles,
-  Info,
-  CheckCircle2,
-  Clock,
-  Compass,
-  X,
-  Droplets,
-  Thermometer,
-  TrendingUp,
-  Newspaper,
-  ChevronLeft,
-  ChevronRight,
-  Radio,
-} from 'lucide-react';
+  IconAlertTriangle,
+  IconCloudSun,
+  IconDroplets,
+  IconTrendingUp,
+  IconMapPin,
+  IconCompass,
+  IconClock,
+  IconRefresh,
+  IconClose,
+  IconChevronDown,
+  IconChevronUp,
+  IconExternalLink,
+  IconShield,
+  IconCheck,
+} from './Icons';
 import { SupportedLanguage } from '../types';
 import { SpeechListenButton } from './SpeechListenButton';
 
@@ -167,7 +157,6 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
       }
 
       try {
-        // Query server-side search grounding endpoint with fallback
         const searchPrompt = `Current real-time weather alert, rainfall warning, storm, wind speed, or heatwave forecast for ${district.name}, Andhra Pradesh today. Official IMD Amaravati / APSDMA advisory for farmers and crop residue management.`;
 
         let groundedResult: any = null;
@@ -188,9 +177,8 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
           console.warn('Grounding endpoint call error:', apiErr);
         }
 
-        // Also fetch live numerical measurements from Open-Meteo for physical metrics (temp, wind, rain prob)
         let liveMetrics = {
-          temp: '32°C',
+          temp: '32 deg C',
           windSpeed: '14 km/h',
           rainProb: '15%',
           humidity: '62%',
@@ -210,7 +198,7 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
             const weatherCode = data.current?.weather_code ?? 0;
 
             liveMetrics = {
-              temp: `${currentTemp}°C`,
+              temp: `${currentTemp} deg C`,
               windSpeed: `${currentWind} km/h`,
               rainProb: `${rainProb}%`,
               humidity: `${currentHumidity}%`,
@@ -221,7 +209,6 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
           console.warn('Open-Meteo fallback:', meteoErr);
         }
 
-        // Determine severity and construct advisory based on real metrics and grounding intel
         const rainProbNum = parseInt(liveMetrics.rainProb, 10);
         const windSpeedNum = parseInt(liveMetrics.windSpeed, 10);
         const code = liveMetrics.weatherCode;
@@ -236,7 +223,6 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
         let agroAdvisoryTe =
           'వర్మికంపోస్ట్ బెడ్లను తిరగవేయడానికి మరియు బయోమాస్‌ను ఎండబెట్టడానికి అనువైన సమయం. సేకరణ వాహనాలను సిద్ధంగా ఉంచుకోండి.';
 
-        // Severe weather threshold (e.g. Thunderstorm code 95-99, Heavy Rain > 70% or wind > 35km/h)
         if (code >= 95 || rainProbNum >= 75 || windSpeedNum >= 38) {
           severity = 'severe';
           alertTitle = `Adverse Weather Warning: High Rain Risk & Thunderstorms (${liveMetrics.rainProb} precipitation)`;
@@ -254,12 +240,11 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
           summary = `Passing cloud cover and moderate wind (${liveMetrics.windSpeed}) in ${district.name}. Minor moisture exposure risk for loose agricultural biomass.`;
           summaryTe = `${district.nameTe} లో మేఘావృత వాతావరణం, ${liveMetrics.windSpeed} గాలులు. ఆరుబయట ఉన్న గడ్డి తడిసే అవకాశం.`;
           agroAdvisory =
-            'Stack loose paddy residue onto elevated wooden pallets or berms. Check moisture levels in compost windrows. If moisture exceeds 65%, add dry dry straw bulking agent.';
+            'Stack loose paddy residue onto elevated wooden pallets or berms. Check moisture levels in compost windrows. If moisture exceeds 65%, add dry straw bulking agent.';
           agroAdvisoryTe =
             'వరి గడ్డిని ఎత్తైన ప్రదేశంలో భద్రపరచండి. కంపోస్ట్ పిట్లలో తేమను పరిశీలించండి. తేమ 65% మించితే ఎండు గడ్డిని కలపండి.';
         }
 
-        // If search-grounding provided specific text, incorporate it
         let groundedSource = 'IMD Agro-Meteorology & Open-Meteo Radar';
         let groundedUri = 'https://mausam.imd.gov.in';
 
@@ -312,7 +297,6 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
     fetchWeatherAlert(selectedDistrict);
   }, [selectedDistrict, fetchWeatherAlert]);
 
-  // Geolocation detector
   const detectLocation = () => {
     if (!navigator.geolocation) return;
     setIsDetectingGps(true);
@@ -320,7 +304,6 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
       (pos) => {
         setIsDetectingGps(false);
         const { latitude, longitude } = pos.coords;
-        // Find closest AP pilot district
         let closest = AP_PILOT_DISTRICTS[0];
         let minDistance = Infinity;
         AP_PILOT_DISTRICTS.forEach((d) => {
@@ -340,32 +323,23 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
   };
 
   if (dismissed) {
-    // Minimized sticky chip
     return (
-      <div className="bg-emerald-950/90 py-1 px-3 border-b border-emerald-800 text-white flex items-center justify-between text-xs">
+      <div className="bg-[#182a20] py-1.5 px-3 border-b border-[#2d4937] text-stone-200 flex items-center justify-between text-xs font-mono">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-          <span className="text-[11px] font-semibold text-emerald-200">
-            {language === 'te' ? 'వాతావరణ హెచ్చరికలు' : 'Real-Time Agri-Weather Alert'}:
+          <span className="w-1.5 h-1.5 rounded-sm bg-[#52b788]" />
+          <span className="text-[11px] font-semibold text-stone-300">
+            {language === 'te' ? 'వాతావరణ హెచ్చరికలు' : 'Agri-Weather Alert'}:
           </span>
           <span className="text-[11px] text-white font-medium">{selectedDistrict.name}</span>
           {alert && (
-            <span
-              className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
-                alert.severity === 'severe'
-                  ? 'bg-rose-600 text-white'
-                  : alert.severity === 'moderate'
-                  ? 'bg-amber-600 text-white'
-                  : 'bg-emerald-600 text-white'
-              }`}
-            >
+            <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-sm border border-stone-500 bg-[#253d2d] text-stone-100">
               {alert.severity.toUpperCase()}
             </span>
           )}
         </div>
         <button
           onClick={() => setDismissed(false)}
-          className="text-[11px] text-emerald-300 hover:text-white underline font-medium flex items-center gap-1 cursor-pointer"
+          className="text-[11px] text-stone-300 hover:text-white underline font-mono cursor-pointer"
         >
           {language === 'te' ? 'చూపించు' : 'Expand Banner'}
         </button>
@@ -373,83 +347,42 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
     );
   }
 
-  // Visual theme config based on severity
-  const severityStyles = {
-    severe: {
-      barBg: 'bg-gradient-to-r from-red-950 via-rose-900 to-amber-950',
-      border: 'border-b border-rose-500/50 shadow-md shadow-rose-950/30',
-      badge: 'bg-rose-500/30 text-rose-100 border border-rose-400/50 animate-pulse',
-      icon: AlertTriangle,
-      iconColor: 'text-rose-400',
-      pulseDot: 'bg-rose-400',
-      drawerBg: 'bg-gradient-to-b from-rose-950/90 to-emerald-950/95 border-rose-800/40',
-      badgeText: language === 'te' ? 'తీవ్ర హెచ్చరిక' : 'SEVERE ADVERSE ALERT',
-    },
-    moderate: {
-      barBg: 'bg-gradient-to-r from-amber-950 via-orange-950 to-emerald-950',
-      border: 'border-b border-amber-500/40 shadow-xs shadow-amber-950/20',
-      badge: 'bg-amber-500/30 text-amber-100 border border-amber-400/40',
-      icon: CloudRain,
-      iconColor: 'text-amber-400',
-      pulseDot: 'bg-amber-400',
-      drawerBg: 'bg-gradient-to-b from-amber-950/90 to-emerald-950/95 border-amber-800/40',
-      badgeText: language === 'te' ? 'మధ్యస్థ హెచ్చరిక' : 'MODERATE ADVISORY',
-    },
-    favorable: {
-      barBg: 'bg-gradient-to-r from-emerald-950 via-teal-950 to-green-950',
-      border: 'border-b border-emerald-600/40 shadow-xs',
-      badge: 'bg-emerald-500/25 text-emerald-100 border border-emerald-400/40',
-      icon: CheckCircle2,
-      iconColor: 'text-emerald-400',
-      pulseDot: 'bg-emerald-400',
-      drawerBg: 'bg-gradient-to-b from-emerald-950/90 to-teal-950/95 border-emerald-700/40',
-      badgeText: language === 'te' ? 'అనుకూల వాతావరణం' : 'FAVORABLE CONDITIONS',
-    },
-  };
-
-  const currentSeverity = alert?.severity || 'favorable';
-  const theme = severityStyles[currentSeverity];
-  const SeverityIcon = theme.icon;
-
   const displayTitle = language === 'te' && alert?.alertTitleTe ? alert.alertTitleTe : alert?.alertTitle || 'Loading weather alerts...';
   const displaySummary = language === 'te' && alert?.summaryTe ? alert.summaryTe : alert?.summary || '';
   const displayAdvisory = language === 'te' && alert?.agroAdvisoryTe ? alert.agroAdvisoryTe : alert?.agroAdvisory || '';
 
-  // Generate multi-topic agricultural news & bulletin items
   const newsItems = [
     {
       id: 'weather',
       category: 'Weather Advisory',
       categoryTe: 'వాతావరణ హెచ్చరిక',
-      icon: SeverityIcon,
+      icon: IconCloudSun,
       headline: loading
         ? (language === 'te' ? 'వాతావరణ సమాచారం శోధిస్తోంది...' : 'Grounding live IMD weather alerts...')
         : displayTitle,
       detail: displaySummary,
       advisory: displayAdvisory,
-      tagBg: 'bg-emerald-500/30 text-emerald-100 border border-emerald-400/50',
     },
     {
       id: 'mandi',
       category: 'Mandi Market Rates',
       categoryTe: 'మార్కెట్ ధరలు',
-      icon: TrendingUp,
+      icon: IconTrendingUp,
       headline: language === 'te'
-        ? `${selectedDistrict.nameTe} వ్యవసాయ మార్కెట్: వర్మికంపోస్ట్ ₹9.50/కిలో; వరి గడ్డి బేల్స్ ₹2,200/టన్ను`
-        : `${selectedDistrict.name} Mandi: Organic Vermicompost ₹9.50/kg; Paddy Bales ₹2,200/t; Chilli firm`,
+        ? `${selectedDistrict.nameTe} వ్యవసాయ మార్కెట్: వర్మికంపోస్ట్ రూ 9.50/కిలో, వరి గడ్డి బేల్స్ రూ 2,200/టన్ను`
+        : `${selectedDistrict.name} Mandi: Organic Vermicompost Rs 9.50/kg; Paddy Bales Rs 2,200/t; Chilli firm`,
       detail: language === 'te'
         ? 'సేంద్రీయ ఎరువులకు మరియు వరి గడ్డి బేల్స్‌కు స్థానిక మార్కెట్లలో అధిక గిరాకీ ఉంది. కనీస మద్దతు ధరతో మార్కెట్‌ప్లేస్‌లో విక్రయించవచ్చు.'
         : `Active buyer demand for certified organic inputs and baled residue across regional collection yards in ${selectedDistrict.name}.`,
       advisory: language === 'te'
         ? 'సేంద్రీయ ఎరువులను నేరుగా కృషిగ్రీన్ డ్యూయల్ మార్కెట్‌లో జాబితా చేసి సరసమైన ధరను పొందండి.'
         : 'List certified vermicompost batches directly on KrishiGreen Marketplace for transparent producer realisation.',
-      tagBg: 'bg-amber-500/30 text-amber-100 border border-amber-400/50',
     },
     {
       id: 'schemes',
       category: 'Govt Schemes',
       categoryTe: 'ప్రభుత్వ పథకాలు',
-      icon: ShieldAlert,
+      icon: IconShield,
       headline: language === 'te'
         ? 'పీఎం-ప్రణామ్ & SMAM: వ్యవసాయ యంత్రాలు & బయో-ష్రెడ్డర్లపై 50% వరకు సబ్సిడీ లభ్యత'
         : 'PM-PRANAM & SMAM: Up to 50% subsidy available for custom hiring machinery & composters',
@@ -459,13 +392,12 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
       advisory: language === 'te'
         ? 'పథకాల నావిగేటర్‌లో తక్షణమే సబ్సిడీ కొటేషన్ గణన చేసుకోండి.'
         : 'Check the Scheme Navigator module to calculate customized equipment subsidy deductions.',
-      tagBg: 'bg-teal-500/30 text-teal-100 border border-teal-400/50',
     },
     {
       id: 'impact',
       category: 'Bio-Economy News',
       categoryTe: 'వ్యర్థాల నుండి సంపద',
-      icon: Sparkles,
+      icon: IconCheck,
       headline: language === 'te'
         ? 'పైలట్ మైలురాయి: ఆంధ్రప్రదేశ్ క్లస్టర్లలో 14,800 టన్నుల పంట వ్యర్థాల వినియోగం'
         : 'Circular Milestone: 14,800 tonnes of crop & food waste diverted in AP Pilot Clusters',
@@ -475,11 +407,9 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
       advisory: language === 'te'
         ? 'వ్యర్థాల సేకరణ కోసం వెంటనే బుకింగ్ చేయండి.'
         : 'Schedule a free geotagged bio-waste pickup for your farm or commercial mandi kitchen.',
-      tagBg: 'bg-indigo-500/30 text-indigo-100 border border-indigo-400/50',
     },
   ];
 
-  // Auto-rotate ticker every 7 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setActiveNewsIndex((prev) => (prev + 1) % 4);
@@ -491,15 +421,15 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
   const CurrentNewsIcon = currentNews.icon;
 
   return (
-    <div className={`w-full transition-all duration-300 ${theme.barBg} ${theme.border} text-white`}>
+    <div className="w-full bg-[#0f241a] border-b border-[#1b3e2c] text-white">
       {/* Primary Banner Strip */}
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2 flex flex-col md:flex-row items-start md:items-center justify-between gap-2.5">
         {/* Left: Location Selector */}
         <div className="flex flex-wrap items-center gap-2 sm:gap-3 flex-1 min-w-0">
-          <div className="flex items-center gap-1.5 bg-black/40 hover:bg-black/60 border border-emerald-400/40 rounded-xl px-2.5 py-1 text-xs transition shadow-2xs shrink-0">
-            <MapPin className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+          <div className="flex items-center gap-1.5 bg-[#091a11] border border-[#1d4530] rounded-full px-3 py-1 text-xs shrink-0">
+            <IconMapPin className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
             <span className="text-[10px] font-bold text-emerald-300 uppercase hidden sm:inline">
-              {language === 'te' ? 'ప్రాంతం:' : 'Region:'}
+              {language === 'te' ? 'ప్రాంతం:' : 'REGION:'}
             </span>
             <select
               value={selectedDistrict.id}
@@ -507,11 +437,11 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
                 const found = AP_PILOT_DISTRICTS.find((d) => d.id === e.target.value);
                 if (found) setSelectedDistrict(found);
               }}
-              className="bg-transparent text-xs font-bold text-white focus:outline-none cursor-pointer pr-1"
+              className="bg-transparent text-xs font-semibold text-white focus:outline-none cursor-pointer pr-1"
               title="Select Agricultural Region / Hub"
             >
               {AP_PILOT_DISTRICTS.map((d) => (
-                <option key={d.id} value={d.id} className="bg-emerald-950 text-white">
+                <option key={d.id} value={d.id} className="bg-[#091a11] text-white">
                   {language === 'te' ? d.nameTe : d.name}
                 </option>
               ))}
@@ -519,36 +449,35 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
             <button
               onClick={detectLocation}
               disabled={isDetectingGps}
-              className="p-1 hover:text-emerald-300 text-gray-300 transition"
+              className="p-1 hover:text-white text-emerald-400 cursor-pointer"
               title={language === 'te' ? 'జీపీఎస్ స్థానాన్ని గుర్తించండి' : 'Auto-detect current GPS location'}
             >
-              <Compass className={`w-3.5 h-3.5 ${isDetectingGps ? 'animate-spin text-emerald-400' : ''}`} />
+              <IconCompass className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          {/* Center News Ticker with Category Pill & Cycling Controls */}
+          {/* Center News Ticker with Category Tag & Controls */}
           <div className="flex items-center gap-2 overflow-hidden min-w-0 flex-1">
-            {/* Category Tag & Arrows */}
             <div className="flex items-center gap-1 shrink-0">
-              <span className={`text-[9px] sm:text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full flex items-center gap-1 shadow-2xs ${currentNews.tagBg}`}>
-                <CurrentNewsIcon className="w-3 h-3" />
+              <span className="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-[#3d1a04]/90 border border-[#7c2d12] text-[#fb923c] flex items-center gap-1 shadow-2xs">
+                <CurrentNewsIcon className="w-3 h-3 text-[#fb923c]" />
                 <span>{language === 'te' ? currentNews.categoryTe : currentNews.category}</span>
               </span>
 
               {/* Ticker Navigator */}
-              <div className="flex items-center bg-black/30 rounded-lg border border-white/10 overflow-hidden">
+              <div className="flex items-center bg-[#091a11] rounded-full border border-[#1d4530] px-1 py-0.5">
                 <button
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
                     setActiveNewsIndex((prev) => (prev - 1 + newsItems.length) % newsItems.length);
                   }}
-                  className="p-1 hover:bg-white/20 text-gray-300 hover:text-white transition cursor-pointer"
+                  className="px-1 hover:bg-[#133827] text-stone-300 hover:text-white text-[10px] rounded-full cursor-pointer"
                   title="Previous item"
                 >
-                  <ChevronLeft className="w-3 h-3" />
+                  &lt;
                 </button>
-                <span className="text-[9px] font-mono font-bold px-1 text-gray-300">
+                <span className="text-[10px] font-bold px-1 text-emerald-300 font-mono">
                   {activeNewsIndex + 1}/{newsItems.length}
                 </span>
                 <button
@@ -557,10 +486,10 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
                     e.stopPropagation();
                     setActiveNewsIndex((prev) => (prev + 1) % newsItems.length);
                   }}
-                  className="p-1 hover:bg-white/20 text-gray-300 hover:text-white transition cursor-pointer"
+                  className="px-1 hover:bg-[#133827] text-stone-300 hover:text-white text-[10px] rounded-full cursor-pointer"
                   title="Next item"
                 >
-                  <ChevronRight className="w-3 h-3" />
+                  &gt;
                 </button>
               </div>
             </div>
@@ -568,10 +497,10 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
             {/* Clickable Headline */}
             <div
               onClick={() => setExpanded(!expanded)}
-              className="cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap min-w-0 flex-1 hover:underline group"
-              title={language === 'te' ? 'పూర్తి వార్తా వివరాలను చూడండి' : 'Click to view full Agricultural News & Agro-Advisory'}
+              className="cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap min-w-0 flex-1 hover:underline"
+              title={language === 'te' ? 'పూర్తి వివరాలు చూడండి' : 'Click to view full Agricultural News & Agro-Advisory'}
             >
-              <span className="font-semibold text-xs text-white tracking-tight group-hover:text-amber-200 transition-colors">
+              <span className="text-xs text-stone-200 tracking-tight font-medium">
                 {currentNews.headline}
               </span>
             </div>
@@ -579,225 +508,159 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
         </div>
 
         {/* Right: Key Metrics, Expand Agro-Advisory, Refresh & Dismiss */}
-        <div className="flex items-center gap-2.5 shrink-0 self-end md:self-center">
+        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0 self-end md:self-center">
           {alert && !loading && (
-            <div className="hidden lg:flex items-center gap-2.5 text-[11px] text-emerald-200/90 font-medium bg-black/25 px-2.5 py-0.5 rounded-lg border border-white/10">
-              <span className="flex items-center gap-1" title="Temperature">
-                <Thermometer className="w-3 h-3 text-amber-400" />
-                <span className="text-white font-bold">{alert.temp}</span>
-              </span>
-              <span className="text-white/40">•</span>
-              <span className="flex items-center gap-1" title="Rainfall Probability">
-                <Droplets className="w-3 h-3 text-sky-400" />
-                <span className="text-white font-bold">{alert.rainChance}</span>
-              </span>
-              <span className="text-white/40">•</span>
-              <span className="flex items-center gap-1" title="Wind Speed">
-                <Wind className="w-3 h-3 text-teal-300" />
-                <span className="text-white font-bold">{alert.windSpeed}</span>
-              </span>
+            <div className="flex items-center gap-2 text-[11px] text-emerald-200 bg-[#091a11] px-3 py-1 rounded-full border border-[#1d4530]">
+              <span className="flex items-center gap-1 font-semibold">🌡 {alert.temp || '25°C'}</span>
+              <span className="text-emerald-700">•</span>
+              <span className="flex items-center gap-1 font-semibold text-cyan-300">💧 {alert.humidity || '100%'}</span>
+              <span className="text-emerald-700">•</span>
+              <span className="flex items-center gap-1 font-semibold text-emerald-300">💨 {alert.windSpeed || '20 km/h'}</span>
             </div>
           )}
 
-          {/* Audio Listen Button for Weather Alert Banner */}
+          {/* Audio Listen Button */}
           <SpeechListenButton
             text={`${currentNews.headline}. ${currentNews.detail}`}
             textTe={currentNews.headline && currentNews.detail ? `${currentNews.headline}. ${currentNews.detail}` : undefined}
             language={language}
             size="xs"
             variant="outline"
-            className="bg-black/30 hover:bg-black/50 text-emerald-200 border-white/20"
+            className="bg-[#133827] hover:bg-[#1b4b35] text-emerald-300 border-[#1d4530] rounded-full px-3 py-1 font-semibold"
           />
 
           {/* Toggle Expand Details */}
           <button
             onClick={() => setExpanded(!expanded)}
-            className="flex items-center gap-1 bg-white/15 hover:bg-white/25 active:scale-95 text-white font-bold text-[11px] px-2.5 py-1 rounded-lg border border-white/25 transition cursor-pointer"
+            className="flex items-center gap-1.5 bg-[#133827] hover:bg-[#1b4b35] text-white text-[11px] font-semibold px-3 py-1 rounded-full border border-[#1d4530] cursor-pointer"
           >
             <span>
               {expanded
                 ? (language === 'te' ? 'మూసివేయి' : 'Hide Bulletin')
                 : (language === 'te' ? 'రైతు సలహా & వార్తలు' : 'Agro-Advisory & News')}
             </span>
-            {expanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+            {expanded ? <IconChevronUp className="w-3 h-3" /> : <IconChevronDown className="w-3 h-3" />}
           </button>
 
           {/* Refresh Button */}
           <button
             onClick={() => fetchWeatherAlert(selectedDistrict, true)}
             disabled={loading}
-            className="p-1 text-emerald-300 hover:text-white transition active:rotate-180 duration-300 rounded hover:bg-white/10 cursor-pointer"
+            className="p-1 text-emerald-400 hover:text-white rounded-full hover:bg-[#133827] cursor-pointer"
             title="Refresh weather alerts via live Google Search Grounding"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-emerald-400' : ''}`} />
+            <IconRefresh className="w-3.5 h-3.5" />
           </button>
 
           {/* Minimize / Dismiss */}
           <button
             onClick={() => setDismissed(true)}
-            className="p-1 text-gray-400 hover:text-white transition rounded hover:bg-white/10 cursor-pointer"
+            className="p-1 text-stone-400 hover:text-white rounded-full hover:bg-[#133827] cursor-pointer"
             title="Minimize alert banner"
           >
-            <X className="w-3.5 h-3.5" />
+            <IconClose className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
 
-      {/* Expandable Agro-Advisory & Action Drawer */}
+      {/* Expandable Agro-Advisory & Action Drawer: 2-Column Ledger Layout */}
       {expanded && alert && (
-        <div className={`border-t border-white/10 ${theme.drawerBg} p-4 sm:p-5 backdrop-blur-md animate-fadeIn`}>
+        <div className="border-t border-[#2d4937] bg-[#122018] p-4 sm:p-5">
           <div className="max-w-7xl mx-auto space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* 2-Column Editorial Grid (No 3-card-in-a-row anti-pattern) */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Column 1: Meteorological Overview & Grounding Source */}
-              <div className="bg-black/30 rounded-xl p-3.5 border border-white/10 space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-bold text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
-                    <CloudLightning className="w-3.5 h-3.5 text-amber-400" />
-                    <span>{language === 'te' ? 'వాతావరణ విశ్లేషణ' : 'IMD Grounded Intel'}</span>
+              <div className="bg-[#182a20] rounded-sm p-4 border border-[#2d4937] space-y-3">
+                <div className="flex items-center justify-between border-b border-[#2d4937] pb-2">
+                  <h4 className="text-xs font-mono font-bold text-stone-200 uppercase tracking-wider flex items-center gap-1.5">
+                    <IconCloudSun className="w-4 h-4 text-stone-300" />
+                    <span>{language === 'te' ? 'వాతావరణ విశ్లేషణ' : 'IMD Meteorological Grounding'}</span>
                   </h4>
-                  <span className="text-[10px] font-mono text-gray-400 flex items-center gap-1">
-                    <Clock className="w-2.5 h-2.5" />
+                  <span className="text-[10px] font-mono text-stone-400 flex items-center gap-1">
+                    <IconClock className="w-3 h-3" />
                     {alert.timestamp}
                   </span>
                 </div>
 
-                <p className="text-xs text-gray-200 leading-relaxed font-medium">{displaySummary}</p>
+                <p className="text-xs text-stone-200 leading-relaxed font-sans">{displaySummary}</p>
 
-                {/* Metrics Grid */}
-                <div className="grid grid-cols-2 gap-2 pt-1">
-                  <div className="bg-white/5 rounded-lg p-2 border border-white/5">
-                    <span className="text-[10px] text-gray-400 block">{language === 'te' ? 'వర్షావకాశం' : 'Rain Probability'}</span>
-                    <span className="text-sm font-black text-sky-300">{alert.rainChance}</span>
+                {/* Metrics 2x2 Grid */}
+                <div className="grid grid-cols-2 gap-2 pt-1 font-mono">
+                  <div className="bg-[#122018] p-2.5 rounded-sm border border-[#2d4937]">
+                    <span className="text-[10px] text-stone-400 block">{language === 'te' ? 'వర్షావకాశం' : 'Rain Probability'}</span>
+                    <span className="text-sm font-bold text-white">{alert.rainChance}</span>
                   </div>
-                  <div className="bg-white/5 rounded-lg p-2 border border-white/5">
-                    <span className="text-[10px] text-gray-400 block">{language === 'te' ? 'గాలి వేగం' : 'Wind Velocity'}</span>
-                    <span className="text-sm font-black text-teal-300">{alert.windSpeed}</span>
+                  <div className="bg-[#122018] p-2.5 rounded-sm border border-[#2d4937]">
+                    <span className="text-[10px] text-stone-400 block">{language === 'te' ? 'గాలి వేగం' : 'Wind Velocity'}</span>
+                    <span className="text-sm font-bold text-white">{alert.windSpeed}</span>
                   </div>
-                  <div className="bg-white/5 rounded-lg p-2 border border-white/5">
-                    <span className="text-[10px] text-gray-400 block">{language === 'te' ? 'ఉష్ణోగ్రత' : 'Temperature'}</span>
-                    <span className="text-sm font-black text-amber-300">{alert.temp}</span>
+                  <div className="bg-[#122018] p-2.5 rounded-sm border border-[#2d4937]">
+                    <span className="text-[10px] text-stone-400 block">{language === 'te' ? 'ఉష్ణోగ్రత' : 'Temperature'}</span>
+                    <span className="text-sm font-bold text-white">{alert.temp}</span>
                   </div>
-                  <div className="bg-white/5 rounded-lg p-2 border border-white/5">
-                    <span className="text-[10px] text-gray-400 block">{language === 'te' ? 'తేమ శాతం' : 'Relative Humidity'}</span>
-                    <span className="text-sm font-black text-indigo-300">{alert.humidity}</span>
+                  <div className="bg-[#122018] p-2.5 rounded-sm border border-[#2d4937]">
+                    <span className="text-[10px] text-stone-400 block">{language === 'te' ? 'తేమ శాతం' : 'Relative Humidity'}</span>
+                    <span className="text-sm font-bold text-white">{alert.humidity}</span>
                   </div>
                 </div>
 
                 {/* Official Source Link */}
-                <div className="pt-1 flex items-center justify-between text-[11px] text-gray-400 border-t border-white/5">
+                <div className="pt-2 flex items-center justify-between text-[11px] text-stone-400 border-t border-[#2d4937] font-mono">
                   <span className="truncate">Source: {alert.source}</span>
                   {alert.sourceUrl && (
                     <a
                       href={alert.sourceUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-emerald-300 hover:text-white flex items-center gap-1 underline shrink-0 ml-2"
+                      className="text-stone-200 hover:text-white flex items-center gap-1 underline underline-offset-2 ml-2"
                     >
-                      <span>Official Bulletin</span>
-                      <ExternalLink className="w-3 h-3" />
+                      <span>Bulletin</span>
+                      <IconExternalLink className="w-3 h-3" />
                     </a>
                   )}
                 </div>
               </div>
 
-              {/* Column 2: Live APMC Mandi Rates & Bio-Input Commodity Bulletin */}
-              <div className="bg-black/30 rounded-xl p-3.5 border border-white/10 space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-                    <TrendingUp className="w-3.5 h-3.5 text-amber-400" />
-                    <span>{language === 'te' ? 'మార్కెట్ ధరల సమాచారం' : 'APMC Mandi & Commodity Rates'}</span>
+              {/* Column 2: Mandi Rates & Farm Protection Directives */}
+              <div className="bg-[#182a20] rounded-sm p-4 border border-[#2d4937] space-y-3">
+                <div className="flex items-center justify-between border-b border-[#2d4937] pb-2">
+                  <h4 className="text-xs font-mono font-bold text-stone-200 uppercase tracking-wider flex items-center gap-1.5">
+                    <IconTrendingUp className="w-4 h-4 text-stone-300" />
+                    <span>{language === 'te' ? 'రక్షణ చర్యలు & మార్కెట్ ధరలు' : 'Advisory Directives & Mandi Rates'}</span>
                   </h4>
-                  <span className="text-[10px] bg-amber-500/20 text-amber-200 px-1.5 py-0.5 rounded font-mono border border-amber-400/30">
-                    Live Rates
+                  <span className="text-[10px] bg-[#122018] text-stone-300 px-2 py-0.5 rounded-sm font-mono border border-[#2d4937]">
+                    APMC Real-Time
                   </span>
                 </div>
 
-                <div className="space-y-2 text-xs">
-                  <div className="bg-white/5 p-2 rounded-lg border border-white/5 flex items-center justify-between">
-                    <div>
-                      <span className="font-bold text-emerald-300 block text-[11px]">
-                        {language === 'te' ? 'సేంద్రీయ వర్మికంపోస్ట్' : 'Certified Vermicompost'}
-                      </span>
-                      <span className="text-[10px] text-gray-300">Grade-A Enriched</span>
-                    </div>
-                    <span className="font-black text-white text-xs bg-emerald-950/80 px-2 py-1 rounded border border-emerald-500/30">
-                      ₹9.50 – ₹12/kg
-                    </span>
-                  </div>
-
-                  <div className="bg-white/5 p-2 rounded-lg border border-white/5 flex items-center justify-between">
-                    <div>
-                      <span className="font-bold text-amber-300 block text-[11px]">
-                        {language === 'te' ? 'వరి గడ్డి బేల్స్ (బయోమాస్)' : 'Baled Paddy Straw'}
-                      </span>
-                      <span className="text-[10px] text-gray-300">Moisture &lt;14%</span>
-                    </div>
-                    <span className="font-black text-white text-xs bg-amber-950/80 px-2 py-1 rounded border border-amber-500/30">
-                      ₹2,100 – ₹2,400/t
-                    </span>
-                  </div>
-
-                  <div className="bg-white/5 p-2 rounded-lg border border-white/5 flex items-center justify-between">
-                    <div>
-                      <span className="font-bold text-teal-300 block text-[11px]">
-                        {language === 'te' ? 'జీవామృతం ద్రావణం' : 'Jeevamrutha Bio-Culture'}
-                      </span>
-                      <span className="text-[10px] text-gray-300">Microbial Fermented</span>
-                    </div>
-                    <span className="font-black text-white text-xs bg-teal-950/80 px-2 py-1 rounded border border-teal-500/30">
-                      ₹25 – ₹35/litre
-                    </span>
-                  </div>
-                </div>
-
-                <div className="pt-1 text-[10px] text-gray-300 flex items-center justify-between border-t border-white/5">
-                  <span>{language === 'te' ? 'మూలం: ఏపీ మార్కెటింగ్ శాఖ' : 'Source: AP Agri Marketing'}</span>
-                  <span className="text-emerald-300 font-bold">{selectedDistrict.region}</span>
-                </div>
-              </div>
-
-              {/* Column 3: Farmer & Circular Bio-Waste Protection Advisory */}
-              <div className="bg-black/30 rounded-xl p-3.5 border border-white/10 space-y-2.5">
-                <div className="flex items-center justify-between flex-wrap gap-1">
-                  <h4 className="text-xs font-bold text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
-                    <ShieldAlert className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>{language === 'te' ? 'రక్షణ చర్యలు & పథకాలు' : 'Safeguard & Scheme Directives'}</span>
-                  </h4>
-                  <SpeechListenButton
-                    text={displayAdvisory}
-                    textTe={alert?.agroAdvisoryTe || undefined}
-                    language={language}
-                    size="xs"
-                    variant="emerald"
-                  />
-                </div>
-
-                <div className="p-2.5 rounded-lg bg-emerald-950/60 border border-emerald-500/30 text-xs text-emerald-50 leading-relaxed font-medium">
+                {/* Advisory Box */}
+                <div className="p-3 rounded-sm bg-[#122018] border border-[#2d4937] text-xs text-stone-200 leading-relaxed font-sans">
+                  <strong className="block text-stone-300 font-mono text-[11px] mb-1">
+                    {language === 'te' ? 'క్షేత్ర స్థాయి సలహా:' : 'Operational Directive:'}
+                  </strong>
                   {displayAdvisory}
                 </div>
 
-                {/* Scheme & Hotline */}
-                <div className="bg-white/5 p-2 rounded-lg border border-white/5 text-[11px] space-y-1">
-                  <span className="font-bold text-teal-300 block">
-                    📜 {language === 'te' ? 'రాయితీ పథకం (SMAM & PM-PRANAM)' : 'Subsidy Alert (SMAM & PM-PRANAM)'}
-                  </span>
-                  <p className="text-gray-300 text-[10px] leading-tight">
-                    {language === 'te'
-                      ? 'కస్టమ్ హైరింగ్ కేంద్రాల ద్వారా 40-50% రాయితీతో బేలర్లు, ష్రెడ్డర్లు మరియు ట్రాక్టర్లు లభ్యం.'
-                      : '40–50% equipment subsidy sanctioned for FPO custom hiring hubs, straw balers, and compost spreaders.'}
-                  </p>
+                {/* Mandi Rates List */}
+                <div className="space-y-1.5 text-xs font-mono">
+                  <div className="bg-[#122018] p-2 rounded-sm border border-[#2d4937] flex items-center justify-between">
+                    <span className="text-stone-300">{language === 'te' ? 'సేంద్రీయ వర్మికంపోస్ట్' : 'Certified Vermicompost (Grade A)'}</span>
+                    <span className="font-bold text-white">Rs 9.50 to Rs 12/kg</span>
+                  </div>
+                  <div className="bg-[#122018] p-2 rounded-sm border border-[#2d4937] flex items-center justify-between">
+                    <span className="text-stone-300">{language === 'te' ? 'వరి గడ్డి బేల్స్ (బయోమాస్)' : 'Baled Paddy Straw (Moisture &lt;14%)'}</span>
+                    <span className="font-bold text-white">Rs 2,100 to Rs 2,400/t</span>
+                  </div>
                 </div>
 
-                {/* Emergency Contact Bar */}
-                <div className="flex items-center justify-between gap-1 pt-1 border-t border-white/5 text-[11px]">
-                  <span className="text-gray-300 text-[10px]">
-                    {language === 'te' ? 'సహాయం కొరకు:' : 'Toll-free Hotline:'}
-                  </span>
+                {/* Scheme Notice and Hotline */}
+                <div className="pt-2 flex items-center justify-between text-[11px] text-stone-400 border-t border-[#2d4937] font-mono">
+                  <span>SMAM & PM-PRANAM Subsidies: 40% to 50%</span>
                   <a
                     href="tel:18005747447"
-                    className="font-bold text-amber-300 hover:text-white bg-amber-500/20 px-2 py-0.5 rounded-full border border-amber-400/30 transition flex items-center gap-1 text-[11px]"
+                    className="font-bold text-stone-200 hover:text-white underline underline-offset-2"
                   >
-                    <span>1800-KRISHI-GRN</span>
+                    1800-KRISHI-GRN
                   </a>
                 </div>
               </div>

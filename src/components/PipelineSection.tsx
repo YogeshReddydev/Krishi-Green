@@ -169,7 +169,7 @@ export const PipelineSection: React.FC<PipelineSectionProps> = ({
             The 5-Step Waste-to-Wealth Pipeline
           </h2>
           <p className="text-emerald-100/90 text-sm sm:text-base leading-relaxed">
-            From village kitchens and mandis directly to living soils. The farmer is both producer and beneficiary—turning discarded bio-waste into certified organic fertility and village revenue.
+            From village kitchens and mandis directly to living soils. The farmer is both producer and beneficiary, turning discarded bio-waste into certified organic fertility and village revenue.
           </p>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5 pt-4 border-t border-emerald-700/60">
@@ -541,7 +541,7 @@ export const PipelineSection: React.FC<PipelineSectionProps> = ({
               <div className="space-y-2 text-sm text-purple-950">
                 <h4 className="font-bold text-base">Fair & Transparent Shared Prosperity Model</h4>
                 <p className="text-xs leading-relaxed text-purple-800">
-                  KrishiGreen keeps commissions deliberately low (3–8%) and capped for smallholders. Every rupee paid by buyers flows directly into village SHGs and farmer bank accounts through instant UPI settlement.
+                  KrishiGreen keeps commissions deliberately low (3-8%) and capped for smallholders. Every rupee paid by buyers flows directly into village SHGs and farmer bank accounts through instant UPI settlement.
                 </p>
                 <div className="flex flex-wrap gap-2 pt-1 text-xs">
                   <span className="px-2.5 py-0.5 bg-white text-purple-800 font-bold rounded-md border border-purple-200">
@@ -587,7 +587,7 @@ export const PipelineSection: React.FC<PipelineSectionProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="p-4 bg-emerald-50/70 border border-emerald-100 rounded-xl space-y-2">
                 <span className="text-xs font-bold uppercase text-emerald-800">Dosage for Paddy & Wheat</span>
-                <p className="text-sm font-semibold text-gray-900">2.0 – 2.5 Tonnes Vermicompost / Acre</p>
+                <p className="text-sm font-semibold text-gray-900">2.0 to 2.5 Tonnes Vermicompost / Acre</p>
                 <p className="text-xs text-gray-600">
                   Apply during basal field preparation. Reduces DAP requirement by 40% in season 1.
                 </p>

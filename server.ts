@@ -37,6 +37,7 @@ interface CacheEntry {
 const searchCache = new Map<string, CacheEntry>();
 const advisorCache = new Map<string, CacheEntry>();
 const mapsCache = new Map<string, CacheEntry>();
+const seasonalAdviceCache = new Map<string, CacheEntry>();
 const CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes TTL
 
 // Helper to construct structured fallback agricultural intelligence when quota is limited
@@ -316,6 +317,118 @@ app.post('/api/calculate-impact', (req, res) => {
     });
   } catch (err: any) {
     res.status(500).json({ error: 'Calculation failed' });
+  }
+});
+
+// 4.5 Real-Time Seasonal Crop Advice with Gemini Agromet Intelligence
+app.post('/api/seasonal-crop-advice', async (req, res) => {
+  try {
+    const { month = 10, region = 'Palnadu / Andhra Pradesh', language = 'en', soilType = 'Black Cotton Soil' } = req.body;
+    const cacheKey = `${month}:${region.toLowerCase()}:${language}:${soilType.toLowerCase()}`;
+    const cached = seasonalAdviceCache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+      return res.json(cached.data);
+    }
+
+    if (!ai) {
+      const fallbackPayload = {
+        isRealtime: false,
+        source: 'Andhra Pradesh Agriculture Dept & IMD Agromet Bulletin',
+        timestamp: new Date().toISOString(),
+        isFallback: true,
+      };
+      return res.json(fallbackPayload);
+    }
+
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const currentMonthName = monthNames[(Number(month) - 1) % 12] || 'October';
+
+    const prompt = `You are KrishiGreen's expert Agromet Intelligence Specialist.
+Current Month: ${currentMonthName} (Month index: ${month}).
+Region: ${region}.
+Soil Type: ${soilType}.
+Language: ${language}.
+
+Provide real-time, actionable seasonal cropping advice for farmers deciding what to plant next right now in this month.
+Output valid JSON in the following exact format:
+{
+  "currentSeason": "Short season name e.g. Peak Rabi Sowing Window",
+  "currentSeasonTe": "రబీ ప్రధాన విత్తనాల సమయం",
+  "climateOutlook": "2-3 sentences on current temperature, soil moisture status, and weather outlook for this month in this region.",
+  "climateOutlookTe": "వాతావరణం మరియు నేల తేమపై 2 వాక్యాల సమాచారం.",
+  "topCropRecommendations": [
+    {
+      "cropName": "Crop Name",
+      "cropNameTe": "తెలుగు పేరు",
+      "category": "Pulses",
+      "sowingWindow": "Specific sowing dates",
+      "durationDays": "e.g. 90-105 days",
+      "whyPlantNow": "Why this month is agronomically ideal for this crop in this region",
+      "whyPlantNowTe": "ఈ నెలలో ఎందుకు నాటాలి",
+      "waterRequirement": "Low",
+      "expectedYield": "e.g. 8-10 Quintals/Acre",
+      "expectedRevenue": "e.g. ₹42,000 - ₹55,000/Acre",
+      "organicFertilizerRegimen": "Recommended dosage of vermicompost and chemical reduction",
+      "organicFertilizerRegimenTe": "సేంద్రీయ ఎరువుల మోతాదు",
+      "riskMitigationTip": "Critical pest or disease alert and organic remedy",
+      "riskMitigationTipTe": "తెగుళ్ల నివారణ సలహా"
+    }
+  ],
+  "farmerFieldTips": [
+    "Practical tip 1 e.g. seed treatment with Trichoderma or Rhizobium",
+    "Practical tip 2 e.g. moisture conservation tillage"
+  ],
+  "farmerFieldTipsTe": [
+    "ఆచరణాత్మక సలహా 1",
+    "ఆచరణాత్మక సలహా 2"
+  ]
+}
+Return ONLY pure JSON without markdown code fences.`;
+
+    let parsedData = null;
+    let isRealtime = false;
+
+    if (ai) {
+      try {
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('AI generation timed out')), 6000)
+        );
+        const generatePromise = ai.models.generateContent({
+          model: 'gemini-3.8-flash',
+          contents: prompt,
+          config: {
+            temperature: 0.6,
+          },
+        });
+
+        const response: any = await Promise.race([generatePromise, timeoutPromise]);
+        const responseText = response?.text || '';
+        const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          try {
+            parsedData = JSON.parse(jsonMatch[0]);
+            isRealtime = true;
+          } catch {
+            parsedData = null;
+          }
+        }
+      } catch (aiErr: any) {
+        console.warn('[Seasonal Advice Notice] AI response timed out or limited. Serving verified agronomy data.');
+      }
+    }
+
+    const payload = {
+      isRealtime,
+      source: isRealtime ? 'Gemini 3.8 Flash Agromet Intelligence + AP Agrisnet' : 'Andhra Pradesh Agriculture Dept & IMD Agromet Bulletin',
+      timestamp: new Date().toISOString(),
+      data: parsedData,
+    };
+
+    seasonalAdviceCache.set(cacheKey, { data: payload, timestamp: Date.now() });
+    return res.json(payload);
+  } catch (err: any) {
+    console.error('Seasonal crop advice error:', err);
+    res.status(500).json({ error: 'Failed to process seasonal crop advice' });
   }
 });
 

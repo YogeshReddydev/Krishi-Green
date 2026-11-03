@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Info, X, ChevronRight, Beaker } from 'lucide-react';
+import { IconInfo, IconClose, IconChevronRight } from './Icons';
 import { SupportedLanguage } from '../types';
 
 interface PrototypeTopBannerProps {
@@ -17,24 +17,23 @@ export const PrototypeTopBanner: React.FC<PrototypeTopBannerProps> = ({
 
   if (isDismissed) {
     return (
-      <div className="bg-amber-950/90 text-amber-200 text-[11px] px-3 py-1 flex items-center justify-between border-b border-amber-800/60 z-30">
-        <div className="flex items-center gap-2 max-w-7xl mx-auto w-full justify-between">
-          <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-            <span className="font-bold tracking-wide uppercase text-amber-300">
-              {isTe ? 'ప్రొటోటైప్ డెమో మోడ్' : 'Prototype Demo Mode'}:
+      <div className="bg-[#241c15] text-stone-300 text-[11px] px-3 py-1 flex items-center justify-between border-b border-[#3d2b1f] z-30 font-mono">
+        <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-amber-300 uppercase">
+              {isTe ? 'ప్రొటోటైప్ మోడ్' : 'Prototype Mode'}:
             </span>
-            <span className="text-amber-100/90 hidden sm:inline">
+            <span className="text-stone-300 hidden sm:inline">
               {isTe
-                ? 'ఆంధ్రప్రదేశ్ పైలట్ ప్రాజెక్ట్ - డెమో ప్లాట్‌ఫారమ్'
+                ? 'ఆంధ్రప్రదేశ్ పైలట్ ప్రాజెక్ట్ : డిజిటల్ అగ్రి ప్లాట్‌ఫారమ్'
                 : 'Andhra Pradesh Circular Bio-Economy Pilot Edition'}
             </span>
           </div>
           <button
             onClick={() => setIsDismissed(false)}
-            className="text-amber-300 hover:text-white underline font-semibold cursor-pointer text-[10px]"
+            className="text-amber-300 hover:text-white underline text-[10px]"
           >
-            {isTe ? 'బ్యానర్ చూపించు' : 'Show Banner'}
+            {isTe ? 'నోటీస్ చూపించు' : 'Show Notice'}
           </button>
         </div>
       </div>
@@ -42,23 +41,23 @@ export const PrototypeTopBanner: React.FC<PrototypeTopBannerProps> = ({
   }
 
   return (
-    <div className="relative z-30 bg-gradient-to-r from-amber-950 via-amber-900 to-emerald-950 text-white border-b border-amber-500/40 shadow-xs">
+    <div className="relative z-30 bg-[#2d1b06] text-[#fbfaf6] border-b border-[#4d2f0d]">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2 flex items-center justify-between gap-3 text-xs">
         {/* Left: Indicator Badge + Message */}
         <div className="flex items-center gap-2.5 flex-1 min-w-0">
-          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/30 border border-amber-400/50 text-amber-200 font-extrabold text-[10px] uppercase tracking-wider shrink-0 shadow-2xs">
-            <Beaker className="w-3 h-3 text-amber-300 animate-pulse" />
-            <span>{isTe ? 'పైలట్ ప్రొటోటైప్' : 'Prototype Demonstration'}</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-amber-400 bg-amber-500/10 text-amber-300 font-bold text-[10px] tracking-wide uppercase shrink-0">
+            <IconInfo className="w-3.5 h-3.5 text-amber-300" />
+            <span>{isTe ? 'ప్రొటోటైప్ డెమో' : 'PROTOTYPE DEMONSTRATION'}</span>
           </div>
 
-          <p className="text-[11px] sm:text-xs text-amber-50 font-medium truncate">
+          <p className="text-[11px] sm:text-xs text-amber-100/90 truncate font-normal">
             {isTe ? (
               <span>
-                <strong>గమనిక:</strong> ఇది కృషిగ్రీన్ వర్కింగ్ ప్రొటోటైప్ వేదిక. సేంద్రీయ ఎరువులు, వ్యర్థాల సేకరణ & AI సలహాలు డెమో కొరకు ఉద్దేశించినవి.
+                <strong>గమనిక:</strong> కృషిగ్రీన్ ఆంధ్రప్రదేశ్ కోసం <strong>ఇంటరాక్టివ్ ప్రొటోటైప్ పైలట్ మోడ్</strong> లో పనిచేస్తోంది. ఫీచర్లు మరియు డేటా ప్రదర్శన & మూల్యాంకనం కొరకు.
               </span>
             ) : (
               <span>
-                <strong>Notice:</strong> KrishiGreen is currently operating in <strong>Interactive Prototype Pilot Mode</strong> for Andhra Pradesh. Features and data are for demonstration & evaluation.
+                <strong>Notice: KrishiGreen is currently operating in Interactive Prototype Pilot Mode</strong> for Andhra Pradesh. Features and data are for demonstration & evaluation.
               </span>
             )}
           </p>
@@ -68,19 +67,18 @@ export const PrototypeTopBanner: React.FC<PrototypeTopBannerProps> = ({
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={onOpenDetails}
-            className="flex items-center gap-1 bg-amber-400/20 hover:bg-amber-400/30 text-amber-200 hover:text-white font-bold text-[11px] px-2.5 py-1 rounded-lg border border-amber-400/40 transition active:scale-95 cursor-pointer"
-            title={isTe ? 'ప్రొటోటైప్ వివరాలు చూడండి' : 'View Prototype Details & Scope'}
+            className="flex items-center gap-1 bg-[#472c0e] hover:bg-[#5c3912] text-amber-300 hover:text-white text-[11px] font-bold px-3 py-1 rounded-full border border-amber-400/80 transition cursor-pointer shadow-xs"
+            title={isTe ? 'ప్రొటోటైప్ వివరాలు' : 'Prototype Details'}
           >
-            <span>{isTe ? 'వివరాలు చూడండి' : 'Prototype Details'}</span>
-            <ChevronRight className="w-3 h-3 text-amber-300" />
+            <span>{isTe ? 'ప్రొటోటైప్ వివరాలు >' : 'Prototype Details >'}</span>
           </button>
 
           <button
             onClick={() => setIsDismissed(true)}
-            className="p-1 text-amber-300/80 hover:text-white hover:bg-white/10 rounded transition cursor-pointer"
-            title={isTe ? 'బ్యానర్ తగ్గించు' : 'Minimize notice'}
+            className="p-1 text-amber-300/80 hover:text-white rounded-full transition cursor-pointer ml-1"
+            title={isTe ? 'నోటీస్ తగ్గించు' : 'Minimize notice'}
           >
-            <X className="w-3.5 h-3.5" />
+            <IconClose className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>

@@ -344,7 +344,7 @@ export const ImpactCalculatorSection: React.FC<ImpactCalculatorProps> = ({ langu
             </p>
           </div>
           <span className="px-2.5 py-1 bg-green-100 text-green-800 font-bold text-xs rounded-full">
-            Phase 1: Months 0–4 Active
+            Phase 1: Months 0 to 4 Active
           </span>
         </div>
 
@@ -389,7 +389,7 @@ export const ImpactCalculatorSection: React.FC<ImpactCalculatorProps> = ({ langu
               <div className="bg-emerald-600 h-full w-[100%]" />
             </div>
             <p className="text-[11px] text-green-700 font-mono font-semibold pt-1">
-              ✓ MoU Signed & Audited
+              MoU Signed & Audited
             </p>
           </div>
         </div>

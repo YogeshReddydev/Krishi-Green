@@ -166,8 +166,8 @@ export const ImpactLedgerReportModal: React.FC<ImpactLedgerReportModalProps> = (
 
             {/* Official Header */}
             <div className="text-center space-y-1.5 border-b-2 border-emerald-900/60 pb-5">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-emerald-50 border border-emerald-200 text-2xl mb-1 shadow-2xs">
-                🌾
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 mb-1">
+                <Leaf className="w-6 h-6 text-emerald-800" />
               </div>
               <div className="text-[11px] font-bold text-emerald-900 uppercase tracking-widest font-mono">
                 Government of Andhra Pradesh • Dept. of Agriculture & RySS

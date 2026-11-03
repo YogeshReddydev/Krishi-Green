@@ -131,6 +131,9 @@ export const DualMarketplace: React.FC<DualMarketplaceProps> = ({
     return matchesCat && matchesSearch;
   });
 
+  // Flagship signature product for high-lift store spotlight
+  const flagshipProduct = products.find((p) => p.isFlagship || p.id === 'PROD-01') || products[0];
+
   // Scale filters for Sector 2
   const scaleFilters = [
     { id: 'all', label: language === 'te' ? 'అన్ని పరిమాణాలు' : 'All Machinery & Supplies', icon: Tractor },
@@ -407,6 +410,135 @@ export const DualMarketplace: React.FC<DualMarketplaceProps> = ({
           ========================================================================= */}
       {activeSector === 'products' && (
         <div className="space-y-6">
+          {/* =========================================================================
+              FEATURED FLAGSHIP PRODUCT HERO SHOWCASE (STORE VISUALS)
+              ========================================================================= */}
+          {flagshipProduct && (
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-950 via-teal-950 to-emerald-900 text-white p-5 sm:p-7 shadow-xl border-2 border-emerald-500/40">
+              {/* Decorative background glow */}
+              <div className="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
+              <div className="absolute -left-20 -bottom-20 w-80 h-80 rounded-full bg-teal-500/10 blur-3xl pointer-events-none" />
+
+              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                {/* Visual Product Showcase (Left) */}
+                <div className="lg:col-span-5 space-y-2">
+                  <div className="relative rounded-2xl overflow-hidden border-2 border-emerald-400/50 shadow-2xl group bg-gradient-to-b from-[#03190f] to-[#010c07] aspect-[4/5] flex items-center justify-center">
+                    <img
+                      src={flagshipProduct.image}
+                      alt={flagshipProduct.name}
+                      className="w-full h-full object-contain transition-transform duration-300"
+                    />
+                    <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
+                    <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-black/75 to-transparent pointer-events-none" />
+
+                    <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+                      <span className="px-3 py-1 rounded-full bg-emerald-500 text-white text-xs font-black tracking-wide shadow-md flex items-center gap-1.5 backdrop-blur-xs">
+                        <Sparkles className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
+                        <span>{language === 'te' ? 'మా ప్రధాన ఉత్పత్తి' : 'Our Flagship Product'}</span>
+                      </span>
+                      <span className="px-2.5 py-1 rounded-full bg-black/60 text-emerald-300 text-[11px] font-bold border border-emerald-400/30 backdrop-blur-xs">
+                        Official Store Visual
+                      </span>
+                    </div>
+
+                    <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-emerald-100">
+                      <span className="flex items-center gap-1 font-semibold">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                        100% Real Handcrafted Bio-Humus
+                      </span>
+                      <span className="px-2 py-0.5 bg-emerald-950/80 rounded-md font-mono text-[10px] border border-emerald-400/30">
+                        Batch: {flagshipProduct.batchNo}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between text-[11px] text-emerald-300 px-1 font-medium">
+                    <span>📸 Verified Store Visual Photo</span>
+                    <span className="text-emerald-400 font-bold">FCO 1985 & PM-PRANAM Approved</span>
+                  </div>
+                </div>
+
+                {/* Product Information & Highlights (Right) */}
+                <div className="lg:col-span-7 space-y-4">
+                  <div>
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-400/30 mb-2">
+                      <Award className="w-3.5 h-3.5 text-amber-400" />
+                      <span>{language === 'te' ? 'ల్యాబ్ ధృవీకృత ప్రీమియం సేంద్రీయ ఎరువు' : 'High-Lift Store Spotlight • 100% Organic Humus'}</span>
+                    </div>
+                    <h2 className="text-2xl sm:text-3xl font-black text-white leading-tight tracking-tight">
+                      {language === 'te'
+                        ? 'కృషిగ్రీన్ ప్రీమియం ఎన్రిచ్డ్ వర్మీకంపోస్ట్'
+                        : 'KrishiGreen™ Grade-A Enriched Vermicompost'}
+                    </h2>
+                    <p className="text-xs sm:text-sm text-emerald-100/90 mt-1.5 leading-relaxed">
+                      {flagshipProduct.description}
+                    </p>
+                  </div>
+
+                  {/* Laboratory Tested Metrics Grid */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+                    <div className="p-2.5 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
+                      <span className="text-[10px] text-emerald-300 block uppercase font-bold tracking-wider">Organic Carbon</span>
+                      <span className="text-base font-black text-white mt-0.5 block">18.4%</span>
+                      <span className="text-[9px] text-emerald-200/80">Rich Micro-Humus</span>
+                    </div>
+                    <div className="p-2.5 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
+                      <span className="text-[10px] text-emerald-300 block uppercase font-bold tracking-wider">NPK Analysis</span>
+                      <span className="text-base font-black text-white mt-0.5 block">1.8 - 1.2 - 1.4</span>
+                      <span className="text-[9px] text-emerald-200/80">Balanced Plant Diet</span>
+                    </div>
+                    <div className="p-2.5 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
+                      <span className="text-[10px] text-emerald-300 block uppercase font-bold tracking-wider">Soil pH</span>
+                      <span className="text-base font-black text-white mt-0.5 block">7.2</span>
+                      <span className="text-[9px] text-emerald-200/80">Neutral pH Balance</span>
+                    </div>
+                    <div className="p-2.5 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
+                      <span className="text-[10px] text-emerald-300 block uppercase font-bold tracking-wider">DAP Replacement</span>
+                      <span className="text-base font-black text-amber-300 mt-0.5 block">40% Less</span>
+                      <span className="text-[9px] text-emerald-200/80">Chemical Savings</span>
+                    </div>
+                  </div>
+
+                  {/* Pricing, Producer Info & CTAs */}
+                  <div className="p-4 bg-emerald-900/70 rounded-2xl border border-emerald-400/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <span className="text-[11px] text-emerald-300 uppercase tracking-wider block font-bold">
+                        {language === 'te' ? 'రైతు డైరెక్ట్ ధర (రాయితీతో)' : 'Farmer Direct Price (Subsidized)'}
+                      </span>
+                      <div className="flex items-baseline gap-2 mt-0.5">
+                        <span className="text-2xl sm:text-3xl font-black text-white">₹{flagshipProduct.pricePerUnit}</span>
+                        <span className="text-xs text-emerald-200 font-semibold">/ {flagshipProduct.unit}</span>
+                        <span className="text-xs text-emerald-300 font-bold ml-2">({flagshipProduct.availableStock} in stock)</span>
+                      </div>
+                      <span className="text-[11px] text-emerald-200/80 flex items-center gap-1 mt-1">
+                        <MapPin className="w-3.5 h-3.5 text-emerald-400" />
+                        {flagshipProduct.village} • Produced by {flagshipProduct.sellerName}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-wrap sm:flex-nowrap gap-2">
+                      <button
+                        onClick={() => onOpenQR(flagshipProduct)}
+                        className="px-4 py-2.5 bg-white/15 hover:bg-white/25 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 border border-white/20 cursor-pointer"
+                        title="Inspect Lab Batch QR Certificate"
+                      >
+                        <QrCode className="w-4 h-4 text-emerald-300" />
+                        <span>Lab QR Batch</span>
+                      </button>
+                      <button
+                        onClick={() => handleStartProductCheckout(flagshipProduct)}
+                        className="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-amber-950 font-black rounded-xl text-xs transition shadow-lg flex items-center gap-2 cursor-pointer"
+                      >
+                        <CreditCard className="w-4 h-4" />
+                        <span>{language === 'te' ? 'ఇప్పుడే కొనండి (UPI)' : 'Order Flagship Now'}</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Sector 1 Filter & Search Bar */}
           <div className="bg-white rounded-2xl border border-gray-200 p-4 shadow-xs space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -466,15 +598,32 @@ export const DualMarketplace: React.FC<DualMarketplaceProps> = ({
             {filteredProducts.map((prod) => (
               <div
                 key={prod.id}
-                className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:border-emerald-400 hover:shadow-lg transition-all duration-200 flex flex-col justify-between"
+                className={`bg-white rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-200 flex flex-col justify-between ${
+                  prod.isFlagship
+                    ? 'border-2 border-emerald-500 ring-4 ring-emerald-500/20 shadow-md bg-gradient-to-b from-emerald-50/25 to-white'
+                    : 'border border-gray-200 hover:border-emerald-400 hover:shadow-lg'
+                }`}
               >
                 <div>
+                  {/* Flagship Top Banner Ribbon if applicable */}
+                  {prod.isFlagship && (
+                    <div className="bg-gradient-to-r from-amber-500 via-emerald-600 to-emerald-700 text-white text-[10px] font-black px-3 py-1.5 flex items-center justify-between shadow-xs">
+                      <span className="flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
+                        <span>{language === 'te' ? 'మా ప్రధాన ఉత్పత్తి • స్టోర్ విజువల్స్' : 'OUR FLAGSHIP PRODUCT • STORE VISUALS'}</span>
+                      </span>
+                      <span className="text-[9px] bg-black/40 px-1.5 py-0.5 rounded font-mono uppercase tracking-wider">
+                        Official Photo
+                      </span>
+                    </div>
+                  )}
+
                   {/* Image & Badges */}
-                  <div className="relative h-48 bg-gray-100 overflow-hidden">
+                  <div className={`relative h-48 ${prod.isFlagship ? 'bg-[#03190f]' : 'bg-gray-100'} overflow-hidden flex items-center justify-center`}>
                     <img
                       src={prod.image}
                       alt={prod.name}
-                      className="w-full h-full object-cover transition duration-300 hover:scale-105"
+                      className={`w-full h-full ${prod.isFlagship ? 'object-contain p-1' : 'object-cover'} transition duration-300 hover:scale-105`}
                     />
                     <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5 flex-wrap">
                       <span className="px-2.5 py-0.5 bg-emerald-900/90 backdrop-blur-xs text-white text-[10px] font-bold rounded-full">
@@ -486,9 +635,15 @@ export const DualMarketplace: React.FC<DualMarketplaceProps> = ({
                         </span>
                       )}
                     </div>
+                    {prod.isFlagship && (
+                      <span className="absolute bottom-2.5 left-2.5 px-2 py-0.5 bg-emerald-950/90 text-white text-[10px] font-bold rounded-md shadow-sm border border-emerald-400/30 flex items-center gap-1 backdrop-blur-xs">
+                        <Sparkles className="w-3 h-3 text-amber-400" />
+                        Official Product Visual
+                      </span>
+                    )}
                     <button
                       onClick={() => onOpenQR(prod)}
-                      className="absolute top-2.5 right-2.5 p-2 bg-white/95 hover:bg-white text-emerald-800 rounded-xl shadow-md transition"
+                      className="absolute top-2.5 right-2.5 p-2 bg-white/95 hover:bg-white text-emerald-800 rounded-xl shadow-md transition cursor-pointer"
                       title="Inspect Batch Laboratory QR Certificate"
                     >
                       <QrCode className="w-4 h-4" />

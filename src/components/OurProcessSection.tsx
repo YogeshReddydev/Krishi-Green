@@ -265,7 +265,7 @@ export const OurProcessSection: React.FC<OurProcessSectionProps> = ({
                 {isTe ? `దశ ${steps[activeStep].stepNumber}` : `Step ${steps[activeStep].stepNumber} Focus`}
               </span>
               <h4 className="text-sm sm:text-base font-black text-white">
-                {steps[activeStep].title} — {steps[activeStep].subtitle}
+                {steps[activeStep].title}: {steps[activeStep].subtitle}
               </h4>
             </div>
             <p className="text-xs text-emerald-100/90 max-w-3xl leading-relaxed">
