@@ -19,7 +19,6 @@ import {
 import { SupportedLanguage } from '../types';
 import { UI_TRANSLATIONS } from '../data/translations';
 import { AnimatedEcosystemModel } from './AnimatedEcosystemModel';
-import { InteractiveGrowthExperience } from './InteractiveGrowthExperience';
 import { SeasonalCropAdvice } from './SeasonalCropAdvice';
 import farmerWelcomeImg from '../assets/images/krishigreen_farmer_welcome_1791353512681.jpg';
 
@@ -217,15 +216,6 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
           </div>
         </div>
       </section>
-
-      {/* 
-        ======================================================================
-        INTERACTIVE PLANT GROWTH TIMELAPSE (See the Difference for Yourself)
-        Inspired by Farm Minerals / CropTab botanical timelapse with scrub slider
-        ======================================================================
-      */}
-      <InteractiveGrowthExperience language={language} />
-
 
 
       {/* 
