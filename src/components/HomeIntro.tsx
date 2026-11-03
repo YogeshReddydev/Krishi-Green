@@ -20,6 +20,7 @@ import { SupportedLanguage } from '../types';
 import { UI_TRANSLATIONS } from '../data/translations';
 import { AnimatedEcosystemModel } from './AnimatedEcosystemModel';
 import { SeasonalCropAdvice } from './SeasonalCropAdvice';
+import { ScrollReveal } from './ScrollReveal';
 import farmerWelcomeImg from '../assets/images/krishigreen_farmer_welcome_1791353512681.jpg';
 
 interface HomeIntroProps {
@@ -147,11 +148,11 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+          <h1 className="kg-hero-title text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
             Krishi<span className="text-emerald-400">Green</span>
           </h1>
 
-          <p className="text-base sm:text-lg font-bold text-emerald-200/95 leading-snug">
+          <p className="kg-hero-sub text-base sm:text-lg font-bold text-emerald-200/95 leading-snug">
             {t.tagline}
           </p>
 
@@ -160,7 +161,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
           </p>
 
           {/* Core Direct Action Buttons */}
-          <div className="flex flex-wrap items-center gap-2.5 pt-2">
+          <div className="kg-hero-cta flex flex-wrap items-center gap-2.5 pt-2">
             <button
               onClick={() => onNavigate('pipeline')}
               className="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-emerald-950 rounded-xl font-black text-xs sm:text-sm shadow-md transition flex items-center gap-2 active:scale-98 cursor-pointer"
@@ -224,102 +225,104 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
         Real product photo high-lifted for verified farmer input commerce
         ======================================================================
       */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-950 via-teal-950 to-emerald-900 border-2 border-emerald-500/40 p-6 sm:p-8 text-white shadow-xl">
-        <div className="absolute -right-24 -top-24 w-72 h-72 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-          <div className="lg:col-span-5 space-y-2">
-            <div className="relative rounded-2xl overflow-hidden border-2 border-emerald-400/50 shadow-2xl group aspect-[4/5] bg-gradient-to-b from-[#03190f] to-[#010c07] flex items-center justify-center">
-              <img
-                src="/assets/aistudio/image_d4f93b65.png"
-                alt="KrishiGreen Flagship Grade-A Vermicompost"
-                className="w-full h-full object-contain transition-transform duration-300"
-              />
-              <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
-              <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-black/75 to-transparent pointer-events-none" />
-              <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-                <span className="px-3 py-1 rounded-full bg-emerald-500 text-white text-xs font-black tracking-wide shadow-md flex items-center gap-1.5 backdrop-blur-xs">
-                  <Sparkles className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
-                  <span>{language === 'te' ? 'మా ప్రధాన ఉత్పత్తి' : 'Our Flagship Product'}</span>
-                </span>
-                <span className="px-2.5 py-1 rounded-full bg-black/60 text-emerald-300 text-[11px] font-bold border border-emerald-400/30 backdrop-blur-xs">
-                  Official Store Visual
-                </span>
+      <ScrollReveal>
+        <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-950 via-teal-950 to-emerald-900 border-2 border-emerald-500/40 p-6 sm:p-8 text-white shadow-xl">
+          <div className="absolute -right-24 -top-24 w-72 h-72 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            <div className="lg:col-span-5 space-y-2">
+              <div className="relative rounded-2xl overflow-hidden border-2 border-emerald-400/50 shadow-2xl group aspect-[4/5] bg-gradient-to-b from-[#03190f] to-[#010c07] flex items-center justify-center">
+                <img
+                  src="/assets/aistudio/image_d4f93b65.png"
+                  alt="KrishiGreen Flagship Grade-A Vermicompost"
+                  className="w-full h-full object-contain transition-transform duration-300"
+                />
+                <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
+                <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-black/75 to-transparent pointer-events-none" />
+                <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+                  <span className="px-3 py-1 rounded-full bg-emerald-500 text-white text-xs font-black tracking-wide shadow-md flex items-center gap-1.5 backdrop-blur-xs">
+                    <Sparkles className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
+                    <span>{language === 'te' ? 'మా ప్రధాన ఉత్పత్తి' : 'Our Flagship Product'}</span>
+                  </span>
+                  <span className="px-2.5 py-1 rounded-full bg-black/60 text-emerald-300 text-[11px] font-bold border border-emerald-400/30 backdrop-blur-xs">
+                    Official Store Visual
+                  </span>
+                </div>
+                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-emerald-100">
+                  <span className="flex items-center gap-1 font-semibold">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    100% Real Handcrafted Bio-Humus
+                  </span>
+                  <span className="text-[10px] font-mono bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-400/30">
+                    Batch: KG-VERMI-2026-08
+                  </span>
+                </div>
               </div>
-              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-emerald-100">
-                <span className="flex items-center gap-1 font-semibold">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  100% Real Handcrafted Bio-Humus
-                </span>
-                <span className="text-[10px] font-mono bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-400/30">
-                  Batch: KG-VERMI-2026-08
-                </span>
-              </div>
-            </div>
-            <p className="text-[11px] text-emerald-300 text-center font-medium">
-              📸 Actual physical product output produced from segregated mandi food waste
-            </p>
-          </div>
-
-          <div className="lg:col-span-7 space-y-4">
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-400/30 mb-2">
-                <Award className="w-3.5 h-3.5 text-amber-400" />
-                <span>{language === 'te' ? 'స్టోర్ విజువల్స్ & ప్రధాన ఉత్పత్తి' : 'High-Lifted in Store Visuals • FCO 1985 Grade-A'}</span>
-              </div>
-              <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-                {language === 'te'
-                  ? 'కృషిగ్రీన్ ప్రీమియం ఎన్రిచ్డ్ వర్మీకంపోస్ట్'
-                  : 'KrishiGreen™ Grade-A Enriched Vermicompost'}
-              </h3>
-              <p className="text-xs sm:text-sm text-emerald-100/90 mt-1.5 leading-relaxed">
-                {language === 'te'
-                  ? 'మండి సేంద్రీయ వ్యర్థాల నుండి 60 రోజుల ఎర్త్‌వార్మ్ జీర్ణక్రియ ద్వారా తయారైన సహజ హ్యూమస్. 18.4% సేంద్రీయ కార్బన్ కలిగి, 40% రసాయన డీఏపీ ఎరువులను సురక్షితంగా భర్తీ చేస్తుంది.'
-                  : 'Handcrafted, nutrient-dense granular humus converted from segregated vegetable mandi bio-waste through 60-day Eisenia fetida digestion. Delivers 18.4% organic carbon, balances soil pH to 7.2, and safely replaces 40% chemical DAP.'}
+              <p className="text-[11px] text-emerald-300 text-center font-medium">
+                📸 Actual physical product output produced from segregated mandi food waste
               </p>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
-              <div className="p-2.5 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
-                <span className="text-[10px] text-emerald-300 block uppercase font-bold tracking-wider">Organic Carbon</span>
-                <span className="text-base font-black text-white mt-0.5 block">18.4%</span>
-                <span className="text-[9px] text-emerald-200/80">Living Micro-Humus</span>
+            <div className="lg:col-span-7 space-y-4">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-400/30 mb-2">
+                  <Award className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{language === 'te' ? 'స్టోర్ విజువల్స్ & ప్రధాన ఉత్పత్తి' : 'High-Lifted in Store Visuals • FCO 1985 Grade-A'}</span>
+                </div>
+                <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                  {language === 'te'
+                    ? 'కృషిగ్రీన్ ప్రీమియం ఎన్రిచ్డ్ వర్మీకంపోస్ట్'
+                    : 'KrishiGreen™ Grade-A Enriched Vermicompost'}
+                </h3>
+                <p className="text-xs sm:text-sm text-emerald-100/90 mt-1.5 leading-relaxed">
+                  {language === 'te'
+                    ? 'మండి సేంద్రీయ వ్యర్థాల నుండి 60 రోజుల ఎర్త్‌వార్మ్ జీర్ణక్రియ ద్వారా తయారైన సహజ హ్యూమస్. 18.4% సేంద్రీయ కార్బన్ కలిగి, 40% రసాయన డీఏపీ ఎరువులను సురక్షితంగా భర్తీ చేస్తుంది.'
+                    : 'Handcrafted, nutrient-dense granular humus converted from segregated vegetable mandi bio-waste through 60-day Eisenia fetida digestion. Delivers 18.4% organic carbon, balances soil pH to 7.2, and safely replaces 40% chemical DAP.'}
+                </p>
               </div>
-              <div className="p-2.5 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
-                <span className="text-[10px] text-emerald-300 block uppercase font-bold tracking-wider">NPK Analysis</span>
-                <span className="text-base font-black text-white mt-0.5 block">1.8 - 1.2 - 1.4</span>
-                <span className="text-[9px] text-emerald-200/80">Complete Nutrition</span>
-              </div>
-              <div className="p-2.5 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
-                <span className="text-[10px] text-emerald-300 block uppercase font-bold tracking-wider">Soil pH</span>
-                <span className="text-base font-black text-white mt-0.5 block">7.2</span>
-                <span className="text-[9px] text-emerald-200/80">Optimum Neutral</span>
-              </div>
-              <div className="p-2.5 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
-                <span className="text-[10px] text-emerald-300 block uppercase font-bold tracking-wider">Farmer Direct</span>
-                <span className="text-base font-black text-amber-300 mt-0.5 block">₹399</span>
-                <span className="text-[9px] text-emerald-200/80">per 50 kg Bag</span>
-              </div>
-            </div>
 
-            <div className="pt-2 flex flex-wrap items-center gap-3">
-              <button
-                onClick={() => onNavigate('marketplace-products')}
-                className="px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-amber-950 font-black rounded-xl text-xs sm:text-sm transition shadow-lg flex items-center gap-2 cursor-pointer"
-              >
-                <ShoppingBag className="w-4 h-4" />
-                <span>{language === 'te' ? 'స్టోర్‌లో కొనండి (యూపీఐ)' : 'View in Store & Buy via UPI'}</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => onNavigate('pipeline')}
-                className="px-5 py-3 bg-white/15 hover:bg-white/25 text-white font-bold rounded-xl text-xs sm:text-sm transition border border-white/20 flex items-center gap-2 cursor-pointer"
-              >
-                <span>{language === 'te' ? 'ఉత్పత్తి పైప్‌లైన్ చూడండి' : 'Trace Mandi-to-Bag Pipeline'}</span>
-              </button>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+                <div className="p-2.5 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
+                  <span className="text-[10px] text-emerald-300 block uppercase font-bold tracking-wider">Organic Carbon</span>
+                  <span className="text-base font-black text-white mt-0.5 block">18.4%</span>
+                  <span className="text-[9px] text-emerald-200/80">Living Micro-Humus</span>
+                </div>
+                <div className="p-2.5 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
+                  <span className="text-[10px] text-emerald-300 block uppercase font-bold tracking-wider">NPK Analysis</span>
+                  <span className="text-base font-black text-white mt-0.5 block">1.8 - 1.2 - 1.4</span>
+                  <span className="text-[9px] text-emerald-200/80">Complete Nutrition</span>
+                </div>
+                <div className="p-2.5 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
+                  <span className="text-[10px] text-emerald-300 block uppercase font-bold tracking-wider">Soil pH</span>
+                  <span className="text-base font-black text-white mt-0.5 block">7.2</span>
+                  <span className="text-[9px] text-emerald-200/80">Optimum Neutral</span>
+                </div>
+                <div className="p-2.5 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
+                  <span className="text-[10px] text-emerald-300 block uppercase font-bold tracking-wider">Farmer Direct</span>
+                  <span className="text-base font-black text-amber-300 mt-0.5 block">₹399</span>
+                  <span className="text-[9px] text-emerald-200/80">per 50 kg Bag</span>
+                </div>
+              </div>
+
+              <div className="pt-2 flex flex-wrap items-center gap-3">
+                <button
+                  onClick={() => onNavigate('marketplace-products')}
+                  className="px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-amber-950 font-black rounded-xl text-xs sm:text-sm transition shadow-lg flex items-center gap-2 cursor-pointer"
+                >
+                  <ShoppingBag className="w-4 h-4" />
+                  <span>{language === 'te' ? 'స్టోర్‌లో కొనండి (యూపీఐ)' : 'View in Store & Buy via UPI'}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => onNavigate('pipeline')}
+                  className="px-5 py-3 bg-white/15 hover:bg-white/25 text-white font-bold rounded-xl text-xs sm:text-sm transition border border-white/20 flex items-center gap-2 cursor-pointer"
+                >
+                  <span>{language === 'te' ? 'ఉత్పత్తి పైప్‌లైన్ చూడండి' : 'Trace Mandi-to-Bag Pipeline'}</span>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </ScrollReveal>
 
       {/* 
         ======================================================================
@@ -327,7 +330,9 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
         Real-time, region-specific cropping suggestions based on current month
         ======================================================================
       */}
-      <SeasonalCropAdvice language={language} onNavigate={onNavigate} />
+      <ScrollReveal>
+        <SeasonalCropAdvice language={language} onNavigate={onNavigate} />
+      </ScrollReveal>
 
       {/* 
         ======================================================================
@@ -335,11 +340,13 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
         Dynamic visual representation of the closed-loop bio-economy
         ======================================================================
       */}
-      <AnimatedEcosystemModel
-        language={language}
-        onNavigate={onNavigate}
-        onOpenHelpline={onOpenHelpline}
-      />
+      <ScrollReveal>
+        <AnimatedEcosystemModel
+          language={language}
+          onNavigate={onNavigate}
+          onOpenHelpline={onOpenHelpline}
+        />
+      </ScrollReveal>
 
       {/* 
         ======================================================================
@@ -364,45 +371,47 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {ecosystemServices.map((service) => {
-            const Icon = service.icon;
-            return (
-              <div
-                key={service.tab}
-                onClick={() => onNavigate(service.tab)}
-                className="relative rounded-3xl border border-emerald-900/10 bg-white/98 backdrop-blur-md p-5 shadow-xs hover:border-emerald-500 hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col justify-between group transform hover:-translate-y-0.5 active:scale-98"
-              >
-                <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${service.color} rounded-t-3xl`} />
+        <ScrollReveal stagger>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {ecosystemServices.map((service) => {
+              const Icon = service.icon;
+              return (
+                <div
+                  key={service.tab}
+                  onClick={() => onNavigate(service.tab)}
+                  className="kg-card relative rounded-3xl border border-emerald-900/10 bg-white/98 backdrop-blur-md p-5 shadow-xs hover:border-emerald-500 hover:shadow-lg cursor-pointer flex flex-col justify-between group active:scale-98"
+                >
+                  <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${service.color} rounded-t-3xl`} />
 
-                <div className="space-y-2.5 pt-1">
-                  <div className="flex items-center justify-between">
-                    <div
-                      className={`w-10 h-10 rounded-2xl flex items-center justify-center text-white bg-gradient-to-br ${service.color} shadow-sm group-hover:scale-105 transition`}
-                    >
-                      <Icon className="w-5 h-5" />
+                  <div className="space-y-2.5 pt-1">
+                    <div className="flex items-center justify-between">
+                      <div
+                        className={`w-10 h-10 rounded-2xl flex items-center justify-center text-white bg-gradient-to-br ${service.color} shadow-sm group-hover:scale-105 transition`}
+                      >
+                        <Icon className="w-5 h-5" />
+                      </div>
+                    </div>
+
+                    <h4 className="font-black text-gray-900 text-sm sm:text-base group-hover:text-emerald-700 transition">
+                      {service.title}
+                    </h4>
+
+                    <p className="text-xs text-gray-600 leading-relaxed line-clamp-3">
+                      {service.desc}
+                    </p>
+                  </div>
+
+                  <div className="pt-3 mt-3 border-t border-gray-100 flex items-center justify-between text-xs font-black text-emerald-800">
+                    <span className="group-hover:underline">{service.actionLabel}</span>
+                    <div className="w-6 h-6 rounded-full bg-emerald-50 group-hover:bg-emerald-700 group-hover:text-white flex items-center justify-center transition">
+                      <ArrowRight className="w-3.5 h-3.5 transition transform group-hover:translate-x-0.5" />
                     </div>
                   </div>
-
-                  <h4 className="font-black text-gray-900 text-sm sm:text-base group-hover:text-emerald-700 transition">
-                    {service.title}
-                  </h4>
-
-                  <p className="text-xs text-gray-600 leading-relaxed line-clamp-3">
-                    {service.desc}
-                  </p>
                 </div>
-
-                <div className="pt-3 mt-3 border-t border-gray-100 flex items-center justify-between text-xs font-black text-emerald-800">
-                  <span className="group-hover:underline">{service.actionLabel}</span>
-                  <div className="w-6 h-6 rounded-full bg-emerald-50 group-hover:bg-emerald-700 group-hover:text-white flex items-center justify-center transition">
-                    <ArrowRight className="w-3.5 h-3.5 transition transform group-hover:translate-x-0.5" />
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        </ScrollReveal>
       </section>
 
       {/* 
@@ -421,79 +430,81 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white/98 backdrop-blur-md rounded-2xl border border-gray-200 p-5 shadow-xs space-y-2.5 hover:border-emerald-400 transition">
-            <div className="flex items-center justify-between">
-              <span className="w-8 h-8 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center font-black text-xs font-mono">
-                01
-              </span>
-              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
-                Decentralized Bioprocessing
-              </span>
+        <ScrollReveal stagger>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="kg-card bg-white/98 backdrop-blur-md rounded-2xl border border-gray-200 p-5 shadow-xs space-y-2.5 hover:border-emerald-400 transition">
+              <div className="flex items-center justify-between">
+                <span className="w-8 h-8 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center font-black text-xs font-mono">
+                  01
+                </span>
+                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                  Decentralized Bioprocessing
+                </span>
+              </div>
+              <h3 className="font-black text-gray-900 text-sm sm:text-base">
+                {t.pillar1Title}
+              </h3>
+              <p className="text-xs text-gray-600 leading-relaxed">
+                {t.pillar1Desc}
+              </p>
+              <button
+                onClick={() => onNavigate('pipeline')}
+                className="text-xs font-black text-emerald-700 hover:text-emerald-900 flex items-center gap-1.5 pt-1 cursor-pointer"
+              >
+                <span>{language === 'te' ? 'పైప్‌లైన్ వివరాలు' : 'Explore Bioprocessing'}</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
             </div>
-            <h3 className="font-black text-gray-900 text-sm sm:text-base">
-              {t.pillar1Title}
-            </h3>
-            <p className="text-xs text-gray-600 leading-relaxed">
-              {t.pillar1Desc}
-            </p>
-            <button
-              onClick={() => onNavigate('pipeline')}
-              className="text-xs font-black text-emerald-700 hover:text-emerald-900 flex items-center gap-1.5 pt-1 cursor-pointer"
-            >
-              <span>{language === 'te' ? 'పైప్‌లైన్ వివరాలు' : 'Explore Bioprocessing'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
 
-          <div className="bg-white/98 backdrop-blur-md rounded-2xl border-2 border-emerald-300 p-5 shadow-xs space-y-2.5 ring-2 ring-emerald-500/10 transition">
-            <div className="flex items-center justify-between">
-              <span className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-900 flex items-center justify-center font-black text-xs font-mono">
-                02
-              </span>
-              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
-                Commerce & Machinery
-              </span>
+            <div className="kg-card bg-white/98 backdrop-blur-md rounded-2xl border-2 border-emerald-300 p-5 shadow-xs space-y-2.5 ring-2 ring-emerald-500/10 transition">
+              <div className="flex items-center justify-between">
+                <span className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-900 flex items-center justify-center font-black text-xs font-mono">
+                  02
+                </span>
+                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                  Commerce & Machinery
+                </span>
+              </div>
+              <h3 className="font-black text-gray-900 text-sm sm:text-base">
+                {t.pillar2Title}
+              </h3>
+              <p className="text-xs text-gray-600 leading-relaxed">
+                {t.pillar2Desc}
+              </p>
+              <button
+                onClick={() => onNavigate('marketplace')}
+                className="text-xs font-black text-emerald-700 hover:text-emerald-900 flex items-center gap-1.5 pt-1 cursor-pointer"
+              >
+                <span>{language === 'te' ? 'మార్కెట్ & యంత్రాలు' : 'Access Commerce Hub'}</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
             </div>
-            <h3 className="font-black text-gray-900 text-sm sm:text-base">
-              {t.pillar2Title}
-            </h3>
-            <p className="text-xs text-gray-600 leading-relaxed">
-              {t.pillar2Desc}
-            </p>
-            <button
-              onClick={() => onNavigate('marketplace')}
-              className="text-xs font-black text-emerald-700 hover:text-emerald-900 flex items-center gap-1.5 pt-1 cursor-pointer"
-            >
-              <span>{language === 'te' ? 'మార్కెట్ & యంత్రాలు' : 'Access Commerce Hub'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
 
-          <div className="bg-white/98 backdrop-blur-md rounded-2xl border border-gray-200 p-5 shadow-xs space-y-2.5 hover:border-emerald-400 transition">
-            <div className="flex items-center justify-between">
-              <span className="w-8 h-8 rounded-xl bg-teal-100 text-teal-900 flex items-center justify-center font-black text-xs font-mono">
-                03
-              </span>
-              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
-                Carbon & Climate
-              </span>
+            <div className="kg-card bg-white/98 backdrop-blur-md rounded-2xl border border-gray-200 p-5 shadow-xs space-y-2.5 hover:border-emerald-400 transition">
+              <div className="flex items-center justify-between">
+                <span className="w-8 h-8 rounded-xl bg-teal-100 text-teal-900 flex items-center justify-center font-black text-xs font-mono">
+                  03
+                </span>
+                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                  Carbon & Climate
+                </span>
+              </div>
+              <h3 className="font-black text-gray-900 text-sm sm:text-base">
+                {t.pillar3Title}
+              </h3>
+              <p className="text-xs text-gray-600 leading-relaxed">
+                {t.pillar3Desc}
+              </p>
+              <button
+                onClick={() => onNavigate('carbon')}
+                className="text-xs font-black text-emerald-700 hover:text-emerald-900 flex items-center gap-1.5 pt-1 cursor-pointer"
+              >
+                <span>{language === 'te' ? 'కార్బన్ క్రెడిట్ లెడ్జర్' : 'View Carbon Protocol'}</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
             </div>
-            <h3 className="font-black text-gray-900 text-sm sm:text-base">
-              {t.pillar3Title}
-            </h3>
-            <p className="text-xs text-gray-600 leading-relaxed">
-              {t.pillar3Desc}
-            </p>
-            <button
-              onClick={() => onNavigate('carbon')}
-              className="text-xs font-black text-emerald-700 hover:text-emerald-900 flex items-center gap-1.5 pt-1 cursor-pointer"
-            >
-              <span>{language === 'te' ? 'కార్బన్ క్రెడిట్ లెడ్జర్' : 'View Carbon Protocol'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
     </div>
   );

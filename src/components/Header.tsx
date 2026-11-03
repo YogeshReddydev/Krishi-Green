@@ -8,6 +8,7 @@ import { SupportedLanguage } from '../types';
 import { SUPPORTED_LANGUAGES, UI_TRANSLATIONS } from '../data/translations';
 import { WeatherWidget } from './WeatherWidget';
 import { WeatherAlertBanner } from './WeatherAlertBanner';
+import { AnimatedNewsTicker } from './AnimatedNewsTicker';
 import { UserAuthButton } from './UserAuthButton';
 
 interface HeaderProps {
@@ -34,6 +35,12 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="sticky top-0 z-40 w-full bg-white border-b border-gray-200/80 shadow-2xs">
+      {/* Smooth animated continuous live ticker */}
+      <AnimatedNewsTicker
+        language={language}
+        districtName="Palnadu / Guntur Hub"
+      />
+
       {/* 1. Agricultural Regional Advisory Sector */}
       <WeatherAlertBanner language={language} />
 

@@ -21,6 +21,7 @@ import { RealImpactDashboard } from './components/RealImpactDashboard';
 import { PrototypeTopBanner } from './components/PrototypeTopBanner';
 import { PrototypeNoticeModal } from './components/PrototypeNoticeModal';
 import { OfflineSyncToast } from './components/OfflineSyncToast';
+import { AnimatedBackground } from './components/AnimatedBackground';
 import { db } from './lib/firebase';
 import { collection, onSnapshot, addDoc } from 'firebase/firestore';
 import {
@@ -284,6 +285,9 @@ export default function App() {
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col relative text-gray-900 bg-[#f8faf8]">
+      {/* Floating Organic Leaf Particle Background */}
+      <AnimatedBackground />
+
       {/* Subtle Farm Landscape Ambient Framing */}
       <div
         className="fixed inset-0 pointer-events-none z-0 opacity-5 bg-cover bg-center bg-no-repeat"

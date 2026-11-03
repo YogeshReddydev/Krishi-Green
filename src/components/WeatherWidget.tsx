@@ -195,7 +195,7 @@ export const WeatherWidget: React.FC = () => {
       {/* Header Pill Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-950 rounded-xl border border-emerald-200 transition text-xs font-semibold shadow-2xs group"
+        className="kg-weather-glow flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-950 rounded-xl border border-emerald-200 transition text-xs font-semibold shadow-2xs group"
         title="Real-time agricultural weather & regional forecast"
       >
         <span className={currentWeatherMeta.color}>

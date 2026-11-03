@@ -856,7 +856,7 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
                 setModalActiveTab('weather');
                 setIsModalOpen(true);
               }}
-              className="flex items-center gap-2 text-[11px] text-emerald-200 bg-[#091a11] px-2.5 py-1 rounded-full border border-[#1d4530] cursor-pointer hover:border-emerald-500 transition"
+              className="kg-weather-glow flex items-center gap-2 text-[11px] text-emerald-200 bg-[#091a11] px-2.5 py-1 rounded-full border border-[#1d4530] cursor-pointer hover:border-emerald-500 transition"
               title="Click to view full IMD Weather Advisory"
             >
               <span className="flex items-center gap-1 font-semibold">🌡 {alert.temp || '31°C'}</span>

@@ -1,0 +1,141 @@
+/* ================================================================
+   KrishiGreen — Enhanced Animations & Dynamic Styles
+   Drop this file into src/ and import in main.tsx or index.css
+   ================================================================ */
+
+/* ── Scroll-reveal: add class "kg-reveal" to any section ───────── */
+.kg-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.kg-reveal.kg-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Staggered children (add kg-stagger to parent) ─────────────── */
+.kg-stagger > *:nth-child(1)  { transition-delay: 0.05s; }
+.kg-stagger > *:nth-child(2)  { transition-delay: 0.12s; }
+.kg-stagger > *:nth-child(3)  { transition-delay: 0.19s; }
+.kg-stagger > *:nth-child(4)  { transition-delay: 0.26s; }
+.kg-stagger > *:nth-child(5)  { transition-delay: 0.33s; }
+.kg-stagger > *:nth-child(6)  { transition-delay: 0.40s; }
+.kg-stagger > *:nth-child(7)  { transition-delay: 0.47s; }
+.kg-stagger > *:nth-child(8)  { transition-delay: 0.54s; }
+
+/* ── Hero text entrance ─────────────────────────────────────────── */
+@keyframes kgSlideUp {
+  from { opacity: 0; transform: translateY(36px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.kg-hero-title {
+  animation: kgSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.kg-hero-sub {
+  animation: kgSlideUp 0.7s 0.15s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.kg-hero-cta {
+  animation: kgSlideUp 0.7s 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Floating gentle bob ────────────────────────────────────────── */
+@keyframes kgFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33%       { transform: translateY(-8px) rotate(1.5deg); }
+  66%       { transform: translateY(-4px) rotate(-1deg); }
+}
+.kg-float {
+  animation: kgFloat 5s ease-in-out infinite;
+}
+
+/* ── Shimmer on cards / skeleton ────────────────────────────────── */
+@keyframes kgShimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.kg-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.18) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  background-size: 200% auto;
+  animation: kgShimmer 2.2s linear infinite;
+}
+
+/* ── Pulse dot (already in index.css, extended here) ───────────── */
+@keyframes kgPulseDot {
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(1.5); }
+}
+.kg-pulse-dot {
+  animation: kgPulseDot 1.6s ease-in-out infinite;
+}
+
+/* ── News ticker smooth horizontal scroll ───────────────────────── */
+@keyframes kgTicker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.kg-ticker-track {
+  display: flex;
+  white-space: nowrap;
+  animation: kgTicker 28s linear infinite;
+}
+.kg-ticker-track:hover {
+  animation-play-state: paused;
+}
+
+/* ── Weather badge glow ─────────────────────────────────────────── */
+@keyframes kgGlow {
+  0%, 100% { box-shadow: 0 0 6px 0px rgba(34,197,94,0.4); }
+  50%       { box-shadow: 0 0 14px 4px rgba(34,197,94,0.7); }
+}
+.kg-weather-glow {
+  animation: kgGlow 2.4s ease-in-out infinite;
+}
+
+/* ── Card hover lift (apply to card wrapper) ────────────────────── */
+.kg-card {
+  transition: transform 0.25s cubic-bezier(0.16,1,0.3,1),
+              box-shadow 0.25s cubic-bezier(0.16,1,0.3,1);
+}
+.kg-card:hover {
+  transform: translateY(-4px) scale(1.012);
+  box-shadow: 0 12px 32px -8px rgba(0,0,0,0.14);
+}
+
+/* ── Gradient border pulse on active nav items ──────────────────── */
+@keyframes kgBorderSpin {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+.kg-active-nav {
+  background-size: 200% 200%;
+  animation: kgBorderSpin 2s linear infinite;
+}
+
+/* ── Fade-in from left for sidebar items ────────────────────────── */
+@keyframes kgSlideLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.kg-slide-left {
+  animation: kgSlideLeft 0.35s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+/* ── Respect reduced motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .kg-reveal, .kg-float, .kg-shimmer, .kg-pulse-dot,
+  .kg-ticker-track, .kg-weather-glow, .kg-card,
+  .kg-hero-title, .kg-hero-sub, .kg-hero-cta,
+  .kg-active-nav, .kg-slide-left {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
