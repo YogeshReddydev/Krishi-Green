@@ -102,13 +102,27 @@ Format the response clearly with:
         <div className="max-w-3xl space-y-2">
           <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-sm bg-[#2d523f] border border-[#3e6852] text-stone-200 text-xs font-mono">
             <IconRefresh className="w-3.5 h-3.5" />
-            <span>Biological Soil Cycle Optimizer | Multi-Season Regeneration</span>
+            <span>
+              {language === 'te'
+                ? 'నేల పోషక చక్రాల ఆప్టిమైజర్ | బహుళ కాలాల పునరుద్ధరణ'
+                : language === 'hi'
+                ? 'जैविक मृदा चक्र ऑप्टिमाइज़र | बहु-मौसमी पुनर्जनन'
+                : 'Biological Soil Cycle Optimizer | Multi-Season Regeneration'}
+            </span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-white">
-            Sustainable Crop Rotation Scheduler
+            {language === 'te'
+              ? 'శాస్త్రీయ పంట మార్పిడి షెడ్యూలర్'
+              : language === 'hi'
+              ? 'वैज्ञानिक फसल चक्र अनुसूचक (क्रॉप रोटेशन)'
+              : 'Sustainable Crop Rotation Scheduler'}
           </h2>
           <p className="text-stone-300 text-xs sm:text-sm leading-relaxed font-sans">
-            Synchronize your Kharif, Rabi, and Zaid planting patterns directly with the nutrient profile of your KrishiGreen organic fertilizer batches. Alternating heavy feeders with nitrogen-fixing legumes and green manures breaks pest life-cycles and permanently builds living soil organic carbon.
+            {language === 'te'
+              ? 'మీ ఖరీఫ్, రబీ మరియు జాయెద్ పంటల సరళిని సేంద్రీయ ఎరువుల పోషక నిష్పత్తితో అనుసంధానించండి. పప్పుధాన్యాల సాగు ద్వారా నేల నత్రజని పెరిగి, తెగుళ్ల బెడద తగ్గి రసాయన ఖర్చు గణనీయంగా ఆదా అవుతుంది.'
+              : language === 'hi'
+              ? 'खरीफ, रबी और जायद बुवाई चक्र को कृषिग्रीन जैविक खाद पोषण के साथ संतुलित करें। भारी पोषक तत्व लेने वाली फसलों के बाद दलहनी व हरी खाद लगाने से मिट्टी का कार्बन बढ़ता है और कीट चक्र टूटता है।'
+              : 'Synchronize your Kharif, Rabi, and Zaid planting patterns directly with the nutrient profile of your KrishiGreen organic fertilizer batches. Alternating heavy feeders with nitrogen-fixing legumes and green manures breaks pest life-cycles and permanently builds living soil organic carbon.'}
           </p>
         </div>
       </div>

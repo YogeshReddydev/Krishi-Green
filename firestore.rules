@@ -41,7 +41,20 @@ service cloud.firestore {
     // Marketplace Products
     match /organic_products/{productId} {
       allow read: if true;
-      allow create, update, delete: if isAuthenticated();
+      allow create: if true;
+      allow update, delete: if isAuthenticated();
+    }
+
+    // AGA Organic Fertilizer Bookings
+    match /aga_bookings/{bookingId} {
+      allow read, create: if true;
+      allow update, delete: if isAuthenticated();
+    }
+
+    // Institutional & CSR Partnership Inquiries
+    match /partnership_inquiries/{inquiryId} {
+      allow read, create: if true;
+      allow update, delete: if isAuthenticated();
     }
 
     // Support Tickets

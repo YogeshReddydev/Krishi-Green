@@ -8,6 +8,8 @@ import {
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, googleProvider, db } from '../lib/firebase';
 
+import { SupportedLanguage } from '../types';
+
 export interface UserProfile {
   uid: string;
   email: string;
@@ -15,8 +17,15 @@ export interface UserProfile {
   photoURL?: string;
   role: 'farmer' | 'fpo_lead' | 'admin';
   village?: string;
+  district?: string;
+  mandal?: string;
   phone?: string;
   landAcres?: number;
+  preferredLanguage?: SupportedLanguage;
+  soilType?: string;
+  irrigationType?: string;
+  primaryCrop?: string;
+  createdAt?: string;
 }
 
 interface AuthContextType {

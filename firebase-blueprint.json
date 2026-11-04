@@ -156,6 +156,40 @@
         "lifecycleStage": { "type": "string", "description": "Lifecycle stage" }
       },
       "required": ["projectTitle", "district", "methodologyCode", "lifecycleStage"]
+    },
+    "AgaBooking": {
+      "title": "AgaBooking",
+      "description": "Farmer trial order and booking for AGA organic bio-fertilizer",
+      "type": "object",
+      "properties": {
+        "bookingId": { "type": "string", "description": "Unique booking reference ID" },
+        "farmerName": { "type": "string", "description": "Farmer full name" },
+        "phone": { "type": "string", "description": "Contact mobile number" },
+        "village": { "type": "string", "description": "Village and district" },
+        "cropType": { "type": "string", "description": "Crop type" },
+        "bagsCount": { "type": "number", "description": "Number of 50kg bags requested" },
+        "priceEstimateINR": { "type": "number", "description": "Estimated cost" },
+        "status": { "type": "string", "description": "Booking status" },
+        "createdAt": { "type": "string", "description": "Timestamp" }
+      },
+      "required": ["bookingId", "farmerName", "phone", "bagsCount"]
+    },
+    "PartnershipInquiry": {
+      "title": "PartnershipInquiry",
+      "description": "Institutional and CSR partnership proposal inquiry",
+      "type": "object",
+      "properties": {
+        "inquiryId": { "type": "string", "description": "Proposal reference ID" },
+        "organizationName": { "type": "string", "description": "Company or foundation name" },
+        "contactName": { "type": "string", "description": "Lead contact person" },
+        "email": { "type": "string", "description": "Official email address" },
+        "phone": { "type": "string", "description": "Phone number" },
+        "interestArea": { "type": "string", "description": "Sponsorship model" },
+        "message": { "type": "string", "description": "Project scope notes" },
+        "status": { "type": "string", "description": "Inquiry status" },
+        "createdAt": { "type": "string", "description": "Timestamp" }
+      },
+      "required": ["inquiryId", "organizationName", "contactName", "phone"]
     }
   },
   "firestore": {
@@ -174,6 +208,14 @@
     "/organic_products/{productId}": {
       "schema": "OrganicProduct",
       "description": "Marketplace organic fertilizers and bio-stimulants"
+    },
+    "/aga_bookings/{bookingId}": {
+      "schema": "AgaBooking",
+      "description": "Farmer trial bookings for AGA bio-fertilizer"
+    },
+    "/partnership_inquiries/{inquiryId}": {
+      "schema": "PartnershipInquiry",
+      "description": "Institutional CSR partnership proposals"
     },
     "/support_tickets/{ticketId}": {
       "schema": "SupportTicket",

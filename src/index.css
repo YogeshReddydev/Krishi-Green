@@ -18,9 +18,9 @@
   }
 
   html, body {
-    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
-    background-color: #f8faf8;
-    color: #111827;
+    font-family: 'Source Sans 3', 'Source Sans Pro', system-ui, -apple-system, sans-serif;
+    background-color: #fbfaf6;
+    color: #17231c;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -54,7 +54,81 @@
   button:not(:disabled), a:not(:disabled) {
     cursor: pointer;
   }
+
+  /* Farmer-First Mobile Touch Accessibility (WCAG 2.5.5 / 2.5.8)
+     Ensures at least 44x44px minimum touch targets for all interactive buttons,
+     navigation links, and touch controls in outdoor/field conditions */
+  @media (max-width: 768px), (pointer: coarse) {
+    button,
+    [role="button"],
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"] {
+      min-height: 44px;
+      min-width: 44px;
+      touch-action: manipulation;
+    }
+
+    nav a,
+    header a,
+    aside a,
+    [role="navigation"] a,
+    [role="tab"] {
+      min-height: 44px;
+      min-width: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="number"],
+    input[type="email"],
+    input[type="search"],
+    select {
+      min-height: 44px;
+      font-size: 16px; /* Prevents auto-zoom on mobile safari */
+    }
+
+    /* Retain natural flow for prose links while offering generous tap area */
+    p a,
+    span a,
+    label a {
+      min-width: auto;
+      min-height: auto;
+      display: inline;
+      padding: 6px 2px;
+    }
+  }
 }
+
+/* Explicit 44x44px Touch Target Utility Classes */
+.touch-target-44 {
+  min-height: 44px !important;
+  min-width: 44px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Invisible tap target expander for compact icon buttons */
+.hit-area-expand {
+  position: relative;
+}
+.hit-area-expand::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 44px;
+  min-height: 44px;
+  width: 100%;
+  height: 100%;
+}
+
 
 /* Custom editorial scrollbars */
 ::-webkit-scrollbar {

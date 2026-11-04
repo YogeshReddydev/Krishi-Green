@@ -205,6 +205,26 @@ export type VerifiedProviderCategory =
   | 'Organic Compost / Vermicompost Plant'
   | 'Farmer Producer Organization (FPO)';
 
+export type UserRole =
+  | 'farmer'
+  | 'waste_operator'
+  | 'processing_operator'
+  | 'equipment_operator'
+  | 'csr_partner'
+  | 'admin'
+  | 'verifier';
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  phone: string;
+  role: UserRole;
+  village?: string;
+  district?: APDistrict | string;
+  organizationName?: string;
+  avatarUrl?: string;
+}
+
 export interface VerifiedProvider {
   id: string;
   businessName: string;
@@ -218,11 +238,12 @@ export interface VerifiedProvider {
   category: VerifiedProviderCategory;
   publicPhone: string;
   website?: string;
-  verificationStatus: 'Verified by Dept / Ground Audit' | 'User Submitted (Pending Review)';
+  verificationStatus: 'DEMO LOCATION — NOT A VERIFIED OPERATING FACILITY' | 'Verified by Dept / Ground Audit' | 'User Submitted (Pending Review)';
   sourceName: string;
   sourceUrl?: string;
   lastCheckedTimestamp: string;
   supportedEquipment: string[];
+  linkedEquipmentIds?: string[];
   pricingNotes: string;
   enquiryEnabled: boolean;
   reportedCount?: number;

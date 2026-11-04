@@ -231,6 +231,8 @@ export const CarbonEngineSection: React.FC<CarbonEngineSectionProps> = ({ langua
             <span>
               {language === 'te'
                 ? 'భారతీయ కార్బన్ మార్కెట్ (ICM) & BEE కార్బన్ క్రెడిట్ ఇంజిన్'
+                : language === 'hi'
+                ? 'भारतीय कार्बन बाज़ार (ICM) व BEE कार्बन क्रेडिट इंजन'
                 : 'Indian Carbon Market (ICM) & BEE Climate Engine'}
             </span>
           </div>
@@ -238,12 +240,16 @@ export const CarbonEngineSection: React.FC<CarbonEngineSectionProps> = ({ langua
           <h2 className="text-2xl sm:text-4xl font-black tracking-tight">
             {language === 'te'
               ? 'వ్యవసాయ వ్యర్థాలు → ధృవీకరించిన కార్బన్ సంపద'
+              : language === 'hi'
+              ? 'कृषि अपशिष्ट निवारण → सत्यापित कार्बन संपदा'
               : 'Waste Avoidance → Verified Carbon Wealth'}
           </h2>
 
           <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed font-normal">
             {language === 'te'
               ? 'ఆంధ్రప్రదేశ్ పైలట్ జిల్లాల్లో సేంద్రీయ వ్యర్థాల నిర్మూలన, వరిలో ఆల్టర్నేట్ వెట్టింగ్ & డ్రైయింగ్ (AWD) మరియు గడ్డి దహన నిరోధం ద్వారా పారదర్శక 70% రైతు ఆదాయ పంపిణీ.'
+              : language === 'hi'
+              ? 'पायलट जिलों में जैविक अपशिष्ट रोकथाम, धान में वैकल्पिक सिंचाई (AWD) व पराली दहन रोककर बीईई सीटीएस के तहत 70% प्रत्यक्ष किसान डीबीटी समाधान।'
               : 'Empowering farmer producer groups with deterministic gross-to-net emissions accounting under the Bureau of Energy Efficiency (BEE) Carbon Credit Trading Scheme (CCTS), ensuring 70% direct farmer revenue reconciliation.'}
           </p>
         </div>
@@ -255,7 +261,11 @@ export const CarbonEngineSection: React.FC<CarbonEngineSectionProps> = ({ langua
           >
             <PlusCircle className="w-4 h-4" />
             <span>
-              {language === 'te' ? 'కొత్త కార్బన్ ప్రాజెక్ట్ నమోదు' : 'Register Carbon Project'}
+              {language === 'te'
+                ? 'కొత్త కార్బన్ ప్రాజెక్ట్ నమోదు'
+                : language === 'hi'
+                ? 'नया कार्बन प्रोजेक्ट पंजीकृत करें'
+                : 'Register Carbon Project'}
             </span>
           </button>
         </div>
@@ -265,7 +275,11 @@ export const CarbonEngineSection: React.FC<CarbonEngineSectionProps> = ({ langua
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white/95 backdrop-blur-md rounded-2xl border border-emerald-100 p-4 shadow-2xs space-y-1">
           <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 block">
-            {language === 'te' ? 'నమోదైన ప్రాజెక్ట్‌లు' : 'Active Registered Projects'}
+            {language === 'te'
+              ? 'నమోదైన ప్రాజెక్ట్‌లు'
+              : language === 'hi'
+              ? 'सक्रिय पंजीकृत प्रोजेक्ट्स'
+              : 'Active Registered Projects'}
           </span>
           <div className="flex items-baseline gap-2">
             <strong className="text-2xl font-black font-mono text-gray-900">
@@ -280,7 +294,11 @@ export const CarbonEngineSection: React.FC<CarbonEngineSectionProps> = ({ langua
 
         <div className="bg-white/95 backdrop-blur-md rounded-2xl border border-emerald-100 p-4 shadow-2xs space-y-1">
           <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 block">
-            {language === 'te' ? 'నిరోధించిన మీథేన్ & ఉద్గారాలు' : 'Gross Emissions Avoided'}
+            {language === 'te'
+              ? 'నిరోధించిన మీథేన్ & ఉద్గారాలు'
+              : language === 'hi'
+              ? 'कुल निवारित उत्सर्जन व मीथेन'
+              : 'Gross Emissions Avoided'}
           </span>
           <div className="flex items-baseline gap-2">
             <strong className="text-2xl font-black font-mono text-emerald-800">
@@ -293,7 +311,11 @@ export const CarbonEngineSection: React.FC<CarbonEngineSectionProps> = ({ langua
 
         <div className="bg-white/95 backdrop-blur-md rounded-2xl border border-emerald-100 p-4 shadow-2xs space-y-1">
           <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 block">
-            {language === 'te' ? 'జారీ చేసిన నికర క్రెడిట్‌లు' : 'Net Issued Carbon Credits'}
+            {language === 'te'
+              ? 'జారీ చేసిన నికర క్రెడిట్‌లు'
+              : language === 'hi'
+              ? 'जारी शुद्ध कार्बन क्रेडिट'
+              : 'Net Issued Carbon Credits'}
           </span>
           <div className="flex items-baseline gap-2">
             <strong className="text-2xl font-black font-mono text-teal-800">
@@ -306,7 +328,11 @@ export const CarbonEngineSection: React.FC<CarbonEngineSectionProps> = ({ langua
 
         <div className="bg-white/95 backdrop-blur-md rounded-2xl border border-emerald-100 p-4 shadow-2xs space-y-1">
           <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 block">
-            {language === 'te' ? 'రైతుల పూల్ ఆదాయం (70%)' : 'Farmer Pool Value (70%)'}
+            {language === 'te'
+              ? 'రైతుల పూల్ ఆదాయం (70%)'
+              : language === 'hi'
+              ? 'किसान पूल आय (70% हिस्सा)'
+              : 'Farmer Pool Value (70%)'}
           </span>
           <div className="flex items-baseline gap-2">
             <strong className="text-2xl font-black font-mono text-emerald-700">
@@ -333,6 +359,8 @@ export const CarbonEngineSection: React.FC<CarbonEngineSectionProps> = ({ langua
             <h3 className="font-black text-gray-900 text-lg">
               {language === 'te'
                 ? 'భారతీయ కార్బన్ ప్రమాణాల పద్ధతులు (BEE / CCTS)'
+                : language === 'hi'
+                ? 'स्वीकृत कार्बन लेखांकन पद्धतियां (BEE / CCTS)'
                 : 'Approved Carbon Accounting Methodologies'}
             </h3>
           </div>
@@ -443,11 +471,15 @@ export const CarbonEngineSection: React.FC<CarbonEngineSectionProps> = ({ langua
             <h3 className="font-black text-gray-900 text-lg">
               {language === 'te'
                 ? 'ధృవీకరించిన కార్బన్ ప్రాజెక్ట్‌లు ఏవీ నమోదు కాలేదు'
+                : language === 'hi'
+                ? 'रजिस्ट्री में अभी कोई कार्बन प्रोजेक्ट दर्ज नहीं है'
                 : 'No Carbon Projects Currently In Registry'}
             </h3>
             <p className="text-xs text-gray-500 max-w-md mx-auto leading-relaxed">
               {language === 'te'
                 ? 'డేటా సమగ్రతా నియమం ప్రకారం, ఇక్కడ నకిలీ ప్రాజెక్ట్‌లు చూపబడవు. మీ ఎఫ్‌పిఓ లేదా క్లస్టర్ కోసం నైతిక కార్బన్ క్రెడిట్ ప్రాజెక్ట్‌ను ప్రారంభించడానికి క్రింద క్లిక్ చేయండి.'
+                : language === 'hi'
+                ? 'हमारी सख्त डेटा सत्यनिष्ठा नीति के तहत कोई काल्पनिक प्रोजेक्ट नहीं दिखाए जाते। अपने एफपीओ या किसान समूह के लिए पहला सत्यापित प्रोजेक्ट शुरू करें।'
                 : 'Under our strict data integrity policy, no fabricated projects are shown. Register a genuine farmer group project in Palnadu, Prakasam, Kurnool, East Godavari, West Godavari, or Vizianagaram to initiate MRV tracking.'}
             </p>
           </div>
@@ -456,7 +488,13 @@ export const CarbonEngineSection: React.FC<CarbonEngineSectionProps> = ({ langua
             className="px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-bold shadow-md transition inline-flex items-center gap-2"
           >
             <PlusCircle className="w-4 h-4" />
-            <span>Register First Pilot Carbon Project</span>
+            <span>
+              {language === 'te'
+                ? 'పైలట్ కార్బన్ ప్రాజెక్ట్‌ను నమోదు చేయండి'
+                : language === 'hi'
+                ? 'पहला पायलट कार्बन प्रोजेक्ट पंजीकृत करें'
+                : 'Register First Pilot Carbon Project'}
+            </span>
           </button>
         </div>
       ) : (

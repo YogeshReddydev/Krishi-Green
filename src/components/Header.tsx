@@ -81,7 +81,9 @@ export const Header: React.FC<HeaderProps> = ({
                   title="Prototype Notice"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-[#b45309]" />
-                  <span>PROTOTYPE</span>
+                  <span>
+                    {language === 'te' ? 'పైలట్' : language === 'hi' ? 'प्रोटोटाइप' : 'PROTOTYPE'}
+                  </span>
                 </button>
               </div>
               <p className="text-[11px] text-gray-500 font-medium tracking-tight mt-0.5 max-w-[200px] sm:max-w-md truncate">
@@ -91,19 +93,19 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Right Tools: Voice Assistant, Language, and Profile */}
+        {/* Right Tools: Helpline, Language, and Profile */}
         <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
-          {/* Voice Assistant Pill Button */}
-          <button
-            onClick={onOpenVoice}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#eafaf1] hover:bg-[#d1fae5] text-[#047857] font-bold rounded-full border border-[#a7f3d0] transition cursor-pointer text-xs shadow-2xs"
-            title={m.voiceAssistant}
+          {/* Toll-Free Call Button */}
+          <a
+            href="tel:18005747443"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-emerald-950 font-extrabold rounded-full border border-amber-500 transition cursor-pointer text-xs shadow-2xs"
+            title="Toll-Free Helpline 1800-574-7443"
           >
-            <svg className="w-3.5 h-3.5 text-[#047857]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+            <svg className="w-3.5 h-3.5 text-emerald-950" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
-            <span className="hidden sm:inline">{m.voiceAssistant}</span>
-          </button>
+            <span className="font-mono tracking-tight font-black">1800-KRISHI-GRN</span>
+          </a>
 
           {/* Regional Language Selector */}
           <div className="flex items-center bg-white rounded-full px-3 py-1.5 border border-gray-200 shadow-2xs">
@@ -127,6 +129,58 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
       </div>
+
+      {/* 3. Desktop Sub-Navigation Bar for Quick Page Hopping */}
+      <nav className="hidden lg:block border-t border-gray-100 bg-[#fbfaf6] px-4 py-2">
+        <div className="max-w-7xl mx-auto flex items-center justify-between text-xs font-semibold text-gray-700 overflow-x-auto">
+          <div className="flex items-center gap-1.5 flex-nowrap">
+            {[
+              { id: 'home', label: language === 'te' ? 'ముఖచిత్రం' : 'Home' },
+              { id: 'about', label: language === 'te' ? 'గురించి' : 'About' },
+              { id: 'sustainable-farming', label: language === 'te' ? 'సహజ సేద్యం' : 'Sustainable Farming' },
+              { id: 'waste-management', label: language === 'te' ? 'వ్యర్థాల సేకరణ' : 'Waste Management' },
+              { id: 'aga', label: language === 'te' ? 'AGA ఎరువు' : 'AGA Fertilizer' },
+              { id: 'marketplace', label: language === 'te' ? 'మార్కెట్' : 'Marketplace' },
+              { id: 'equipment-hub', label: language === 'te' ? 'యంత్రాల హబ్' : 'Equipment Hub' },
+              { id: 'carbon-integrity', label: language === 'te' ? 'కర్బన లెడ్జర్' : 'Carbon Integrity' },
+              { id: 'partnerships', label: language === 'te' ? 'భాగస్వామ్యాలు' : 'Partnerships' },
+              { id: 'agriculture-updates', label: language === 'te' ? 'వాతావరణ వార్తలు' : 'Agri Updates' },
+              { id: 'contact', label: language === 'te' ? 'హెల్ప్‌లైన్' : 'Contact & Help' },
+            ].map((p) => {
+              const active = currentTab === p.id;
+              return (
+                <button
+                  key={p.id}
+                  onClick={() => setCurrentTab(p.id)}
+                  className={`px-2.5 py-1 rounded-md transition whitespace-nowrap ${
+                    active
+                      ? 'bg-emerald-800 text-white font-bold shadow-2xs'
+                      : 'hover:bg-emerald-50 hover:text-emerald-900 text-gray-700'
+                  }`}
+                >
+                  {p.label}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="flex items-center gap-1.5 shrink-0 pl-2 border-l border-gray-200">
+            <button
+              onClick={() => setCurrentTab('dashboard-farmer')}
+              className="px-2 py-0.5 rounded text-[11px] font-bold text-emerald-800 hover:bg-emerald-100/60"
+            >
+              {language === 'te' ? 'రైతు పోర్టల్' : 'Farmer Portal'}
+            </button>
+            <span className="text-gray-300">•</span>
+            <button
+              onClick={() => setCurrentTab('admin')}
+              className="px-2 py-0.5 rounded text-[11px] font-bold text-gray-600 hover:bg-gray-200"
+            >
+              Admin / 7 Roles
+            </button>
+          </div>
+        </div>
+      </nav>
     </header>
   );
 };

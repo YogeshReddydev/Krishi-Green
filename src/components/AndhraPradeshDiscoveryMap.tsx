@@ -246,17 +246,23 @@ export const AndhraPradeshDiscoveryMap: React.FC<AndhraPradeshDiscoveryMapProps>
             <span>
               {language === 'te'
                 ? 'ధృవీకరించిన కస్టమ్ హైరింగ్ & యంత్రాల నెట్‌వర్క్'
+                : language === 'hi'
+                ? 'सत्यापित कस्टम हायरिंग व कृषि मशीनरी नेटवर्क'
                 : 'Verified Custom Hiring & Machinery Network'}
             </span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
             {language === 'te'
               ? 'కస్టమ్ హైరింగ్ కేంద్రాలు & వ్యవసాయ యంత్రాల డైరెక్టరీ'
+              : language === 'hi'
+              ? 'कस्टम हायरिंग केंद्र व कृषि मशीनरी निर्देशिका'
               : 'Custom Hiring Centres & Machinery Directory'}
           </h2>
           <p className="text-xs sm:text-sm text-gray-600 max-w-2xl">
             {language === 'te'
               ? 'రైతుల కోసం ట్రాక్టర్లు, బేలర్లు, బయో-ష్రెడ్డర్లు మరియు సేంద్రీయ వ్యర్థాల ప్రాసెసింగ్ యంత్రాల అధికారిక డైరెక్టరీ మరియు కొటేషన్ సేవలు.'
+              : language === 'hi'
+              ? 'किसानों के लिए ट्रैक्टर, बेलर, बायो-श्रेडर और फसल अवशेष प्रबंधन मशीनों की आधिकारिक निर्देशिका एवं रीयल-टाइम कोटेशन।'
               : 'Real, verifiable machinery providers, Custom Hiring Centres (CHCs), balers, shredders, and bio-waste processors with live quotation workflows.'}
           </p>
         </div>
@@ -268,7 +274,11 @@ export const AndhraPradeshDiscoveryMap: React.FC<AndhraPradeshDiscoveryMapProps>
           >
             <PlusCircle className="w-4 h-4" />
             <span>
-              {language === 'te' ? 'కొత్త కేంద్రాన్ని నమోదు చేయండి' : 'Submit Provider for Review'}
+              {language === 'te'
+                ? 'కొత్త కేంద్రాన్ని నమోదు చేయండి'
+                : language === 'hi'
+                ? 'नया केंद्र समीक्षा हेतु जोड़ें'
+                : 'Submit Provider for Review'}
             </span>
           </button>
 
@@ -279,7 +289,7 @@ export const AndhraPradeshDiscoveryMap: React.FC<AndhraPradeshDiscoveryMapProps>
                 viewMode === 'map' ? 'bg-white text-emerald-900 shadow-xs' : 'text-gray-500 hover:text-gray-900'
               }`}
             >
-              {language === 'te' ? 'మ్యాప్ వ్యూ' : 'Interactive Map'}
+              {language === 'te' ? 'మ్యాప్ వ్యూ' : language === 'hi' ? 'मानचित्र दृश्य' : 'Interactive Map'}
             </button>
             <button
               onClick={() => setViewMode('list')}
@@ -287,7 +297,7 @@ export const AndhraPradeshDiscoveryMap: React.FC<AndhraPradeshDiscoveryMapProps>
                 viewMode === 'list' ? 'bg-white text-emerald-900 shadow-xs' : 'text-gray-500 hover:text-gray-900'
               }`}
             >
-              {language === 'te' ? 'జాబితా వ్యూ' : 'Directory List'} ({filteredProviders.length})
+              {language === 'te' ? 'జాబితా వ్యూ' : language === 'hi' ? 'सूची दृश्य' : 'Directory List'} ({filteredProviders.length})
             </button>
           </div>
         </div>
@@ -303,7 +313,11 @@ export const AndhraPradeshDiscoveryMap: React.FC<AndhraPradeshDiscoveryMapProps>
               : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
           }`}
         >
-          {language === 'te' ? 'అన్ని జిల్లాలు (ఆంధ్రప్రదేశ్)' : 'All 5 Pilot District Groups'}
+          {language === 'te'
+            ? 'అన్ని జిల్లాలు (ఆంధ్రప్రదేశ్)'
+            : language === 'hi'
+            ? 'सभी 5 पायलट ज़िला समूह'
+            : 'All 5 Pilot District Groups'}
         </button>
 
         {(
@@ -351,6 +365,8 @@ export const AndhraPradeshDiscoveryMap: React.FC<AndhraPradeshDiscoveryMapProps>
             placeholder={
               language === 'te'
                 ? 'యంత్రం పేరు, మండలం లేదా కేంద్రం పేరుతో వెతకండి...'
+                : language === 'hi'
+                ? 'मशीनरी, बेलर, सीएचसी, मंडल या केंद्र के नाम से खोजें...'
                 : 'Search by equipment, baler, CHC, mandal, or business name...'
             }
             value={searchQuery}
@@ -367,7 +383,11 @@ export const AndhraPradeshDiscoveryMap: React.FC<AndhraPradeshDiscoveryMapProps>
             className="w-full px-3 py-2.5 rounded-xl border border-gray-300 text-xs bg-white focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium"
           >
             <option value="All">
-              {language === 'te' ? 'అన్ని కేటగిరీలు' : 'All Provider Categories'}
+              {language === 'te'
+                ? 'అన్ని కేటగిరీలు'
+                : language === 'hi'
+                ? 'सभी केंद्र श्रेणियां'
+                : 'All Provider Categories'}
             </option>
             <option value="Custom Hiring Centre (CHC)">Custom Hiring Centre (CHC)</option>
             <option value="Tractor & Machinery Dealership">Tractor & Machinery Dealership</option>
@@ -388,11 +408,22 @@ export const AndhraPradeshDiscoveryMap: React.FC<AndhraPradeshDiscoveryMapProps>
               onChange={(e) => setVerifiedOnly(e.target.checked)}
               className="rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4"
             />
-            <span>{language === 'te' ? 'ధృవీకరించినవి మాత్రమే' : 'Govt / Audit Verified'}</span>
+            <span>
+              {language === 'te'
+                ? 'ధృవీకరించినవి మాత్రమే'
+                : language === 'hi'
+                ? 'केवल सरकारी/ऑडिट सत्यापित'
+                : 'Govt / Audit Verified'}
+            </span>
           </label>
 
           <span className="text-xs text-gray-400 font-mono">
-            {filteredProviders.length} {language === 'te' ? 'కేంద్రాలు' : 'centers'}
+            {filteredProviders.length}{' '}
+            {language === 'te'
+              ? 'కేంద్రాలు'
+              : language === 'hi'
+              ? 'केंद्र'
+              : 'centers'}
           </span>
         </div>
       </div>
@@ -651,7 +682,11 @@ export const AndhraPradeshDiscoveryMap: React.FC<AndhraPradeshDiscoveryMapProps>
                   >
                     <Send className="w-3.5 h-3.5" />
                     <span>
-                      {language === 'te' ? 'ధర / లభ్యత విచారణ పంపండి' : 'Request Quotation / Confirm Rental'}
+                      {language === 'te'
+                        ? 'ధర / లభ్యత విచారణ పంపండి'
+                        : language === 'hi'
+                        ? 'कोटेशन प्राप्त करें / बुकिंग अनुरोध भेजें'
+                        : 'Request Quotation / Confirm Rental'}
                     </span>
                   </button>
 
@@ -830,7 +865,11 @@ export const AndhraPradeshDiscoveryMap: React.FC<AndhraPradeshDiscoveryMapProps>
                   REAL-DATA ENQUIRY DISPATCH
                 </span>
                 <h3 className="font-black text-gray-900 text-lg">
-                  {language === 'te' ? 'యంత్రం / సేవ విచారణ పంపండి' : 'Request Equipment Quotation'}
+                  {language === 'te'
+                    ? 'యంత్రం / సేవ విచారణ పంపండి'
+                    : language === 'hi'
+                    ? 'उपकरण / सेवा कोटेशन अनुरोध भेजें'
+                    : 'Request Equipment Quotation'}
                 </h3>
               </div>
               <button

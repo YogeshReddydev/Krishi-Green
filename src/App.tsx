@@ -48,9 +48,105 @@ import {
 import { UI_TRANSLATIONS } from './data/translations';
 import { getMultiTranslations } from './utils/multiLang';
 import farmerWelcomeImg from './assets/images/krishigreen_farmer_welcome_1791353512681.jpg';
+import { AboutPage } from './pages/AboutPage';
+import { SustainableFarmingPage } from './pages/SustainableFarmingPage';
+import { WasteManagementPage } from './pages/WasteManagementPage';
+import { AgaProductPage } from './pages/AgaProductPage';
+import { MarketplacePage } from './pages/MarketplacePage';
+import { EquipmentHubPage } from './pages/EquipmentHubPage';
+import { CarbonIntegrityPage } from './pages/CarbonIntegrityPage';
+import { PartnershipsPage } from './pages/PartnershipsPage';
+import { AgricultureUpdatesPage } from './pages/AgricultureUpdatesPage';
+import { ContactPage } from './pages/ContactPage';
+import { FarmerDashboard } from './pages/dashboards/FarmerDashboard';
+import { WasteOperationsDashboard } from './pages/dashboards/WasteOperationsDashboard';
+import { ProcessingFacilityDashboard } from './pages/dashboards/ProcessingFacilityDashboard';
+import { EquipmentOperatorDashboard } from './pages/dashboards/EquipmentOperatorDashboard';
+import { PartnerDashboard } from './pages/dashboards/PartnerDashboard';
+import { AdminDashboard } from './pages/dashboards/AdminDashboard';
+import { VerificationDashboard } from './pages/dashboards/VerificationDashboard';
+import { APP_ROUTES } from './utils/navigation';
+
+const pathToTab = (pathname: string): string => {
+  const clean = pathname.replace(/\/$/, '') || '/';
+  if (clean === '/about') return 'about';
+  if (clean === '/sustainable-farming') return 'sustainable-farming';
+  if (clean === '/waste-management') return 'waste-management';
+  if (clean === '/aga') return 'aga';
+  if (clean === '/marketplace') return 'marketplace';
+  if (clean === '/equipment-hub') return 'equipment-hub';
+  if (clean === '/carbon-integrity') return 'carbon-integrity';
+  if (clean === '/partnerships') return 'partnerships';
+  if (clean === '/agriculture-updates') return 'agriculture-updates';
+  if (clean === '/contact') return 'contact';
+  if (clean === '/dashboard/farmer') return 'dashboard-farmer';
+  if (clean === '/dashboard/waste') return 'dashboard-waste';
+  if (clean === '/dashboard/processing') return 'dashboard-processing';
+  if (clean === '/dashboard/equipment') return 'dashboard-equipment';
+  if (clean === '/dashboard/partner') return 'dashboard-partner';
+  if (clean === '/dashboard/verification') return 'dashboard-verification';
+  if (clean === '/admin') return 'admin';
+  return 'home';
+};
+
+const tabToPath = (tab: string): string => {
+  switch (tab) {
+    case 'home': return '/';
+    case 'about': return '/about';
+    case 'sustainable-farming': return '/sustainable-farming';
+    case 'waste-management': return '/waste-management';
+    case 'aga': return '/aga';
+    case 'marketplace': return '/marketplace';
+    case 'equipment-hub': return '/equipment-hub';
+    case 'carbon-integrity': return '/carbon-integrity';
+    case 'partnerships': return '/partnerships';
+    case 'agriculture-updates': return '/agriculture-updates';
+    case 'contact': return '/contact';
+    case 'dashboard-farmer': return '/dashboard/farmer';
+    case 'dashboard-waste': return '/dashboard/waste';
+    case 'dashboard-processing': return '/dashboard/processing';
+    case 'dashboard-equipment': return '/dashboard/equipment';
+    case 'dashboard-partner': return '/dashboard/partner';
+    case 'dashboard-verification': return '/dashboard/verification';
+    case 'admin': return '/admin';
+    default: return '/';
+  }
+};
 
 export default function App() {
-  const [currentTab, setCurrentTab] = useState<string>('home');
+  const [currentTab, setCurrentTabState] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return pathToTab(window.location.pathname);
+    }
+    return 'home';
+  });
+
+  const setCurrentTab = (tab: string) => {
+    setCurrentTabState(tab);
+    if (typeof window !== 'undefined') {
+      const targetPath = tabToPath(tab);
+      if (window.location.pathname !== targetPath) {
+        window.history.pushState({}, '', targetPath);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setCurrentTabState(pathToTab(window.location.pathname));
+    };
+    const handleCustomNav = () => {
+      setCurrentTabState(pathToTab(window.location.pathname));
+    };
+    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('krishi_location_change', handleCustomNav);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('krishi_location_change', handleCustomNav);
+    };
+  }, []);
+
   const [language, setLanguage] = useState<SupportedLanguage>('en');
   const m = getMultiTranslations(language);
 
@@ -345,20 +441,34 @@ export default function App() {
                   <span>{t.navHome}</span>
                 </button>
                 <span className="text-gray-400">/</span>
-                <span className="font-bold text-gray-900">
-                  {currentTab === 'process' && (m.servicePipelineTitle || 'Our Process: Waste Collection to Organic Yield')}
-                  {currentTab === 'ap-pilot' && (m.serviceMachineryTitle || 'Custom Hiring & Machinery Hubs')}
-                  {currentTab === 'pipeline' && (m.servicePipelineTitle || t.navPipeline)}
-                  {currentTab === 'marketplace' && (m.serviceMarketplaceTitle || t.navMarketplace)}
-                  {currentTab === 'marketplace-products' && (m.flagshipProduct || 'Selling Farming Products')}
-                  {currentTab === 'marketplace-machinery' && (m.serviceMachineryTitle || 'Equipment Hub for Farmers')}
-                  {currentTab === 'carbon' && (m.serviceCarbonTitle || t.navCarbon || 'Carbon & Climate Engine')}
-                  {currentTab === 'rotation' && (m.serviceRotationTitle || t.navRotation)}
-                  {currentTab === 'schemes' && (m.serviceSchemesTitle || t.navSchemes)}
-                  {currentTab === 'impact' && (m.serviceImpactTitle || t.navImpact)}
-                  {currentTab === 'maps' && (t.navMaps || m.region)}
-                  {currentTab === 'search' && (t.navSearch || 'Smart Agro Search')}
-                  {currentTab === 'helpline' && (m.serviceHelplineTitle || t.navHelpline)}
+                <span className="font-bold text-gray-900 capitalize">
+                  {currentTab === 'about' && 'About Krishi Green'}
+                  {currentTab === 'sustainable-farming' && 'Sustainable Farming & Soil Health'}
+                  {currentTab === 'waste-management' && 'Organic Waste Management'}
+                  {currentTab === 'aga' && 'AGA Organic Fertilizer'}
+                  {currentTab === 'marketplace' && 'Unified Marketplace (Buy & Sell)'}
+                  {currentTab === 'equipment-hub' && 'Farmer Equipment Hub (AP CHCs)'}
+                  {currentTab === 'carbon-integrity' && 'Carbon Integrity & Standards'}
+                  {currentTab === 'partnerships' && 'Institutional & CSR Partnerships'}
+                  {currentTab === 'agriculture-updates' && 'Agriculture Weather & Mandi Updates'}
+                  {currentTab === 'contact' && 'Farmer Contact & Helpline'}
+                  {currentTab === 'dashboard-farmer' && 'Farmer Dashboard (Rythu Mitra)'}
+                  {currentTab === 'dashboard-waste' && 'Waste Operations & Fleet Dispatch'}
+                  {currentTab === 'dashboard-processing' && 'Compost Processing Facility'}
+                  {currentTab === 'dashboard-equipment' && 'Equipment Hub Operator'}
+                  {currentTab === 'dashboard-partner' && 'CSR & Institutional Partner Portal'}
+                  {currentTab === 'dashboard-verification' && 'Independent Carbon Verification (MRV)'}
+                  {currentTab === 'admin' && 'System Super Admin Control'}
+                  {currentTab === 'process' && (m.servicePipelineTitle || 'Our Process')}
+                  {currentTab === 'ap-pilot' && (m.serviceMachineryTitle || 'Custom Hiring Hubs')}
+                  {currentTab === 'pipeline' && '16-Stage Pipeline'}
+                  {currentTab === 'carbon' && 'Carbon Engine'}
+                  {currentTab === 'rotation' && 'Crop Rotation'}
+                  {currentTab === 'schemes' && 'Government Schemes'}
+                  {currentTab === 'impact' && 'Impact Ledger'}
+                  {currentTab === 'maps' && 'Agri Maps'}
+                  {currentTab === 'search' && 'Agro Intel Search'}
+                  {currentTab === 'helpline' && '24x7 Helpline'}
                 </span>
               </div>
               <button
@@ -370,17 +480,14 @@ export default function App() {
             </div>
           )}
 
-          {/* Dedicated Webpage 1: Home / Intro Overview */}
+          {/* PAGE 1: Home / Intro Overview */}
           {currentTab === 'home' && (
             <div className="space-y-6">
-              {/* 1. TOP ENTRANCE: Welcome, Circular Flow & Quick Navigation */}
               <HomeIntro
                 onNavigate={(tab) => setCurrentTab(tab)}
                 onOpenHelpline={() => setIsHelplineOpen(true)}
                 language={language}
               />
-
-              {/* 2. MIDDLE: Grounded Agricultural Intelligence Preview Modules */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
                 <MapsLocationDetector
                   language={language}
@@ -388,21 +495,19 @@ export default function App() {
                 />
                 <SearchGroundingWidget language={language} />
               </div>
-
-              {/* 3. BOTTOM: Real-Time Local Weather & Rainfall Probability Dashboard Widget */}
               <div className="pt-2 border-t border-emerald-100/80">
                 <div className="mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
                     <h3 className="text-sm font-extrabold text-emerald-950 uppercase tracking-wider font-mono">
-                      {language === 'te' ? 'వాతావరణం & వర్షపాత నివేదిక' : 'Regional Agromet Weather & Rain Probability'}
+                      {language === 'te' ? 'వాతావరణం & వర్షపాత నివేదిక' : language === 'hi' ? 'क्षेत्रीय कृषि मौसम और वर्षा पूर्वानुमान' : 'Regional Agromet Weather & Rain Probability'}
                     </h3>
                   </div>
                   <button
-                    onClick={() => setCurrentTab('search')}
+                    onClick={() => setCurrentTab('agriculture-updates')}
                     className="text-xs font-bold text-emerald-700 hover:text-emerald-900 hover:underline flex items-center gap-1"
                   >
-                    <span>{language === 'te' ? 'పూర్తి నివేదిక చూడండి' : 'Open Weather Intel Tab'}</span>
+                    <span>{language === 'te' ? 'పూర్తి నివేదిక చూడండి' : 'Open Weather Intel'}</span>
                     <span>→</span>
                   </button>
                 </div>
@@ -411,7 +516,125 @@ export default function App() {
             </div>
           )}
 
-          {/* Dedicated Webpage: Our Process (6-Stage Waste-to-Wealth & Organic Yield Lifecycle) */}
+          {/* PAGE 2: About Krishi Green */}
+          {currentTab === 'about' && (
+            <AboutPage language={language} />
+          )}
+
+          {/* PAGE 3: Sustainable Farming & Soil Carbon */}
+          {currentTab === 'sustainable-farming' && (
+            <SustainableFarmingPage language={language} batches={batches} />
+          )}
+
+          {/* PAGE 4: Organic Waste Management */}
+          {currentTab === 'waste-management' && (
+            <WasteManagementPage
+              language={language}
+              wasteRequests={wasteRequests}
+              onRequestPickup={handleRequestPickup}
+              onOpenQR={setActiveQRBatch}
+            />
+          )}
+
+          {/* PAGE 5: AGA Organic Fertilizer */}
+          {currentTab === 'aga' && (
+            <AgaProductPage language={language} onOpenQR={setActiveQRBatch} />
+          )}
+
+          {/* PAGE 6: Unified Marketplace */}
+          {currentTab === 'marketplace' && (
+            <MarketplacePage
+              language={language}
+              products={products}
+              onAddProduct={handleAddProduct}
+              onOpenQR={handleOpenQRForProduct}
+            />
+          )}
+
+          {/* PAGE 7: Farmer Equipment Hub */}
+          {currentTab === 'equipment-hub' && (
+            <EquipmentHubPage language={language} />
+          )}
+
+          {/* PAGE 8: Carbon Integrity & Standards */}
+          {currentTab === 'carbon-integrity' && (
+            <CarbonIntegrityPage language={language} />
+          )}
+
+          {/* PAGE 9: Institutional & CSR Partnerships */}
+          {currentTab === 'partnerships' && (
+            <PartnershipsPage language={language} />
+          )}
+
+          {/* PAGE 10: Agriculture Updates & Weather */}
+          {currentTab === 'agriculture-updates' && (
+            <AgricultureUpdatesPage language={language} />
+          )}
+
+          {/* PAGE 11: Contact & Farmer Support */}
+          {currentTab === 'contact' && (
+            <ContactPage
+              language={language}
+              tickets={tickets}
+              onTicketCreated={handleTicketCreated}
+            />
+          )}
+
+          {/* DASHBOARD 1: Farmer Dashboard */}
+          {currentTab === 'dashboard-farmer' && (
+            <FarmerDashboard
+              language={language}
+              wasteRequests={wasteRequests}
+              products={products}
+              onLanguageChange={setLanguage}
+            />
+          )}
+
+          {/* DASHBOARD 2: Waste Operations */}
+          {currentTab === 'dashboard-waste' && (
+            <WasteOperationsDashboard
+              language={language}
+              wasteRequests={wasteRequests}
+            />
+          )}
+
+          {/* DASHBOARD 3: Processing Facility */}
+          {currentTab === 'dashboard-processing' && (
+            <ProcessingFacilityDashboard
+              language={language}
+              batches={batches}
+              onAddBatch={handleAddBatch}
+              onOpenQR={setActiveQRBatch}
+            />
+          )}
+
+          {/* DASHBOARD 4: Equipment Operator */}
+          {currentTab === 'dashboard-equipment' && (
+            <EquipmentOperatorDashboard language={language} />
+          )}
+
+          {/* DASHBOARD 5: Partner Dashboard */}
+          {currentTab === 'dashboard-partner' && (
+            <PartnerDashboard language={language} />
+          )}
+
+          {/* DASHBOARD 6: Verification & MRV */}
+          {currentTab === 'dashboard-verification' && (
+            <VerificationDashboard language={language} />
+          )}
+
+          {/* DASHBOARD 7: Admin Panel */}
+          {currentTab === 'admin' && (
+            <AdminDashboard
+              language={language}
+              wasteRequests={wasteRequests}
+              batches={batches}
+              products={products}
+              tickets={tickets}
+            />
+          )}
+
+          {/* Backward-compatible views */}
           {currentTab === 'process' && (
             <div className="space-y-6 animate-fadeIn">
               <OurProcessSection
@@ -420,19 +643,11 @@ export default function App() {
               />
             </div>
           )}
-
-          {/* Dedicated Webpage 2: Andhra Pradesh Geographic Pilot (5 District Groups) */}
-          {currentTab === 'ap-pilot' && (
-            <AndhraPradeshDiscoveryMap language={language} />
-          )}
-
-          {/* Dedicated Webpage 3: 16-Stage Waste-to-Wealth Pipeline */}
+          {currentTab === 'ap-pilot' && <AndhraPradeshDiscoveryMap language={language} />}
           {currentTab === 'pipeline' && (
             <WasteToWealthPipeline language={language} onOpenQR={setActiveQRBatch} />
           )}
-
-          {/* Dedicated Webpage 4: Strictly Separated Sectors: Selling Farming Products & Farmer Equipment Hub */}
-          {(currentTab === 'marketplace' || currentTab === 'marketplace-products' || currentTab === 'marketplace-machinery') && (
+          {(currentTab === 'marketplace-products' || currentTab === 'marketplace-machinery') && (
             <DualMarketplace
               products={products}
               equipment={equipment}
@@ -442,35 +657,17 @@ export default function App() {
               initialSector={currentTab === 'marketplace-machinery' ? 'equipment' : 'products'}
             />
           )}
-
-          {/* Dedicated Webpage 5: Carbon Credit & Climate Engine (BEE / ICM) */}
-          {currentTab === 'carbon' && (
-            <CarbonEngineSection language={language} />
-          )}
-
-          {/* Dedicated Webpage 6: Crop Rotation Scheduler */}
-          {currentTab === 'rotation' && (
-            <CropRotationScheduler batches={batches} language={language} />
-          )}
-
-          {/* Dedicated Webpage 7: Government Schemes & Subsidies */}
+          {currentTab === 'carbon' && <CarbonEngineSection language={language} />}
+          {currentTab === 'rotation' && <CropRotationScheduler batches={batches} language={language} />}
           {currentTab === 'schemes' && <SchemeNavigator language={language} />}
-
-          {/* Dedicated Webpage 8: Live Real-Data Impact Ledger */}
           {currentTab === 'impact' && <RealImpactDashboard language={language} />}
-
-          {/* Dedicated Webpage 9: Google Maps Agri-Hub & Location Detector */}
           {currentTab === 'maps' && <MapsLocationDetector language={language} />}
-
-          {/* Dedicated Webpage 10: Live Google Search Weather & Mandi Intel */}
           {currentTab === 'search' && (
             <div className="space-y-6">
               <RealtimeWeatherDashboardWidget language={language} />
               <SearchGroundingWidget language={language} />
             </div>
           )}
-
-          {/* Dedicated Webpage 11: 24x7 Helpline & AI Advisor */}
           {currentTab === 'helpline' && (
             <HelplinePage
               language={language}

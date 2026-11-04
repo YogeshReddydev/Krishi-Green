@@ -40,13 +40,25 @@ export const SchemeNavigator: React.FC<SchemeNavigatorProps> = ({ language }) =>
           <div>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold mb-1.5">
               <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-              Government Policy Navigator & Subsidies
+              {language === 'te'
+                ? 'ప్రభుత్వ వ్యవసాయ పథకాలు & సబ్సిడీలు'
+                : language === 'hi'
+                ? 'सरकारी कृषि योजनाएं व सब्सिडी'
+                : 'Government Policy Navigator & Subsidies'}
             </div>
             <h2 className="text-xl sm:text-2xl font-extrabold text-gray-900 tracking-tight">
-              Central & State Agro Subsidies Navigator
+              {language === 'te'
+                ? 'కేంద్ర & రాష్ట్ర వ్యవసాయ రాయితీ నావిగేటర్'
+                : language === 'hi'
+                ? 'केंद्रीय व राज्य कृषि सब्सिडी नेविगेटर'
+                : 'Central & State Agro Subsidies Navigator'}
             </h2>
             <p className="text-xs text-gray-500">
-              Access up to 50% equipment subsidies and organic input grants under PM-PRANAM, PKVY, SMAM, and GOBARdhan.
+              {language === 'te'
+                ? 'పీఎం-ప్రణామ్, పీకేవీవై, స్మామ్ మరియు గోబర్ధన్ కింద 50% వరకు యంత్రాల రాయితీలు & సేంద్రీయ గ్రాంట్లు పొందండి.'
+                : language === 'hi'
+                ? 'पीएम-प्रणाम, पीकेवीवाई, स्माम और गोवर्धन के तहत 50% तक कृषि उपकरण सब्सिडी और जैविक अनुदान प्राप्त करें।'
+                : 'Access up to 50% equipment subsidies and organic input grants under PM-PRANAM, PKVY, SMAM, and GOBARdhan.'}
             </p>
           </div>
 
@@ -56,7 +68,13 @@ export const SchemeNavigator: React.FC<SchemeNavigatorProps> = ({ language }) =>
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search scheme name or code..."
+              placeholder={
+                language === 'te'
+                  ? 'పథకం పేరు లేదా కోడ్ వెతకండి...'
+                  : language === 'hi'
+                  ? 'योजना का नाम या कोड खोजें...'
+                  : 'Search scheme name or code...'
+              }
               className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
           </div>

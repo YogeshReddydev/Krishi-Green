@@ -345,18 +345,18 @@ export const RealtimeWeatherDashboardWidget: React.FC<RealtimeWeatherDashboardWi
   };
 
   const getWeatherIconAndLabel = (code: number) => {
-    if (code === 0) return { label: 'Clear Sky', icon: Sun, color: 'text-amber-500', bg: 'bg-amber-50' };
-    if ([1, 2].includes(code)) return { label: 'Partly Cloudy', icon: Cloud, color: 'text-sky-600', bg: 'bg-sky-50' };
-    if (code === 3) return { label: 'Overcast Skies', icon: Cloud, color: 'text-gray-500', bg: 'bg-gray-100' };
-    if ([51, 53, 55, 61, 63].includes(code)) return { label: 'Light Rain / Drizzle', icon: CloudDrizzle, color: 'text-blue-500', bg: 'bg-blue-50' };
-    if ([65, 80, 81, 82].includes(code)) return { label: 'Heavy Showers', icon: CloudRain, color: 'text-blue-600', bg: 'bg-blue-100' };
-    if ([95, 96, 99].includes(code)) return { label: 'Thunderstorm Warning', icon: CloudLightning, color: 'text-purple-600', bg: 'bg-purple-100' };
-    return { label: 'Fair Agricultural Weather', icon: Sun, color: 'text-amber-500', bg: 'bg-amber-50' };
+    if (code === 0) return { label: 'Clear Sky', labelTe: 'స్వచ్ఛమైన ఆకాశం', labelHi: 'साफ मौसम', icon: Sun, color: 'text-amber-500', bg: 'bg-amber-50' };
+    if ([1, 2].includes(code)) return { label: 'Partly Cloudy', labelTe: 'పాక్షికంగా మేఘావృతం', labelHi: 'आंशिक बादल', icon: Cloud, color: 'text-sky-600', bg: 'bg-sky-50' };
+    if (code === 3) return { label: 'Overcast Skies', labelTe: 'పూర్తిగా మేఘాలు', labelHi: 'घने बादल', icon: Cloud, color: 'text-gray-500', bg: 'bg-gray-100' };
+    if ([51, 53, 55, 61, 63].includes(code)) return { label: 'Light Rain / Drizzle', labelTe: 'తేలికపాటి జల్లులు', labelHi: 'हल्की बारिश / बूंदाबांदी', icon: CloudDrizzle, color: 'text-blue-500', bg: 'bg-blue-50' };
+    if ([65, 80, 81, 82].includes(code)) return { label: 'Heavy Showers', labelTe: 'భారీ వర్షం', labelHi: 'तेज बारिश', icon: CloudRain, color: 'text-blue-600', bg: 'bg-blue-100' };
+    if ([95, 96, 99].includes(code)) return { label: 'Thunderstorm Warning', labelTe: 'ఉరుములతో కూడిన వర్షం', labelHi: 'आंधी-तूफान की चेतावनी', icon: CloudLightning, color: 'text-purple-600', bg: 'bg-purple-100' };
+    return { label: 'Fair Agricultural Weather', labelTe: 'వ్యవసాయ అనుకూల వాతావరణం', labelHi: 'कृषि अनुकूल मौसम', icon: Sun, color: 'text-amber-500', bg: 'bg-amber-50' };
   };
 
   const weatherMeta = weatherData
     ? getWeatherIconAndLabel(weatherData.weatherCode)
-    : { label: 'Checking Atmosphere...', icon: Sun, color: 'text-amber-500', bg: 'bg-amber-50' };
+    : { label: 'Checking Atmosphere...', labelTe: 'వాతావరణం తనిఖీ చేస్తోంది...', labelHi: 'मौसम की जांच हो रही है...', icon: Sun, color: 'text-amber-500', bg: 'bg-amber-50' };
   const WeatherIcon = weatherMeta.icon;
 
   // Rainfall risk level classification
@@ -365,7 +365,10 @@ export const RealtimeWeatherDashboardWidget: React.FC<RealtimeWeatherDashboardWi
       return {
         level: 'Low Rain Risk',
         levelTe: 'వర్షపు ముప్పు తక్కువ',
+        levelHi: 'वर्षा का कम जोखिम',
         desc: 'Ideal for foliar bio-enzyme spraying, residue baling & outdoor transport.',
+        descTe: 'జీవ-ఎంజైమ్ పిచికారీ మరియు వ్యర్థాల రవాణాకు అనుకూల సమయం.',
+        descHi: 'जैविक बायो-एंजाइम छिड़काव, पराली बेलिंग और परिवहन के लिए उत्तम मौसम।',
         color: 'text-emerald-800',
         barColor: 'bg-emerald-600',
         badgeBg: 'bg-emerald-100 border-emerald-300 text-emerald-900',
@@ -375,7 +378,10 @@ export const RealtimeWeatherDashboardWidget: React.FC<RealtimeWeatherDashboardWi
       return {
         level: 'Moderate Rain Chance',
         levelTe: 'మితమైన వర్ష సూచన',
+        levelHi: 'मध्यम वर्षा की संभावना',
         desc: 'Keep open-field vermi-beds and baled straw covered with waterproof sheets.',
+        descTe: 'వర్మీ కంపోస్ట్ బెడ్లను మరియు గడ్డిని పట్టాలతో కప్పి ఉంచండి.',
+        descHi: 'खुले खेतों में वर्मी-बेड और रखी गई फसल को वाटरप्रूफ तिरपाल से ढककर रखें।',
         color: 'text-amber-800',
         barColor: 'bg-amber-500',
         badgeBg: 'bg-amber-100 border-amber-300 text-amber-900',
@@ -384,7 +390,10 @@ export const RealtimeWeatherDashboardWidget: React.FC<RealtimeWeatherDashboardWi
     return {
       level: 'High Rainfall Risk',
       levelTe: 'భారీ వర్ష సూచన',
+      levelHi: 'भारी वर्षा की चेतावनी',
       desc: 'Delay liquid nutrient application. Ensure drainage channels in mandi yards are clear.',
+      descTe: 'ద్రవ ఎరువుల పిచికారీ వాయిదా వేయండి. మురుగు నీటి కాలువలను శుభ్రం చేయండి.',
+      descHi: 'तरल उर्वरक छिड़काव टालें। खेत और मंडी में जल निकासी की व्यवस्था सुनिश्चित करें।',
       color: 'text-rose-800',
       barColor: 'bg-rose-600',
       badgeBg: 'bg-rose-100 border-rose-300 text-rose-900',
@@ -532,7 +541,9 @@ export const RealtimeWeatherDashboardWidget: React.FC<RealtimeWeatherDashboardWi
               <div className={`p-3 rounded-2xl ${weatherMeta.bg} ${weatherMeta.color} shadow-xs mb-1`}>
                 <WeatherIcon className="w-8 h-8" />
               </div>
-              <span className="text-xs font-bold text-gray-800">{weatherMeta.label}</span>
+              <span className="text-xs font-bold text-gray-800">
+                {language === 'te' ? weatherMeta.labelTe : language === 'hi' ? weatherMeta.labelHi : weatherMeta.label}
+              </span>
             </div>
           </div>
 
@@ -540,11 +551,17 @@ export const RealtimeWeatherDashboardWidget: React.FC<RealtimeWeatherDashboardWi
           <div className="grid grid-cols-2 gap-2 pt-2 border-t border-emerald-100 text-xs">
             <div className="flex items-center gap-1.5 text-gray-600">
               <Droplets className="w-3.5 h-3.5 text-blue-500" />
-              <span>Humidity: <strong>{weatherData?.humidity ?? 60}%</strong></span>
+              <span>
+                {language === 'te' ? 'తేమ:' : language === 'hi' ? 'नमी:' : 'Humidity:'}{' '}
+                <strong>{weatherData?.humidity ?? 60}%</strong>
+              </span>
             </div>
             <div className="flex items-center gap-1.5 text-gray-600">
               <Wind className="w-3.5 h-3.5 text-teal-600" />
-              <span>Wind: <strong>{weatherData?.windSpeed ?? 12} km/h</strong></span>
+              <span>
+                {language === 'te' ? 'గాలి వేగం:' : language === 'hi' ? 'हवा:' : 'Wind:'}{' '}
+                <strong>{weatherData?.windSpeed ?? 12} km/h</strong>
+              </span>
             </div>
           </div>
         </div>
@@ -553,7 +570,7 @@ export const RealtimeWeatherDashboardWidget: React.FC<RealtimeWeatherDashboardWi
         <div className="bg-gradient-to-br from-blue-50/80 via-sky-50/40 to-white rounded-2xl border border-blue-200 p-5 shadow-2xs space-y-3">
           <div className="flex items-center justify-between text-gray-500">
             <span className="text-[10px] font-bold uppercase tracking-wider text-blue-900 font-mono">
-              RAINFALL PROBABILITY GAUGE
+              {language === 'te' ? 'వర్షపాత సంభావ్యత గేజ్' : language === 'hi' ? 'वर्षा संभावना मीटर' : 'RAINFALL PROBABILITY GAUGE'}
             </span>
             <Umbrella className="w-4 h-4 text-blue-700" />
           </div>
@@ -564,16 +581,23 @@ export const RealtimeWeatherDashboardWidget: React.FC<RealtimeWeatherDashboardWi
                 <span className="text-4xl sm:text-5xl font-black font-mono text-blue-950">
                   {loading ? '...' : `${weatherData?.rainProbability ?? 20}%`}
                 </span>
-                <span className="text-xs text-blue-700 font-bold uppercase">Precipitation</span>
+                <span className="text-xs text-blue-700 font-bold uppercase">
+                  {language === 'te' ? 'వర్షపాతం' : language === 'hi' ? 'वर्षा संभावना' : 'Precipitation'}
+                </span>
               </div>
               <div className="text-xs text-gray-600 font-medium">
-                Risk Level: <strong className={rainRisk.color}>{language === 'te' ? rainRisk.levelTe : rainRisk.level}</strong>
+                {language === 'te' ? 'ముప్పు స్థాయి:' : language === 'hi' ? 'जोखिम स्तर:' : 'Risk Level:'}{' '}
+                <strong className={rainRisk.color}>
+                  {language === 'te' ? rainRisk.levelTe : language === 'hi' ? rainRisk.levelHi : rainRisk.level}
+                </strong>
               </div>
             </div>
 
             <div className="text-right">
               <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold border ${rainRisk.badgeBg}`}>
-                {weatherData && weatherData.rainProbability > 50 ? 'Rain Expected' : 'Rain Unlikely'}
+                {weatherData && weatherData.rainProbability > 50
+                  ? (language === 'te' ? 'వర్ష సూచన' : language === 'hi' ? 'वर्षा की संभावना' : 'Rain Expected')
+                  : (language === 'te' ? 'వర్షం తక్కువ' : language === 'hi' ? 'वर्षा की संभावना कम' : 'Rain Unlikely')}
               </span>
             </div>
           </div>

@@ -292,14 +292,16 @@ export const DualMarketplace: React.FC<DualMarketplaceProps> = ({
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 text-xs font-bold mb-2 border border-emerald-200">
               <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
-              <span>{language === 'te' ? 'రైతు మార్కెట్‌ప్లేస్ & యంత్రాల కేంద్రం' : 'KrishiGreen Agricultural Commerce'}</span>
+              <span>{language === 'te' ? 'రైతు మార్కెట్‌ప్లేస్ & యంత్రాల కేంద్రం' : language === 'hi' ? 'किसान बाजार और कृषि यंत्र केंद्र' : 'KrishiGreen Agricultural Commerce'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
-              {language === 'te' ? 'ద్విముఖ మార్కెట్‌ప్లేస్ & యంత్రాల హబ్' : 'Dual Marketplace & Machinery'}
+              {language === 'te' ? 'ద్విముఖ మార్కెట్‌ప్లేస్ & యంత్రాల హబ్' : language === 'hi' ? 'दोहरा बाजार एवं कृषि उपकरण केंद्र' : 'Dual Marketplace & Machinery'}
             </h1>
             <p className="text-xs sm:text-sm text-gray-600 mt-1 max-w-3xl leading-relaxed">
               {language === 'te'
                 ? 'రైతుల కోసం రెండు ప్రత్యేక రంగాలు విభజించబడ్డాయి: సేంద్రీయ వ్యవసాయ ఉత్పత్తుల అమ్మకం మరియు ఆంధ్రప్రదేశ్ యంత్రాల అద్దె/కొనుగోలు కేంద్రం.'
+                : language === 'hi'
+                ? 'किसानों के लिए दो स्पष्ट विभाग: प्रमाणित जैविक कृषि उत्पाद बिक्री और कृषि यंत्र किराया व खरीद केंद्र।'
                 : 'Divided into two strictly unmixed sectors: Selling Farming Products (certified organic inputs) and the Equipment Hub for Farmers (Andhra Pradesh machinery rentals & purchases).'}
             </p>
           </div>
@@ -310,7 +312,7 @@ export const DualMarketplace: React.FC<DualMarketplaceProps> = ({
               className="px-4 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 shadow-sm transition shrink-0"
             >
               <Plus className="w-4 h-4" />
-              <span>{language === 'te' ? '+ నా సేంద్రీయ ఉత్పత్తిని అమ్మండి' : '+ List My Farm Product'}</span>
+              <span>{language === 'te' ? '+ నా సేంద్రీయ ఉత్పత్తిని అమ్మండి' : language === 'hi' ? '+ अपना उत्पाद बेचें' : '+ List My Farm Product'}</span>
             </button>
           ) : (
             <div className="px-3.5 py-2 bg-amber-50 border border-amber-200 rounded-xl text-xs font-semibold text-amber-900 flex items-center gap-2">
@@ -341,18 +343,20 @@ export const DualMarketplace: React.FC<DualMarketplaceProps> = ({
             <div className="flex-1">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full bg-emerald-200/80 text-emerald-900">
-                  {language === 'te' ? 'విభాగం 1' : 'Sector 1'}
+                  {language === 'te' ? 'విభాగం 1' : language === 'hi' ? 'विभाग 1' : 'Sector 1'}
                 </span>
                 <span className="text-xs font-bold text-emerald-800">
-                  {products.length} {language === 'te' ? 'ఉత్పత్తులు' : 'Products'}
+                  {products.length} {language === 'te' ? 'ఉత్పత్తులు' : language === 'hi' ? 'उत्पाद' : 'Products'}
                 </span>
               </div>
               <h3 className="font-extrabold text-base text-gray-900 mt-1">
-                {language === 'te' ? 'వ్యవసాయ ఉత్పత్తుల అమ్మకం' : 'Selling Farming Products'}
+                {language === 'te' ? 'వ్యవసాయ ఉత్పత్తుల అమ్మకం' : language === 'hi' ? 'कृषि उत्पाद बिक्री' : 'Selling Farming Products'}
               </h3>
               <p className="text-xs text-gray-600 mt-0.5">
                 {language === 'te'
                   ? 'ధృవీకరించబడిన సేంద్రీయ ఎరువులు, వర్మీకంపోస్ట్, జీవామృతం & రైతు సహజ ఉత్పత్తులు.'
+                  : language === 'hi'
+                  ? 'प्रमाणित जैविक खाद, वर्मीकम्पोस्ट, जीवामृत व लैब-परीक्षित कृषि उत्पाद।'
                   : 'Organic fertilizers, vermicompost, Jeevamrutha, bio-inputs & lab-tested farm solutions.'}
               </p>
             </div>
@@ -382,18 +386,20 @@ export const DualMarketplace: React.FC<DualMarketplaceProps> = ({
             <div className="flex-1">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full bg-amber-200/80 text-amber-950">
-                  {language === 'te' ? 'విభాగం 2' : 'Sector 2'}
+                  {language === 'te' ? 'విభాగం 2' : language === 'hi' ? 'विभाग 2' : 'Sector 2'}
                 </span>
                 <span className="text-xs font-bold text-amber-900">
-                  {equipment.length} {language === 'te' ? 'యంత్రాలు & సామాగ్రి' : 'Machinery, Pipes & Pattas'}
+                  {equipment.length} {language === 'te' ? 'యంత్రాలు & సామాగ్రి' : language === 'hi' ? 'यंत्र व उपकरण' : 'Machinery, Pipes & Pattas'}
                 </span>
               </div>
               <h3 className="font-extrabold text-base text-gray-900 mt-1">
-                {language === 'te' ? 'రైతుల కోసం యంత్రాల హబ్' : 'Equipment Hub for Farmers'}
+                {language === 'te' ? 'రైతుల కోసం యంత్రాల హబ్' : language === 'hi' ? 'किसानों के लिए कृषि यंत्र केंद्र' : 'Equipment Hub for Farmers'}
               </h3>
               <p className="text-xs text-gray-600 mt-0.5">
                 {language === 'te'
                   ? 'మినీ నుండి భారీ యంత్రాలు, డ్రోన్లు, పైపులు, డ్రిప్, పట్టాలు, సంచులు - గంటకు/రోజుకు/ఎకరానికి అద్దె & కొనుగోలు.'
+                  : language === 'hi'
+                  ? 'छोटे व बड़े कृषि यंत्र, ड्रोन, ड्रिप पाइप, तिरपाल व बोरियां - प्रति घंटा/दिन/एकड़ किराए व खरीद पर उपलब्ध।'
                   : 'Mini to heavy equipment, smart drones, drip pipes, drying pattas & bags — hourly, daily & per-acre rates with How-to-Use.'}
               </p>
             </div>

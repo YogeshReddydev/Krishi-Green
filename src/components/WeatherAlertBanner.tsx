@@ -50,6 +50,7 @@ export interface DistrictCoords {
   id: string;
   name: string;
   nameTe: string;
+  nameHi?: string;
   lat: number;
   lon: number;
   region: string;
@@ -60,6 +61,7 @@ export const AP_PILOT_DISTRICTS: DistrictCoords[] = [
     id: 'palnadu',
     name: 'Palnadu / Guntur Hub',
     nameTe: 'పల్నాడు / గుంటూరు హబ్',
+    nameHi: 'पलनाडु / गुंटूर हब',
     lat: 16.236,
     lon: 80.049,
     region: 'Commercial Chilli & Cotton Zone',
@@ -68,6 +70,7 @@ export const AP_PILOT_DISTRICTS: DistrictCoords[] = [
     id: 'godavari_delta',
     name: 'Godavari Delta (Rajahmundry)',
     nameTe: 'గోదావరి డెల్టా (రాజమండ్రి)',
+    nameHi: 'गोदावरी डेल्टा (राजमंड्री)',
     lat: 17.000,
     lon: 81.804,
     region: 'Rice & Paddy Biomass Belt',
@@ -76,6 +79,7 @@ export const AP_PILOT_DISTRICTS: DistrictCoords[] = [
     id: 'rayalaseema',
     name: 'Kurnool / Rayalaseema',
     nameTe: 'కర్నూలు / రాయలసీమ',
+    nameHi: 'कर्नूल / रायलसीमा',
     lat: 15.828,
     lon: 78.037,
     region: 'Millets & Pulses Agro-Zone',
@@ -84,6 +88,7 @@ export const AP_PILOT_DISTRICTS: DistrictCoords[] = [
     id: 'prakasam',
     name: 'Prakasam (Ongole Hub)',
     nameTe: 'ప్రకాశం (ఒంగోలు హబ్)',
+    nameHi: 'प्रकाशम (ओंगोल हब)',
     lat: 15.505,
     lon: 80.044,
     region: 'Biomass Aggregation Hub',
@@ -92,6 +97,7 @@ export const AP_PILOT_DISTRICTS: DistrictCoords[] = [
     id: 'vizianagaram',
     name: 'Vizianagaram (North Coastal)',
     nameTe: 'విజయనగరం (ఉత్తర కోస్తా)',
+    nameHi: 'विजयनगरम (उत्तर तटीय)',
     lat: 18.112,
     lon: 83.407,
     region: 'North Coastal Agro-Forestry Belt',
@@ -100,6 +106,7 @@ export const AP_PILOT_DISTRICTS: DistrictCoords[] = [
     id: 'punjab_plains',
     name: 'Ludhiana / Punjab Plains',
     nameTe: 'లుధియానా / పంజాబ్ మైదానాలు',
+    nameHi: 'लुधियाना / पंजाब मैदान',
     lat: 30.901,
     lon: 75.857,
     region: 'North Indian Grain & Residue Belt',
@@ -108,6 +115,7 @@ export const AP_PILOT_DISTRICTS: DistrictCoords[] = [
     id: 'deccan_central',
     name: 'Vidarbha / Central Maharashtra',
     nameTe: 'విదర్భ / మహారాష్ట్ర',
+    nameHi: 'विदर्भ / मध्य महाराष्ट्र',
     lat: 20.932,
     lon: 77.752,
     region: 'Black Soil Cotton & Soybean Zone',
@@ -116,6 +124,7 @@ export const AP_PILOT_DISTRICTS: DistrictCoords[] = [
     id: 'gangetic_plain',
     name: 'Varanasi / Gangetic Basin',
     nameTe: 'వారణాసి / గంగా మైదానం',
+    nameHi: 'वाराणसी / गंगा मैदान',
     lat: 25.317,
     lon: 82.973,
     region: 'Horticulture & Vegetable Corridor',
@@ -647,7 +656,7 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
             >
               {AP_PILOT_DISTRICTS.map((d) => (
                 <option key={d.id} value={d.id} className="bg-[#091a11] text-white">
-                  {language === 'te' ? d.nameTe : d.name}
+                  {language === 'te' ? d.nameTe : language === 'hi' ? (d.nameHi || d.name) : d.name}
                 </option>
               ))}
             </select>
@@ -849,7 +858,7 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
                 }`}
               >
                 <APMCLogoSvg className="w-4 h-4" />
-                <span>{language === 'te' ? 'APMC మార్కెట్ ధరలు' : 'APMC Mandi Rates (Live)'}</span>
+                <span>{language === 'te' ? 'APMC మార్కెట్ ధరలు' : language === 'hi' ? 'एपीएमसी मंडी भाव (लाइव)' : 'APMC Mandi Rates (Live)'}</span>
               </button>
               <button
                 onClick={() => setModalActiveTab('weather')}
@@ -860,7 +869,7 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
                 }`}
               >
                 <IMDLogoSvg className="w-4 h-4" />
-                <span>{language === 'te' ? 'IMD వాతావరణ నివేదిక' : 'IMD Weather Radar'}</span>
+                <span>{language === 'te' ? 'IMD వాతావరణ నివేదిక' : language === 'hi' ? 'मौसम रडार (IMD)' : 'IMD Weather Radar'}</span>
               </button>
               <button
                 onClick={() => setModalActiveTab('schemes')}
@@ -871,7 +880,7 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
                 }`}
               >
                 <GovtEmblemSvg className="w-4 h-4" />
-                <span>{language === 'te' ? 'ప్రభుత్వ పథకాలు & సబ్సిడీలు' : 'Govt Subsidies (DBT)'}</span>
+                <span>{language === 'te' ? 'ప్రభుత్వ పథకాలు & సబ్సిడీలు' : language === 'hi' ? 'सरकारी योजनाएं व सब्सिडी (DBT)' : 'Govt Subsidies (DBT)'}</span>
               </button>
               <button
                 onClick={() => setModalActiveTab('telemetry')}
@@ -882,7 +891,7 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
                 }`}
               >
                 <IconActivity className="w-4 h-4" />
-                <span>{language === 'te' ? 'లీనియర్ ప్రోగ్రెస్ & స్ట్రీమ్ సెట్టింగ్స్' : 'Linear Progress & Telemetry'}</span>
+                <span>{language === 'te' ? 'లీనియర్ ప్రోగ్రెస్ & స్ట్రీమ్ సెట్టింగ్స్' : language === 'hi' ? 'टेलीमेट्री व लाइव स्ट्रीम' : 'Linear Progress & Telemetry'}</span>
               </button>
             </div>
 

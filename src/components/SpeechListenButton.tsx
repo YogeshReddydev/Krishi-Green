@@ -171,12 +171,12 @@ export const SpeechListenButton: React.FC<SpeechListenButtonProps> = ({
   const getButtonText = () => {
     if (label) return label;
     if (isLoadingAudio) {
-      return language === 'te' ? 'వాయిస్ లోడ్...' : 'Loading...';
+      return language === 'te' ? 'వాయిస్ లోడ్...' : language === 'hi' ? 'ऑडियो लोड...' : 'Loading...';
     }
     if (isSpeaking) {
-      return language === 'te' ? 'ఆపండి' : 'Stop';
+      return language === 'te' ? 'ఆపండి' : language === 'hi' ? 'रोकें' : 'Stop';
     }
-    return language === 'te' ? 'వినండి' : 'Listen';
+    return language === 'te' ? 'వినండి' : language === 'hi' ? 'सुनें' : 'Listen';
   };
 
   const sizeClasses = {
@@ -207,9 +207,13 @@ export const SpeechListenButton: React.FC<SpeechListenButtonProps> = ({
         isSpeaking
           ? language === 'te'
             ? 'వాయిస్ ఆపండి'
+            : language === 'hi'
+            ? 'ऑडियो रोकें'
             : 'Stop Voice Reading'
           : language === 'te'
           ? 'తెలుగులో వినండి'
+          : language === 'hi'
+          ? 'हिन्दी में सुनें'
           : 'Listen to agro-bulletin readout'
       }
       className={`inline-flex items-center font-bold rounded-xl transition duration-150 active:scale-95 shrink-0 select-none ${sizeClasses} ${variantClasses} ${className}`}

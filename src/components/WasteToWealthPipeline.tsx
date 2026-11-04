@@ -237,17 +237,23 @@ export const WasteToWealthPipeline: React.FC<WasteToWealthPipelineProps> = ({
             <span>
               {language === 'te'
                 ? 'వ్యర్థాల నుండి సంపద: 16-దశల సమగ్ర సర్క్యులర్ ప్రక్రియ'
+                : language === 'hi'
+                ? 'कचरे से समृद्धि: 16-चरणीय एंड-टू-एंड सर्कुलर लाइफसाइकिल इंजन'
                 : '16-Stage End-to-End Circular Lifecycle Engine'}
             </span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
             {language === 'te'
               ? 'వ్యర్థాల సేకరణ నుండి ఎరువుల అమ్మకం & కార్బన్ సెటిల్‌మెంట్'
+              : language === 'hi'
+              ? 'कचरा घोषणा → वे-ब्रिज कांटा → लैब प्रमाणित जैविक संपदा'
               : 'Waste Declaration → Weighbridge → Lab Certified Wealth'}
           </h2>
           <p className="text-xs sm:text-sm text-gray-600 max-w-2xl">
             {language === 'te'
               ? 'రైతు వ్యర్థాల డిక్లరేషన్, కాటా బరువు స్లిప్, రవాణా ట్రాకింగ్, ల్యాబ్ ఎన్‌పికె పరీక్ష మరియు ప్రత్యక్ష డిబిటి బ్యాంక్ చెల్లింపుల వరకు పూర్తి పారదర్శక రికార్డు.'
+              : language === 'hi'
+              ? 'सत्यापनीय वजन पर्चियां, मास-बैलेंस गणना, एफसीओ 1985 प्रमाणन रिपोर्ट और सीधे बैंक डीबीटी के साथ पूर्ण पारदर्शी रिकॉर्ड।'
               : 'Every single transition uses verifiable weight slips, mass-balance stoichiometry (inputs = outputs + loss), FCO 1985 compliance certificates, and direct bank reconciliation.'}
           </p>
         </div>
@@ -258,7 +264,11 @@ export const WasteToWealthPipeline: React.FC<WasteToWealthPipelineProps> = ({
         >
           <PlusCircle className="w-4 h-4" />
           <span>
-            {language === 'te' ? 'కొత్త బ్యాచ్ రికార్డ్ నమోదు' : 'Log Waste & Weighbridge Event'}
+            {language === 'te'
+              ? 'కొత్త బ్యాచ్ రికార్డ్ నమోదు'
+              : language === 'hi'
+              ? 'नया कचरा व वे-ब्रिज रिकॉर्ड दर्ज करें'
+              : 'Log Waste & Weighbridge Event'}
           </span>
         </button>
       </div>
@@ -338,11 +348,15 @@ export const WasteToWealthPipeline: React.FC<WasteToWealthPipelineProps> = ({
             <h3 className="font-black text-gray-900 text-lg">
               {language === 'te'
                 ? 'లైవ్ డేటాబేస్ సిద్ధంగా ఉంది - రికార్డులు ఏవీ లేవు'
+                : language === 'hi'
+                ? 'लाइव डेटाबेस तैयार है - अभी कोई रिकॉर्ड दर्ज नहीं है'
                 : 'No Live Lifecycle Events In Registry Yet'}
             </h3>
             <p className="text-xs text-gray-500 max-w-md mx-auto leading-relaxed">
               {language === 'te'
                 ? 'కృత్రిమ రికార్డులు తొలగించబడ్డాయి. నిజమైన కాటా రసీదు, పంట వ్యర్థాల డిక్లరేషన్ మరియు ఎరువుల బ్యాచ్ వివరాలను నమోదు చేయడానికి క్రింది బటన్ క్లిక్ చేయండి.'
+                : language === 'hi'
+                ? 'सत्यापित वे-ब्रिज रसीद, फसल अवशेष घोषणा व जैविक खाद बैच विवरण दर्ज करने के लिए नीचे दिए बटन पर क्लिक करें।'
                 : 'All mock and simulated records have been purged. Log a genuine waste declaration, weighbridge slip, and processing batch to activate the end-to-end 16-stage pipeline.'}
             </p>
           </div>
@@ -351,7 +365,13 @@ export const WasteToWealthPipeline: React.FC<WasteToWealthPipelineProps> = ({
             className="px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-bold shadow-md transition inline-flex items-center gap-2"
           >
             <PlusCircle className="w-4 h-4" />
-            <span>Log First Verifiable Event</span>
+            <span>
+              {language === 'te'
+                ? 'మొదటి ధృవీకరించిన రికార్డును నమోదు చేయండి'
+                : language === 'hi'
+                ? 'पहला सत्यापित रिकॉर्ड दर्ज करें'
+                : 'Log First Verifiable Event'}
+            </span>
           </button>
         </div>
       ) : (

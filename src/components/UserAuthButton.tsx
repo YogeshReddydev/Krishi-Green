@@ -68,7 +68,9 @@ export const UserAuthButton: React.FC<UserAuthButtonProps> = ({ language }) => {
             />
           </svg>
         )}
-        <span className="font-semibold">{language === 'te' ? 'ప్రొఫైల్' : 'Profile'}</span>
+        <span className="font-semibold">
+          {language === 'te' ? 'ప్రొఫైల్' : language === 'hi' ? 'प्रोफ़ाइल' : 'Profile'}
+        </span>
       </button>
     );
   }
@@ -178,7 +180,9 @@ export const UserAuthButton: React.FC<UserAuthButtonProps> = ({ language }) => {
               className="w-full flex items-center justify-center gap-1.5 py-2 text-rose-600 hover:bg-rose-50 rounded-xl font-bold transition text-xs"
             >
               <LogOut className="w-3.5 h-3.5" />
-              <span>Sign Out</span>
+              <span>
+                {language === 'te' ? 'లాగ్ అవుట్' : language === 'hi' ? 'लॉग आउट' : 'Sign Out'}
+              </span>
             </button>
           </div>
         </div>

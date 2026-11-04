@@ -29,6 +29,7 @@ import { UI_TRANSLATIONS } from '../data/translations';
 import { getMultiTranslations } from '../utils/multiLang';
 import { AnimatedEcosystemModel } from './AnimatedEcosystemModel';
 import { SeasonalCropAdvice } from './SeasonalCropAdvice';
+import { CropAdvisorySuggester } from './CropAdvisorySuggester';
 import { ScrollReveal } from './ScrollReveal';
 import { AnimatedNewsTicker } from './AnimatedNewsTicker';
 import { FarmerInteractivePanel } from './FarmerInteractivePanel';
@@ -59,13 +60,16 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
   // Interactive Method Comparison Tab
   const [comparisonMetric, setComparisonMetric] = useState<'all' | 'costs' | 'soil' | 'income'>('all');
 
+  // Home Advisory Selector state
+  const [homeAdviceView, setHomeAdviceView] = useState<'suggester' | 'calendar'>('suggester');
+
   // Crop dosage configurations for interactive station
-  const cropDosageMap: Record<string, { name: string; nameTe: string; bagsPerAcre: number; dapCut: number }> = {
-    chilli: { name: 'Chilli / Pepper', nameTe: 'మిరప తోట', bagsPerAcre: 5, dapCut: 1950 },
-    cotton: { name: 'Cotton', nameTe: 'పత్తి', bagsPerAcre: 6, dapCut: 2200 },
-    paddy: { name: 'Paddy / Rice', nameTe: 'వరి', bagsPerAcre: 4, dapCut: 1600 },
-    tomato: { name: 'Tomato / Veg', nameTe: 'టమోటా & కూరగాయలు', bagsPerAcre: 5, dapCut: 1850 },
-    groundnut: { name: 'Groundnut', nameTe: 'వేరుశనగ', bagsPerAcre: 4, dapCut: 1500 },
+  const cropDosageMap: Record<string, { name: string; nameTe: string; nameHi: string; bagsPerAcre: number; dapCut: number }> = {
+    chilli: { name: 'Chilli / Pepper', nameTe: 'మిరప తోట', nameHi: 'मिर्च', bagsPerAcre: 5, dapCut: 1950 },
+    cotton: { name: 'Cotton', nameTe: 'పత్తి', nameHi: 'कपास', bagsPerAcre: 6, dapCut: 2200 },
+    paddy: { name: 'Paddy / Rice', nameTe: 'వరి', nameHi: 'धान / चावल', bagsPerAcre: 4, dapCut: 1600 },
+    tomato: { name: 'Tomato / Veg', nameTe: 'టమోటా & కూరగాయలు', nameHi: 'टमाटर व सब्जियां', bagsPerAcre: 5, dapCut: 1850 },
+    groundnut: { name: 'Groundnut', nameTe: 'వేరుశనగ', nameHi: 'मूंगफली', bagsPerAcre: 4, dapCut: 1500 },
   };
 
   const currentCropInfo = cropDosageMap[calcCrop] || cropDosageMap.chilli;
@@ -79,7 +83,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
       tab: 'marketplace-machinery',
       category: 'marketplace',
       title: m.serviceMachineryTitle,
-      shortBenefit: language === 'te' ? 'రైతులకు 50% సబ్సిడీతో ష్రెడ్డర్లు & ట్రాక్టర్లు' : 'Subsidized custom-hiring balers & shredders',
+      shortBenefit: language === 'te' ? 'రైతులకు 50% సబ్సిడీతో ష్రెడ్డర్లు & ట్రాక్టర్లు' : language === 'hi' ? 'किसानों को 50% सब्सिडी पर श्रेडर व ट्रैक्टर' : 'Subsidized custom-hiring balers & shredders',
       icon: Tractor,
       tags: ['50% Subsidy', 'Zero Deposit'],
       color: 'from-amber-600 to-orange-600',
@@ -89,7 +93,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
       tab: 'pipeline',
       category: 'biomass',
       title: m.servicePipelineTitle,
-      shortBenefit: language === 'te' ? 'ద్వారపు వద్దనే బరువు చూసి తక్షణ చెల్లింపు' : 'Doorstep biomass weighing with instant DBT',
+      shortBenefit: language === 'te' ? 'ద్వారపు వద్దనే బరువు చూసి తక్షణ చెల్లింపు' : language === 'hi' ? 'खेत पर ही तौल व तत्काल डीबीटी भुगतान' : 'Doorstep biomass weighing with instant DBT',
       icon: Layers,
       tags: ['Geotagged', '₹750/MT'],
       color: 'from-teal-600 to-emerald-600',
@@ -99,7 +103,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
       tab: 'marketplace-products',
       category: 'marketplace',
       title: m.serviceMarketplaceTitle,
-      shortBenefit: language === 'te' ? 'FCO ధృవీకరించిన సేంద్రీయ ఎరువుల విక్రయం' : 'Direct certified input marketplace for growers',
+      shortBenefit: language === 'te' ? 'FCO ధృవీకరించిన సేంద్రీయ ఎరువుల విక్రయం' : language === 'hi' ? 'एफसीओ 1985 प्रमाणित जैविक खाद की सीधी बिक्री' : 'Direct certified input marketplace for growers',
       icon: ShoppingBag,
       tags: ['FCO 1985', '₹399/Bag'],
       color: 'from-emerald-700 to-green-600',
@@ -109,7 +113,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
       tab: 'carbon',
       category: 'schemes',
       title: m.serviceCarbonTitle,
-      shortBenefit: language === 'te' ? '70% కార్బన్ క్రెడిట్ నగదు నేరుగా బ్యాంకులో' : '70% verified carbon revenue credited to DBT',
+      shortBenefit: language === 'te' ? '70% కార్బన్ క్రెడిట్ నగదు నేరుగా బ్యాంకులో' : language === 'hi' ? '70% प्रमाणित कार्बन क्रेडिट सीधे खाते में' : '70% verified carbon revenue credited to DBT',
       icon: Flame,
       tags: ['BEE / CCTS', '70% DBT'],
       color: 'from-teal-700 to-green-600',
@@ -119,7 +123,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
       tab: 'rotation',
       category: 'biomass',
       title: m.serviceRotationTitle,
-      shortBenefit: language === 'te' ? 'నేల సారాన్ని పెంచే శాస్త్రీయ పంట ప్రణాళిక' : 'Crop calendar matched to residual soil moisture',
+      shortBenefit: language === 'te' ? 'నేల సారాన్ని పెంచే శాస్త్రీయ పంట ప్రణాళిక' : language === 'hi' ? 'मिट्टी की नमी अनुसार वैज्ञानिक फसल चक्र' : 'Crop calendar matched to residual soil moisture',
       icon: RotateCcw,
       tags: ['Agromet AI', 'Moisture Map'],
       color: 'from-blue-600 to-cyan-500',
@@ -129,7 +133,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
       tab: 'schemes',
       category: 'schemes',
       title: m.serviceSchemesTitle,
-      shortBenefit: language === 'te' ? 'పీఎం-కుసుమ్ & పీఎం-ప్రణామ్ రాయితీలు' : 'PM-PRANAM & PM-KUSUM grant navigators',
+      shortBenefit: language === 'te' ? 'పీఎం-కుసుమ్ & పీఎం-ప్రణామ్ రాయితీలు' : language === 'hi' ? 'पीएम-प्रणाम व पीएम-कुसुम अनुदान सहायक' : 'PM-PRANAM & PM-KUSUM grant navigators',
       icon: FileCheck2,
       tags: ['Govt Grants', '1-Click Apply'],
       color: 'from-purple-600 to-indigo-500',
@@ -139,7 +143,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
       tab: 'impact',
       category: 'schemes',
       title: m.serviceImpactTitle,
-      shortBenefit: language === 'te' ? 'వాస్తవ ల్యాబ్ డేటా మరియు క్షేత్రస్థాయి విశ్లేషణ' : 'Real-time ledger of diverted methane & humus',
+      shortBenefit: language === 'te' ? 'వాస్తవ ల్యాబ్ డేటా మరియు క్షేత్రస్థాయి విశ్లేషణ' : language === 'hi' ? 'प्रमाणित जैविक प्रभाव व बचत का लाइव खाता' : 'Real-time ledger of diverted methane & humus',
       icon: TrendingUp,
       tags: ['Audited Data', 'Live Ledger'],
       color: 'from-green-600 to-emerald-600',
@@ -149,7 +153,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
       tab: 'helpline',
       category: 'schemes',
       title: m.serviceHelplineTitle,
-      shortBenefit: language === 'te' ? '13 భాషలలో ఉచిత 24×7 వ్యవసాయ సలహా' : 'Toll-free voice advisor in 13 Indian languages',
+      shortBenefit: language === 'te' ? '13 భాషలలో ఉచిత 24×7 వ్యవసాయ సలహా' : language === 'hi' ? '13 भारतीय भाषाओं में 24×7 निःशुल्क कृषि सलाह' : 'Toll-free voice advisor in 13 Indian languages',
       icon: Bot,
       tags: ['24×7 Free', '13 Languages'],
       color: 'from-rose-600 to-amber-600',
@@ -230,11 +234,11 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
         {/* Tactile 4-Card Action Dock */}
         <div className="relative z-10 w-full mt-6 pt-4 border-t border-emerald-800/50">
           <p className="text-[11px] font-mono uppercase tracking-wider text-emerald-300/80 mb-2.5">
-            {language === 'te' ? 'రైతు తక్షణ చర్యలు:' : 'Quick Farmer Actions:'}
+            {language === 'te' ? 'రైతు తక్షణ చర్యలు:' : language === 'hi' ? 'त्वरित किसान क्रियाएं:' : 'Quick Farmer Actions:'}
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 text-xs">
             <button
-              onClick={() => onNavigate('pipeline')}
+              onClick={() => onNavigate('waste-management')}
               className="p-3 bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-700/50 hover:border-emerald-400 rounded-2xl text-left transition group cursor-pointer shadow-sm"
             >
               <div className="flex items-center justify-between mb-1.5">
@@ -242,15 +246,15 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                 <ArrowRight className="w-3 h-3 text-emerald-400 group-hover:translate-x-1 transition" />
               </div>
               <strong className="text-white block font-black text-xs">
-                {language === 'te' ? 'వ్యర్థాల సేకరణ' : 'Pickup Request'}
+                {language === 'te' ? 'వ్యర్థాల సేకరణ' : language === 'hi' ? 'कचरा उठाव अनुरोध' : 'Request Waste Collection'}
               </strong>
               <span className="text-[10px] text-emerald-200/80 block mt-0.5 truncate">
-                {language === 'te' ? 'కాటా బరువు & తక్షణ DBT' : 'Doorstep tare & direct DBT'}
+                {language === 'te' ? 'గ్రామం/మండీ నుండి సేకరణ' : language === 'hi' ? 'खेत पर तौल व सीधा उठाव' : 'Mandi & Farm Pickup'}
               </span>
             </button>
 
             <button
-              onClick={() => onNavigate('marketplace-products')}
+              onClick={() => onNavigate('aga')}
               className="p-3 bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-700/50 hover:border-emerald-400 rounded-2xl text-left transition group cursor-pointer shadow-sm"
             >
               <div className="flex items-center justify-between mb-1.5">
@@ -258,15 +262,15 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                 <ArrowRight className="w-3 h-3 text-emerald-400 group-hover:translate-x-1 transition" />
               </div>
               <strong className="text-white block font-black text-xs">
-                {language === 'te' ? 'వర్మికంపోస్ట్ ఆర్డర్' : 'Order Bio-Humus'}
+                {language === 'te' ? 'AGA సేంద్రీయ ఎరువు' : language === 'hi' ? 'एजीए जैविक खाद' : 'AGA Organic Fertilizer'}
               </strong>
               <span className="text-[10px] text-emerald-200/80 block mt-0.5 truncate">
-                {language === 'te' ? '₹399 / 50 కిలోల సంచి' : 'FCO Grade-1 @ ₹399/bag'}
+                {language === 'te' ? 'జీవామృతం & ఆవు పేడ ఎరువు' : language === 'hi' ? 'देसी गाय गोबर व जीवामृत' : 'Living Microbial Humus'}
               </span>
             </button>
 
             <button
-              onClick={() => onNavigate('marketplace-machinery')}
+              onClick={() => onNavigate('equipment-hub')}
               className="p-3 bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-700/50 hover:border-emerald-400 rounded-2xl text-left transition group cursor-pointer shadow-sm"
             >
               <div className="flex items-center justify-between mb-1.5">
@@ -274,19 +278,15 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                 <ArrowRight className="w-3 h-3 text-emerald-400 group-hover:translate-x-1 transition" />
               </div>
               <strong className="text-white block font-black text-xs">
-                {language === 'te' ? 'యంత్రాల అద్దె హబ్' : 'Custom Hiring Hub'}
+                {language === 'te' ? 'సమీప వ్యవసాయ యంత్రాలు' : language === 'hi' ? 'नजदीकी कृषि उपकरण' : 'Find Farming Equipment'}
               </strong>
               <span className="text-[10px] text-emerald-200/80 block mt-0.5 truncate">
-                {language === 'te' ? '50% సబ్సిడీ బేలర్లు' : 'Shredders & Balers rental'}
+                {language === 'te' ? 'CHC హబ్‌లు & అద్దె యంత్రాలు' : language === 'hi' ? 'कस्टम हायरिंग केंद्र' : 'AP CHC Machinery Hubs'}
               </span>
             </button>
 
             <button
-              onClick={() => {
-                const el = document.getElementById('seasonal-advice-block');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-                else onNavigate('search');
-              }}
+              onClick={() => onNavigate('agriculture-updates')}
               className="p-3 bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-700/50 hover:border-emerald-400 rounded-2xl text-left transition group cursor-pointer shadow-sm"
             >
               <div className="flex items-center justify-between mb-1.5">
@@ -294,10 +294,10 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                 <ArrowRight className="w-3 h-3 text-emerald-400 group-hover:translate-x-1 transition" />
               </div>
               <strong className="text-white block font-black text-xs">
-                {language === 'te' ? 'సీజనల్ పంటల సలహా' : 'Cropping Advisory'}
+                {language === 'te' ? 'వాతావరణం & పంట సలహాలు' : language === 'hi' ? 'मौसम व फसल सलाह' : 'Agri Weather & Updates'}
               </strong>
               <span className="text-[10px] text-emerald-200/80 block mt-0.5 truncate">
-                {language === 'te' ? 'ఈ నెలకు అనువైన పంటలు' : 'Best crops for this month'}
+                {language === 'te' ? 'వర్షపాతం & మండి ధరలు' : language === 'hi' ? 'वर्षा व मंडी भाव' : 'Rain Radar & Mandi Prices'}
               </span>
             </button>
           </div>
@@ -382,7 +382,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                     : 'text-emerald-200 hover:text-white'
                 }`}
               >
-                {language === 'te' ? 'ముఖ్యాంశాలు' : 'Key Highlights'}
+                {language === 'te' ? 'ముఖ్యాంశాలు' : language === 'hi' ? 'मुख्य विशेषताएं' : 'Key Highlights'}
               </button>
               <button
                 onClick={() => setProductTab('calculator')}
@@ -393,7 +393,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                 }`}
               >
                 <Calculator className="w-3.5 h-3.5" />
-                <span>{language === 'te' ? 'మోతాదు కాలిక్యులేటర్' : 'Dosage Calc'}</span>
+                <span>{language === 'te' ? 'మోతాదు కాలిక్యులేటర్' : language === 'hi' ? 'मात्रा कैलकुलेटर' : 'Dosage Calc'}</span>
               </button>
               <button
                 onClick={() => setProductTab('lab')}
@@ -404,7 +404,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                 }`}
               >
                 <ShieldCheck className="w-3.5 h-3.5" />
-                <span>{language === 'te' ? 'ల్యాబ్ రిపోర్ట్' : 'Lab Certificate'}</span>
+                <span>{language === 'te' ? 'ల్యాబ్ రిపోర్ట్' : language === 'hi' ? 'लैब प्रमाण पत्र' : 'Lab Certificate'}</span>
               </button>
             </div>
           </div>
@@ -439,7 +439,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                       <div>
                         <strong className="text-white block font-bold text-xs">18.4% Living Bio-Humus</strong>
                         <p className="text-[11px] text-emerald-200/80 mt-0.5">
-                          {language === 'te' ? 'నేలలో సేంద్రీయ కర్బనాన్ని వేగంగా పునరుద్ధరిస్తుంది' : 'Rapidly activates depleted soil microbial biology'}
+                          {language === 'te' ? 'నేలలో సేంద్రీయ కర్బనాన్ని వేగంగా పునరుద్ధరిస్తుంది' : language === 'hi' ? 'मिट्टी के जैविक कार्बन को तुरंत सक्रिय करता है' : 'Rapidly activates depleted soil microbial biology'}
                         </p>
                       </div>
                     </div>
@@ -449,7 +449,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                       <div>
                         <strong className="text-white block font-bold text-xs">3.2x Water Sponge</strong>
                         <p className="text-[11px] text-emerald-200/80 mt-0.5">
-                          {language === 'te' ? 'వర్షాభావ పరిస్థితుల్లో 10 రోజుల వరకు తేమ సంరక్షణ' : 'Holds dew and irrigation moisture for 8-10 dry days'}
+                          {language === 'te' ? 'వర్షాభావ పరిస్థితుల్లో 10 రోజుల వరకు తేమ సంరక్షణ' : language === 'hi' ? 'कम पानी में भी 8-10 दिनों तक नमी बनाए रखता है' : 'Holds dew and irrigation moisture for 8-10 dry days'}
                         </p>
                       </div>
                     </div>
@@ -459,7 +459,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                       <div>
                         <strong className="text-white block font-bold text-xs">40% Chemical DAP Cut</strong>
                         <p className="text-[11px] text-emerald-200/80 mt-0.5">
-                          {language === 'te' ? 'ఖరీదైన రసాయన ఎరువుల ఖర్చును సగానికి తగ్గిస్తుంది' : 'Substitutes costly chemical fertilizer bags safely'}
+                          {language === 'te' ? 'ఖరీదైన రసాయన ఎరువుల ఖర్చును సగానికి తగ్గిస్తుంది' : language === 'hi' ? 'डीएपी और रासायनिक खाद की लागत में 40% तक कटौती' : 'Substitutes costly chemical fertilizer bags safely'}
                         </p>
                       </div>
                     </div>
@@ -469,7 +469,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                       <div>
                         <strong className="text-white block font-bold text-xs">100% Odorless & Pure</strong>
                         <p className="text-[11px] text-emerald-200/80 mt-0.5">
-                          {language === 'te' ? 'కలుపు విత్తనాలు లేని నాణ్యమైన గ్రాన్యూల్స్' : 'Zero weed seeds, lab-certified non-toxic formula'}
+                          {language === 'te' ? 'కలుపు విత్తనాలు లేని నాణ్యమైన గ్రాన్యూల్స్' : language === 'hi' ? 'खरपतवार मुक्त, 100% शुद्ध व गंधहीन खाद' : 'Zero weed seeds, lab-certified non-toxic formula'}
                         </p>
                       </div>
                     </div>
@@ -502,7 +502,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                 <div className="space-y-4 p-4 rounded-2xl bg-black/40 border border-emerald-500/40 animate-fadeIn text-xs">
                   <div>
                     <label className="text-[11px] text-emerald-300 font-bold block mb-1.5">
-                      {language === 'te' ? 'మీ పంటను ఎంచుకోండి:' : 'Select Your Target Crop:'}
+                      {language === 'te' ? 'మీ పంటను ఎంచుకోండి:' : language === 'hi' ? 'अपनी फसल चुनें:' : 'Select Your Target Crop:'}
                     </label>
                     <div className="flex flex-wrap gap-1.5">
                       {Object.entries(cropDosageMap).map(([key, crop]) => (
@@ -515,7 +515,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                               : 'bg-white/10 text-white hover:bg-white/20'
                           }`}
                         >
-                          {language === 'te' ? crop.nameTe : crop.name}
+                          {language === 'te' ? crop.nameTe : language === 'hi' ? crop.nameHi : crop.name}
                         </button>
                       ))}
                     </div>
@@ -523,7 +523,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
 
                   <div>
                     <label className="text-[11px] text-emerald-300 font-bold block mb-1.5">
-                      {language === 'te' ? 'పొలం విస్తీర్ణం (ఎకరాలు):' : 'Farm Acreage:'}
+                      {language === 'te' ? 'పొలం విస్తీర్ణం (ఎకరాలు):' : language === 'hi' ? 'खेत का क्षेत्रफल (एकड़):' : 'Farm Acreage:'}
                     </label>
                     <div className="flex gap-2">
                       {[1, 2, 5, 10].map((acres) => (
@@ -536,7 +536,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                               : 'bg-white/10 text-white hover:bg-white/20'
                           }`}
                         >
-                          {acres} {acres === 1 ? 'Acre' : 'Acres'}
+                          {acres} {language === 'te' ? 'ఎకరాలు' : language === 'hi' ? 'एकड़' : acres === 1 ? 'Acre' : 'Acres'}
                         </button>
                       ))}
                     </div>
@@ -545,19 +545,29 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                   {/* Calculated Output Summary Strip */}
                   <div className="grid grid-cols-3 gap-2 p-3 rounded-xl bg-emerald-950/90 border border-emerald-500/40 text-center">
                     <div>
-                      <span className="text-[10px] text-emerald-300/80 block uppercase font-mono">Bags Required</span>
-                      <strong className="text-base font-black text-white">{totalBagsNeeded} Bags</strong>
+                      <span className="text-[10px] text-emerald-300/80 block uppercase font-mono">
+                        {language === 'te' ? 'అవసరమైన బస్తాలు' : language === 'hi' ? 'आवश्यक बोरियां' : 'Bags Required'}
+                      </span>
+                      <strong className="text-base font-black text-white">
+                        {totalBagsNeeded} {language === 'te' ? 'బస్తాలు' : language === 'hi' ? 'बोरियां' : 'Bags'}
+                      </strong>
                       <span className="text-[10px] text-emerald-200/70 block">({totalWeightKg} kg)</span>
                     </div>
                     <div>
-                      <span className="text-[10px] text-emerald-300/80 block uppercase font-mono">Investment</span>
+                      <span className="text-[10px] text-emerald-300/80 block uppercase font-mono">
+                        {language === 'te' ? 'మొత్తం ఖర్చు' : language === 'hi' ? 'कुल लागत' : 'Investment'}
+                      </span>
                       <strong className="text-base font-black text-amber-300">₹{totalProductCost.toLocaleString('en-IN')}</strong>
                       <span className="text-[10px] text-emerald-200/70 block">@ ₹399/bag</span>
                     </div>
                     <div>
-                      <span className="text-[10px] text-emerald-300/80 block uppercase font-mono">Est. DAP Saved</span>
+                      <span className="text-[10px] text-emerald-300/80 block uppercase font-mono">
+                        {language === 'te' ? 'రసాయన ఎరువుల ఆదా' : language === 'hi' ? 'डीएपी खाद की बचत' : 'Est. DAP Saved'}
+                      </span>
                       <strong className="text-base font-black text-emerald-300">₹{estimatedDapSavings.toLocaleString('en-IN')}</strong>
-                      <span className="text-[10px] text-emerald-200/70 block">Chemical cut</span>
+                      <span className="text-[10px] text-emerald-200/70 block">
+                        {language === 'te' ? 'ఖర్చు తగ్గింపు' : language === 'hi' ? 'लागत में बचत' : 'Chemical cut'}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -639,12 +649,73 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
 
       {/* 
         ======================================================================
-        5. SEASONAL CROP ADVICE: WHAT TO PLANT NEXT
+        5. FARMER ADVISORY: CROP & AGA SUGGESTER + SEASONAL CALENDAR
         ======================================================================
       */}
-      <div id="seasonal-advice-block">
+      <div id="seasonal-advice-block" className="space-y-4">
+        {/* View Switcher Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-2xl border border-emerald-200/80 shadow-2xs">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse"></span>
+            <span className="text-xs font-bold text-gray-800">
+              {language === 'te'
+                ? 'వ్యవసాయ సలహా సాధనాలు'
+                : language === 'hi'
+                ? 'कृषि सलाहकार टूल्स'
+                : 'Agricultural Advisory Tools'}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-1.5 p-1 bg-emerald-50 rounded-xl border border-emerald-200">
+            <button
+              onClick={() => setHomeAdviceView('suggester')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ${
+                homeAdviceView === 'suggester'
+                  ? 'bg-emerald-700 text-white shadow'
+                  : 'text-emerald-900 hover:bg-emerald-100/60'
+              }`}
+            >
+              <span>🌾</span>
+              <span>
+                {language === 'te'
+                  ? 'స్మార్ట్ పంట & ఎరువు సలహా'
+                  : language === 'hi'
+                  ? 'स्मार्ट फसल व खाद सलाहकार'
+                  : 'Custom Crop & AGA Suggester'}
+              </span>
+            </button>
+
+            <button
+              onClick={() => setHomeAdviceView('calendar')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ${
+                homeAdviceView === 'calendar'
+                  ? 'bg-emerald-700 text-white shadow'
+                  : 'text-emerald-900 hover:bg-emerald-100/60'
+              }`}
+            >
+              <span>📅</span>
+              <span>
+                {language === 'te'
+                  ? 'సీజనల్ పంట క్యాలెండర్'
+                  : language === 'hi'
+                  ? 'मौसमी फसल कैलेंडर'
+                  : 'Seasonal Crop Calendar'}
+              </span>
+            </button>
+          </div>
+        </div>
+
         <ScrollReveal>
-          <SeasonalCropAdvice language={language} onNavigate={onNavigate} />
+          {homeAdviceView === 'suggester' ? (
+            <CropAdvisorySuggester
+              language={language}
+              onOpenBooking={(crop, bags) => {
+                onNavigate('marketplace-products');
+              }}
+            />
+          ) : (
+            <SeasonalCropAdvice language={language} onNavigate={onNavigate} />
+          )}
         </ScrollReveal>
       </div>
 
@@ -659,11 +730,13 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-100">
             <div>
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-800">
-                {language === 'te' ? 'వాస్తవ పోలిక' : 'THE REAL DIFFERENCE'}
+                {language === 'te' ? 'వాస్తవ పోలిక' : language === 'hi' ? 'वास्तविक अंतर' : 'THE REAL DIFFERENCE'}
               </span>
               <h3 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
                 {language === 'te'
                   ? 'రసాయన సేద్యం vs కృషిగ్రీన్ సేంద్రీయ చక్రం'
+                  : language === 'hi'
+                  ? 'पारंपरिक रासायनिक खेती बनाम कृषिग्रीन जैविक चक्र'
                   : 'Conventional Chemical Farming vs. KrishiGreen Bio-Loop'}
               </h3>
             </div>
@@ -676,7 +749,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                   comparisonMetric === 'all' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
-                {language === 'te' ? 'అన్నీ' : 'Full Matrix'}
+                {language === 'te' ? 'అన్నీ' : language === 'hi' ? 'सभी' : 'Full Matrix'}
               </button>
               <button
                 onClick={() => setComparisonMetric('costs')}
@@ -684,7 +757,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                   comparisonMetric === 'costs' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
-                {language === 'te' ? 'ఖర్చులు' : 'Input Costs'}
+                {language === 'te' ? 'ఖర్చులు' : language === 'hi' ? 'लागत' : 'Input Costs'}
               </button>
               <button
                 onClick={() => setComparisonMetric('soil')}
@@ -692,7 +765,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                   comparisonMetric === 'soil' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
-                {language === 'te' ? 'నేల సారం' : 'Soil Health'}
+                {language === 'te' ? 'నేల సారం' : language === 'hi' ? 'मिट्टी की उर्वरता' : 'Soil Health'}
               </button>
             </div>
           </div>
@@ -703,7 +776,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
             <div className="p-5 rounded-2xl bg-rose-50/60 border border-rose-200/70 space-y-3.5">
               <div className="flex items-center justify-between">
                 <span className="px-2.5 py-0.5 rounded-full bg-rose-200/80 text-rose-900 text-xs font-black">
-                  {language === 'te' ? 'రసాయన పద్ధతి' : 'Conventional Chemical Approach'}
+                  {language === 'te' ? 'రసాయన పద్ధతి' : language === 'hi' ? 'पारंपरिक रासायनिक विधि' : 'Conventional Chemical Approach'}
                 </span>
                 <XCircle className="w-5 h-5 text-rose-600" />
               </div>
@@ -713,9 +786,15 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                   <div className="p-2.5 rounded-xl bg-white/80 border border-rose-100 flex items-start gap-2">
                     <span className="text-rose-600 font-bold shrink-0">✕</span>
                     <div>
-                      <strong>{language === 'te' ? 'ఖరీదైన రసాయనాలు:' : 'High Input Cost:'}</strong>
+                      <strong>
+                        {language === 'te' ? 'ఖరీదైన రసాయనాలు:' : language === 'hi' ? 'अधिक लागत:' : 'High Input Cost:'}
+                      </strong>
                       <span className="block text-[11px] text-gray-600">
-                        {language === 'te' ? 'ఎకరాకు ₹4,500 - ₹6,000 వరకు ఖర్చు' : '₹4,500 - ₹6,000/acre on DAP & chemical fertilizers'}
+                        {language === 'te'
+                          ? 'ఎకరాకు ₹4,500 - ₹6,000 వరకు ఖర్చు'
+                          : language === 'hi'
+                          ? 'डीएपी और रसायनों पर ₹4,500 - ₹6,000 प्रति एकड़ खर्च'
+                          : '₹4,500 - ₹6,000/acre on DAP & chemical fertilizers'}
                       </span>
                     </div>
                   </div>
@@ -725,9 +804,15 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                   <div className="p-2.5 rounded-xl bg-white/80 border border-rose-100 flex items-start gap-2">
                     <span className="text-rose-600 font-bold shrink-0">✕</span>
                     <div>
-                      <strong>{language === 'te' ? 'నేల క్షీణత:' : 'Depleted Soil Biology:'}</strong>
+                      <strong>
+                        {language === 'te' ? 'నేల క్షీణత:' : language === 'hi' ? 'मिट्टी का बंजर होना:' : 'Depleted Soil Biology:'}
+                      </strong>
                       <span className="block text-[11px] text-gray-600">
-                        {language === 'te' ? 'సేంద్రీయ కర్బనం <0.3% కు పడిపోయి గట్టిపడుతుంది' : 'Soil Organic Carbon <0.3%, hardpan soil crusting'}
+                        {language === 'te'
+                          ? 'సేంద్రీయ కర్బనం <0.3% కు పడిపోయి గట్టిపడుతుంది'
+                          : language === 'hi'
+                          ? 'जैविक कार्बन <0.3% तक गिरकर मिट्टी सख्त हो जाती है'
+                          : 'Soil Organic Carbon <0.3%, hardpan soil crusting'}
                       </span>
                     </div>
                   </div>
@@ -737,9 +822,15 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                   <div className="p-2.5 rounded-xl bg-white/80 border border-rose-100 flex items-start gap-2">
                     <span className="text-rose-600 font-bold shrink-0">✕</span>
                     <div>
-                      <strong>{language === 'te' ? 'వ్యర్థాలు దహనం:' : 'Stubble Burning:'}</strong>
+                      <strong>
+                        {language === 'te' ? 'వ్యర్థాలు దహనం:' : language === 'hi' ? 'पराली जलाना:' : 'Stubble Burning:'}
+                      </strong>
                       <span className="block text-[11px] text-gray-600">
-                        {language === 'te' ? 'జీరో ఆదాయం, కాలుష్యం & జరిమానాలు' : 'Crop residues burned or dumped with zero revenue'}
+                        {language === 'te'
+                          ? 'జీరో ఆదాయం, కాలుష్యం & జరిమానాలు'
+                          : language === 'hi'
+                          ? 'शून्य आय, वायु प्रदूषण और चालान का जोखिम'
+                          : 'Crop residues burned or dumped with zero revenue'}
                       </span>
                     </div>
                   </div>
@@ -751,7 +842,7 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
             <div className="p-5 rounded-2xl bg-emerald-50/70 border border-emerald-300 space-y-3.5 shadow-xs">
               <div className="flex items-center justify-between">
                 <span className="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white text-xs font-black shadow-xs">
-                  {language === 'te' ? 'కృషిగ్రీన్ సేంద్రీయ చక్రం' : 'KrishiGreen Closed-Loop Bio-Model'}
+                  {language === 'te' ? 'కృషిగ్రీన్ సేంద్రీయ చక్రం' : language === 'hi' ? 'कृषिग्रीन जैविक चक्र' : 'KrishiGreen Closed-Loop Bio-Model'}
                 </span>
                 <CheckCircle2 className="w-5 h-5 text-emerald-600" />
               </div>
@@ -761,9 +852,15 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                   <div className="p-2.5 rounded-xl bg-white border border-emerald-200/80 flex items-start gap-2 shadow-2xs">
                     <span className="text-emerald-600 font-bold shrink-0">✓</span>
                     <div>
-                      <strong>{language === 'te' ? '40% తక్కువ ఖర్చు:' : '40% Lower Input Cost:'}</strong>
+                      <strong>
+                        {language === 'te' ? '40% తక్కువ ఖర్చు:' : language === 'hi' ? '40% कम लागत:' : '40% Lower Input Cost:'}
+                      </strong>
                       <span className="block text-[11px] text-gray-600">
-                        {language === 'te' ? 'ఎకరాకు ₹2,200 మాత్రమే ఖర్చు అవుతుంది' : 'Only ~₹2,200/acre; displaces costly chemical DAP'}
+                        {language === 'te'
+                          ? 'ఎకరాకు ₹2,200 మాత్రమే ఖర్చు అవుతుంది'
+                          : language === 'hi'
+                          ? 'प्रति एकड़ केवल ₹2,200 खर्च; डीएपी की 40% बचत'
+                          : 'Only ~₹2,200/acre; displaces costly chemical DAP'}
                       </span>
                     </div>
                   </div>
@@ -773,9 +870,15 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                   <div className="p-2.5 rounded-xl bg-white border border-emerald-200/80 flex items-start gap-2 shadow-2xs">
                     <span className="text-emerald-600 font-bold shrink-0">✓</span>
                     <div>
-                      <strong>{language === 'te' ? 'సజీవ నేల సారం:' : '18.4% Organic Carbon:'}</strong>
+                      <strong>
+                        {language === 'te' ? 'సజీవ నేల సారం:' : language === 'hi' ? '18.4% जैविक कार्बन:' : '18.4% Organic Carbon:'}
+                      </strong>
                       <span className="block text-[11px] text-gray-600">
-                        {language === 'te' ? '3.2 రెట్ల నీటి నిల్వ సామర్థ్యంతో కరువు తట్టుకుంటుంది' : '3.2x water sponge protects crops through 10 dry days'}
+                        {language === 'te'
+                          ? '3.2 రెట్ల నీటి నిల్వ సామర్థ్యంతో కరువు తట్టుకుంటుంది'
+                          : language === 'hi'
+                          ? '3.2 गुना अधिक नमी सोखने की क्षमता; सूखे से बचाव'
+                          : '3.2x water sponge protects crops through 10 dry days'}
                       </span>
                     </div>
                   </div>
@@ -785,9 +888,15 @@ export const HomeIntro: React.FC<HomeIntroProps> = ({
                   <div className="p-2.5 rounded-xl bg-white border border-emerald-200/80 flex items-start gap-2 shadow-2xs">
                     <span className="text-emerald-600 font-bold shrink-0">✓</span>
                     <div>
-                      <strong>{language === 'te' ? 'వ్యర్థాల నుండి ఆదాయం:' : 'Waste-to-Wealth & Carbon:'}</strong>
+                      <strong>
+                        {language === 'te' ? 'వ్యర్థాల నుండి ఆదాయం:' : language === 'hi' ? 'कचरे से आय व कार्बन क्रेडिट:' : 'Waste-to-Wealth & Carbon:'}
+                      </strong>
                       <span className="block text-[11px] text-gray-600">
-                        {language === 'te' ? 'టన్నుకు ₹750 రాబడి + 70% కార్బన్ క్రెడిట్ జమ' : '₹750/MT aggregation revenue + 70% direct DBT'}
+                        {language === 'te'
+                          ? 'టన్నుకు ₹750 రాబడి + 70% కార్బన్ క్రెడిట్ జమ'
+                          : language === 'hi'
+                          ? '₹750 प्रति टन कचरा आय + 70% सीधा डीबीटी भुगतान'
+                          : '₹750/MT aggregation revenue + 70% direct DBT'}
                       </span>
                     </div>
                   </div>
