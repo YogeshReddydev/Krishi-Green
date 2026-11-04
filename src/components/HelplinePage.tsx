@@ -13,7 +13,7 @@ import {
   FileText,
   LifeBuoy,
   AlertTriangle,
-  Loader2,
+  Sprout,
   Search,
   Filter,
   User,
@@ -384,7 +384,7 @@ export const HelplinePage: React.FC<HelplinePageProps> = ({
               {isLoadingAi && (
                 <div className="flex justify-start">
                   <div className="bg-white p-3 rounded-2xl border border-gray-200 flex items-center gap-2 text-xs text-gray-500 shadow-2xs">
-                    <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-600" />
+                    <Sprout className="w-3.5 h-3.5 animate-spin text-emerald-600" />
                     <span>Advisor analyzing agronomy standards...</span>
                   </div>
                 </div>

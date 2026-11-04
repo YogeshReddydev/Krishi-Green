@@ -37,6 +37,7 @@ import {
   Droplets,
   PackageCheck,
   Cpu,
+  Sprout,
 } from 'lucide-react';
 import { OrganicProduct, EquipmentItem, SupportedLanguage, EquipmentScale } from '../types';
 import { UI_TRANSLATIONS } from '../data/translations';
@@ -1576,7 +1577,9 @@ export const DualMarketplace: React.FC<DualMarketplaceProps> = ({
 
             {purchaseStep === 'confirm' && (
               <div className="text-center py-6 space-y-3">
-                <div className="w-12 h-12 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto" />
+                <div className="relative inline-flex items-center justify-center p-3.5 rounded-2xl bg-emerald-950/80 border border-emerald-400/50 shadow-md mx-auto">
+                  <Sprout className="w-8 h-8 text-emerald-400 animate-spin" />
+                </div>
                 <h4 className="font-bold text-base text-gray-900">Verifying SMAM Subsidy & Invoicing...</h4>
                 <p className="text-xs text-gray-500">
                   Connecting to AP Rythu Bharosa Kendra (RBK) database & generating purchase order.
@@ -1918,7 +1921,9 @@ export const DualMarketplace: React.FC<DualMarketplaceProps> = ({
 
             {productPaymentStep === 'processing' && (
               <div className="text-center py-6 space-y-3">
-                <div className="w-12 h-12 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto" />
+                <div className="relative inline-flex items-center justify-center p-3.5 rounded-2xl bg-emerald-950/80 border border-emerald-400/50 shadow-md mx-auto">
+                  <Sprout className="w-8 h-8 text-emerald-400 animate-spin" />
+                </div>
                 <h4 className="font-bold text-base text-gray-900">Processing UPI Transaction...</h4>
                 <p className="text-xs text-gray-500">
                   Simulating payment for ₹{checkoutProduct.product.pricePerUnit} with BHIM / PhonePe / GPay.

@@ -9,7 +9,7 @@ import {
   Droplets,
   MapPin,
   Navigation,
-  RefreshCw,
+  Sprout,
   AlertCircle,
   CheckCircle2,
   Calendar,
@@ -491,7 +491,7 @@ export const RealtimeWeatherDashboardWidget: React.FC<RealtimeWeatherDashboardWi
             className="p-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl transition cursor-pointer"
             title="Refresh Real-Time Data"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-emerald-700' : ''}`} />
+            <Sprout className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-emerald-700' : 'text-gray-700'}`} />
           </button>
         </div>
       </div>

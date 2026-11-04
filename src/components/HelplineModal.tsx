@@ -13,7 +13,7 @@ import {
   FileText,
   X,
   AlertTriangle,
-  Loader2,
+  Sprout,
 } from 'lucide-react';
 import { SupportedLanguage, SupportTicket } from '../types';
 import { UI_TRANSLATIONS, SUPPORTED_LANGUAGES } from '../data/translations';
@@ -332,7 +332,7 @@ export const HelplineModal: React.FC<HelplineModalProps> = ({
             )}
             {callState === 'calling' && (
               <span className="text-amber-700 font-semibold flex items-center gap-1">
-                <Loader2 className="w-3.5 h-3.5 animate-spin" /> Dialing National IVR Gateway...
+                <Sprout className="w-3.5 h-3.5 animate-spin text-amber-600" /> Dialing National IVR Gateway...
               </span>
             )}
             {callState === 'connected' && (
@@ -411,7 +411,7 @@ export const HelplineModal: React.FC<HelplineModalProps> = ({
 
           {isLoadingAi && (
             <div className="flex items-center gap-2 text-xs text-emerald-700 p-2 bg-emerald-50 rounded-xl w-fit">
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <Sprout className="w-4 h-4 animate-spin text-emerald-600" />
               <span>Consulting KrishiGreen Soil & Agronomy Database...</span>
             </div>
           )}

@@ -14,7 +14,6 @@ import {
   ChevronRight,
   Sprout,
   ShieldCheck,
-  RefreshCw,
 } from 'lucide-react';
 import { SupportedLanguage } from '../types';
 
@@ -133,7 +132,7 @@ export const OurProcessSection: React.FC<OurProcessSectionProps> = ({
       <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-gray-100">
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100/80 border border-emerald-300 text-emerald-900 text-xs font-black uppercase tracking-wider mb-2">
-            <RefreshCw className="w-3.5 h-3.5 text-emerald-700 animate-spin-slow" />
+            <Sprout className="w-3.5 h-3.5 text-emerald-700 animate-spin-slow" />
             <span>{isTe ? 'మా సమగ్ర విధానం' : 'Our End-to-End Process'}</span>
           </div>
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-gray-900 tracking-tight">

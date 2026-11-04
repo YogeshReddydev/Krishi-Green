@@ -9,7 +9,6 @@ import {
   AlertCircle,
   TrendingUp,
   CheckCircle2,
-  RefreshCw,
   Volume2,
   VolumeX,
   ArrowRight,
@@ -180,7 +179,7 @@ export const SeasonalCropAdvice: React.FC<SeasonalCropAdviceProps> = ({
             className="px-3.5 py-2 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-200 hover:text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
             title="Fetch latest Agromet Advice with Gemini AI"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-amber-400' : ''}`} />
+            <Sprout className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-amber-400' : 'text-emerald-400'}`} />
             <span>{isRefreshing ? 'Syncing...' : 'Fetch Live AI Advice'}</span>
           </button>
         </div>

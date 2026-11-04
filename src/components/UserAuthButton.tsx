@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { User, LogIn, LogOut, Shield, MapPin, Check, Loader2 } from 'lucide-react';
+import { User, LogIn, LogOut, Shield, MapPin, Check, Sprout } from 'lucide-react';
 import { SupportedLanguage } from '../types';
 
 interface UserAuthButtonProps {
@@ -47,7 +47,7 @@ export const UserAuthButton: React.FC<UserAuthButtonProps> = ({ language }) => {
         title="Sign in with Google"
       >
         {isSigningIn ? (
-          <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-600" />
+          <Sprout className="w-3.5 h-3.5 animate-spin text-emerald-600" />
         ) : (
           <svg className="w-3.5 h-3.5" viewBox="0 0 24 24">
             <path

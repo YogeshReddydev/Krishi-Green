@@ -9,7 +9,7 @@ import {
   FlaskConical,
   Store,
   ExternalLink,
-  Loader2,
+  Sprout,
   CheckCircle2,
   Sparkles,
   AlertCircle,
@@ -128,7 +128,7 @@ export const MapsLocationDetector: React.FC<MapsLocationDetectorProps> = ({
           className="flex items-center gap-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-4 py-2 rounded-xl text-xs transition shadow-sm active:scale-98 self-start sm:self-auto cursor-pointer"
         >
           {isDetecting ? (
-            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            <Sprout className="w-3.5 h-3.5 animate-spin" />
           ) : (
             <Navigation className="w-3.5 h-3.5" />
           )}

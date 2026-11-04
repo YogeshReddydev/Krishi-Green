@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Volume2, VolumeX, Loader2 } from 'lucide-react';
+import { Volume2, VolumeX, Sprout } from 'lucide-react';
 import { SupportedLanguage } from '../types';
 
 interface SpeechListenButtonProps {
@@ -215,7 +215,7 @@ export const SpeechListenButton: React.FC<SpeechListenButtonProps> = ({
       className={`inline-flex items-center font-bold rounded-xl transition duration-150 active:scale-95 shrink-0 select-none ${sizeClasses} ${variantClasses} ${className}`}
     >
       {isLoadingAudio ? (
-        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+        <Sprout className="w-3.5 h-3.5 animate-spin text-emerald-400" />
       ) : isSpeaking ? (
         <VolumeX className="w-3.5 h-3.5 text-rose-200 shrink-0" />
       ) : (

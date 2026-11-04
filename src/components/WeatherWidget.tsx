@@ -10,7 +10,7 @@ import {
   MapPin,
   ChevronDown,
   Navigation,
-  RefreshCw,
+  Sprout,
   AlertCircle,
   CheckCircle2,
   Calendar,
@@ -241,7 +241,7 @@ export const WeatherWidget: React.FC = () => {
                 className="p-1.5 hover:bg-emerald-50 text-emerald-800 rounded-lg transition"
                 title="Refresh Weather"
               >
-                <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-emerald-600' : ''}`} />
+                <Sprout className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-emerald-600' : 'text-emerald-800'}`} />
               </button>
               <button
                 onClick={() => setIsOpen(false)}
