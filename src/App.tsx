@@ -21,6 +21,7 @@ import { RealImpactDashboard } from './components/RealImpactDashboard';
 import { PrototypeNoticeModal } from './components/PrototypeNoticeModal';
 import { OfflineSyncToast } from './components/OfflineSyncToast';
 import { AnimatedBackground } from './components/AnimatedBackground';
+import { CropChatbot } from './components/CropChatbot';
 import { db } from './lib/firebase';
 import { collection, onSnapshot, addDoc } from 'firebase/firestore';
 import {
@@ -710,24 +711,36 @@ export default function App() {
         </div>
       </footer>
 
-      {/* Floating Action Trigger for 24x7 Helpline & Support Tickets Drawer */}
-      <div className="fixed bottom-5 right-5 z-40 flex items-center gap-2.5">
-        <button
-          onClick={() => setShowTicketsDrawer(!showTicketsDrawer)}
-          className="px-4 py-2 bg-white hover:bg-gray-50 text-emerald-950 rounded-full border border-emerald-200 shadow-md transition flex items-center gap-2 text-xs font-bold cursor-pointer"
-          title={t.tickets}
-        >
-          <IconShield className="w-4 h-4 text-emerald-700" />
-          <span>{t.tickets} ({tickets.length})</span>
-        </button>
+      {/* Floating Action Trigger Stack: Krishi Bot ON TOP, Tickets & Toll-Free below */}
+      <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-2.5 pointer-events-auto">
+        {/* Krishi Bot - Small Crop Logo Floating Chatbot */}
+        <CropChatbot
+          language={language}
+          onLanguageChange={setLanguage}
+          onTicketCreated={handleTicketCreated}
+          onOpenHelpline={() => setIsHelplineOpen(true)}
+          ticketCount={tickets.length}
+        />
 
-        <button
-          onClick={() => setIsHelplineOpen(true)}
-          className="px-4 py-2 bg-[#047857] hover:bg-[#065f46] text-white rounded-full shadow-md transition flex items-center gap-2 text-xs font-bold cursor-pointer"
-        >
-          <IconPhone className="w-4 h-4" />
-          <span>{t.tollFreeNumber}</span>
-        </button>
+        {/* Floating Support Tickets & Toll-Free Call Row */}
+        <div className="flex items-center gap-2.5">
+          <button
+            onClick={() => setShowTicketsDrawer(!showTicketsDrawer)}
+            className="px-4 py-2 bg-white hover:bg-gray-50 text-emerald-950 rounded-full border border-emerald-200 shadow-md transition flex items-center gap-2 text-xs font-bold cursor-pointer touch-target-44"
+            title={t.tickets}
+          >
+            <IconShield className="w-4 h-4 text-emerald-700" />
+            <span>{t.tickets} ({tickets.length})</span>
+          </button>
+
+          <button
+            onClick={() => setIsHelplineOpen(true)}
+            className="px-4 py-2 bg-[#047857] hover:bg-[#065f46] text-white rounded-full shadow-md transition flex items-center gap-2 text-xs font-bold cursor-pointer touch-target-44"
+          >
+            <IconPhone className="w-4 h-4" />
+            <span>{t.tollFreeNumber}</span>
+          </button>
+        </div>
       </div>
 
       {/* Slide-over Tickets Drawer */}
