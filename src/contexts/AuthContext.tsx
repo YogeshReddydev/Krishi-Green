@@ -13,7 +13,7 @@ export interface UserProfile {
   email: string;
   displayName: string;
   photoURL?: string;
-  role: 'farmer' | 'fpo_lead' | 'admin';
+  role: 'farmer' | 'fpo_lead' | 'admin' | 'collection_operator' | 'processing_operator' | 'equipment_operator' | 'csr_partner' | 'verifier';
   village?: string;
   phone?: string;
   landAcres?: number;
