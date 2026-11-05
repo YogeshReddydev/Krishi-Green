@@ -720,6 +720,7 @@ export default function App() {
           onTicketCreated={handleTicketCreated}
           onOpenHelpline={() => setIsHelplineOpen(true)}
           ticketCount={tickets.length}
+          onOpenTicketsDrawer={() => setShowTicketsDrawer(true)}
         />
 
         {/* Floating Support Tickets & Toll-Free Call Row */}

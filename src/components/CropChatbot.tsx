@@ -20,6 +20,9 @@ import {
   Maximize2,
   Minimize2,
   RefreshCw,
+  CloudSun,
+  Coins,
+  Ticket,
 } from 'lucide-react';
 import { SupportedLanguage, SupportTicket } from '../types';
 import { navigateTo, APP_ROUTES } from '../utils/navigation';
@@ -31,6 +34,7 @@ interface CropChatbotProps {
   onTicketCreated?: (ticket: SupportTicket) => void;
   onOpenHelpline?: () => void;
   ticketCount?: number;
+  onOpenTicketsDrawer?: () => void;
 }
 
 interface ChatMessage {
@@ -62,6 +66,7 @@ export const CropChatbot: React.FC<CropChatbotProps> = ({
   onTicketCreated,
   onOpenHelpline,
   ticketCount = 0,
+  onOpenTicketsDrawer,
 }) => {
   const isTe = language === 'te';
   const isHi = language === 'hi';
@@ -206,12 +211,319 @@ export const CropChatbot: React.FC<CropChatbotProps> = ({
         ? 'नमस्ते! मैं कृषि बॉट (AI किसान मित्र) हूँ। कचरा संग्रह, एजीए जैविक खाद, कृषि यंत्र या किसी भी सहायता के लिए मुझसे पूछें।'
         : 'Namaskaram! I am Krishi Bot, your 24×7 agricultural companion. Ask me anything about ordering AGA fertilizer, waste collection, hiring farm equipment, or raise a support ticket directly.',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      actionCard: {
-        type: 'operational_guide',
-        title: isTe ? 'త్వరిత సహాయ మార్గదర్శకాలు' : isHi ? 'त्वरित सहायता एवं दिशानिर्देश' : 'Quick Operations Guide',
-      },
     },
   ]);
+
+  // Check if user has started conversation (sent any message)
+  const hasUserStartedConversation = messages.some((m) => m.sender === 'user');
+
+  // Reset conversation handler
+  const handleResetChat = () => {
+    setMessages([
+      {
+        id: `welcome-${Date.now()}`,
+        sender: 'bot',
+        text: isTe
+          ? 'నమస్కారం! నేను కృషి బోట్ (AI రైతు మిత్ర). వ్యర్థాల సేకరణ, AGA సేంద్రీయ ఎరువు ఆర్డర్, యంత్రాల అద్దె లేదా ఏదైనా సందేహం ఉంటే నన్ను అడగండి.'
+          : isHi
+          ? 'नमस्ते! मैं कृषि बॉट (AI किसान मित्र) हूँ। कचरा संग्रह, एजीए जैविक खाद, कृषि यंत्र या किसी भी सहायता के लिए मुझसे पूछें।'
+          : 'Namaskaram! I am Krishi Bot, your 24×7 agricultural companion. Ask me anything about ordering AGA fertilizer, waste collection, hiring farm equipment, or raise a support ticket directly.',
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      },
+    ]);
+    setInputMessage('');
+  };
+
+  type QuickTopicId =
+    | 'how_to_order'
+    | 'view_tickets'
+    | 'waste_pickup'
+    | 'rent_machinery'
+    | 'weather_mandi'
+    | 'chemical_savings';
+
+  interface QuickTopic {
+    id: QuickTopicId;
+    icon: React.ReactNode;
+    title: { en: string; te: string; hi: string };
+    desc: { en: string; te: string; hi: string };
+    badge?: string;
+  }
+
+  const QUICK_TOPICS: QuickTopic[] = [
+    {
+      id: 'how_to_order',
+      icon: <ShoppingBag className="w-4 h-4 text-emerald-700" />,
+      title: {
+        en: 'How to order',
+        te: 'ఎరువు ఆర్డర్',
+        hi: 'खाद ऑर्डर करें',
+      },
+      desc: {
+        en: '50kg AGA bags & delivery',
+        te: 'సబ్సిడీతో 50kg బ్యాగులు',
+        hi: 'सब्सिडी दर पर खाद',
+      },
+    },
+    {
+      id: 'view_tickets',
+      icon: <Ticket className="w-4 h-4 text-emerald-700" />,
+      title: {
+        en: 'View my tickets',
+        te: 'నా టికెట్లు చూడండి',
+        hi: 'मेरे टिकट देखें',
+      },
+      desc: {
+        en: ticketCount > 0 ? `${ticketCount} active ticket(s)` : 'Check status or query',
+        te: ticketCount > 0 ? `${ticketCount} యాక్టివ్ టికెట్లు` : 'స్థితి లేదా ప్రశ్న',
+        hi: ticketCount > 0 ? `${ticketCount} सक्रिय टिकट` : 'स्थिति व समाधान',
+      },
+      badge: ticketCount > 0 ? `${ticketCount}` : undefined,
+    },
+    {
+      id: 'waste_pickup',
+      icon: <Truck className="w-4 h-4 text-emerald-700" />,
+      title: {
+        en: 'Waste pickup',
+        te: 'వ్యర్థాల సేకరణ',
+        hi: 'कचरा संग्रह',
+      },
+      desc: {
+        en: 'Farm & market residue',
+        te: 'వరి గడ్డి & వ్యర్థాలు',
+        hi: 'पराली व मंडी कचरा',
+      },
+    },
+    {
+      id: 'rent_machinery',
+      icon: <Tractor className="w-4 h-4 text-emerald-700" />,
+      title: {
+        en: 'Rent machinery',
+        te: 'యంత్రాల అద్దె',
+        hi: 'यंत्र किराया',
+      },
+      desc: {
+        en: 'Shredders, balers, CHC',
+        te: 'ష్రెడ్డర్లు, బేలర్లు',
+        hi: 'श्रेडर, बेलर व ट्रैक्टर',
+      },
+    },
+    {
+      id: 'weather_mandi',
+      icon: <CloudSun className="w-4 h-4 text-emerald-700" />,
+      title: {
+        en: 'Weather & mandi',
+        te: 'వాతావరణం & ధరలు',
+        hi: 'मौसम व मंडी भाव',
+      },
+      desc: {
+        en: 'Rain radar & crop rates',
+        te: 'లైవ్ రాడార్ & రేట్లు',
+        hi: 'लाइव बारिश व भाव',
+      },
+    },
+    {
+      id: 'chemical_savings',
+      icon: <Coins className="w-4 h-4 text-emerald-700" />,
+      title: {
+        en: 'Calculate savings',
+        te: 'ఎరువుల పొదుపు',
+        hi: 'उर्वरक बचत',
+      },
+      desc: {
+        en: 'Save ₹3200-5400/acre',
+        te: 'ఎకరాకు ₹3200+ ఆదా',
+        hi: 'यूरिया व DAP बचत',
+      },
+    },
+  ];
+
+  const handleQuickTopicSelect = (topicId: QuickTopicId) => {
+    let userText = '';
+    switch (topicId) {
+      case 'how_to_order':
+        userText = isTe
+          ? 'AGA సేంద్రీయ ఎరువును ఎలా ఆర్డర్ చేయాలి?'
+          : isHi
+          ? 'एजीए जैविक खाद कैसे ऑर्डर करें?'
+          : 'How do I order AGA Organic Fertilizer?';
+        break;
+      case 'view_tickets':
+        userText = isTe
+          ? 'నా సపోర్ట్ టికెట్లు చూడండి'
+          : isHi
+          ? 'मेरे सहायता टिकट देखें'
+          : 'View my support tickets';
+        break;
+      case 'waste_pickup':
+        userText = isTe
+          ? 'పంట & మార్కెట్ వ్యర్థాల సేకరణ ఎలా అభ్యర్థించాలి?'
+          : isHi
+          ? 'फसल व मंडी अपशिष्ट संग्रह का अनुरोध कैसे करें?'
+          : 'How to request farm waste pickup?';
+        break;
+      case 'rent_machinery':
+        userText = isTe
+          ? 'ట్రాక్టర్లు & ష్రెడ్డర్లు అద్దెకు ఎలా తీసుకోవాలి?'
+          : isHi
+          ? 'कृषि यंत्र किराए पर कैसे लें?'
+          : 'How to rent tractors & farming machinery?';
+        break;
+      case 'weather_mandi':
+        userText = isTe
+          ? 'ఈరోజు వాతావరణం & మార్కెట్ ధరలు ఏమిటి?'
+          : isHi
+          ? 'आज का मौसम और मंडी भाव क्या हैं?'
+          : "Check today's weather & mandi rates";
+        break;
+      case 'chemical_savings':
+        userText = isTe
+          ? 'రసాయన ఎరువుల ఖర్చు ఎంత ఆదా అవుతుంది?'
+          : isHi
+          ? 'रासायनिक खाद पर कितनी बचत होगी?'
+          : 'How much chemical DAP/Urea cost can I save?';
+        break;
+    }
+
+    const userMsg: ChatMessage = {
+      id: `user-${Date.now()}`,
+      sender: 'user',
+      text: userText,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    };
+
+    setMessages((prev) => [...prev, userMsg]);
+    setIsTyping(true);
+
+    // Instant realistic response
+    setTimeout(() => {
+      setIsTyping(false);
+      let botReply: ChatMessage;
+
+      if (topicId === 'view_tickets') {
+        if (ticketCount > 0) {
+          botReply = {
+            id: `bot-${Date.now()}`,
+            sender: 'bot',
+            text: isTe
+              ? `మీ ఖాతాలో ప్రస్తుతం ${ticketCount} సపోర్ట్ టికెట్లు నమోదై ఉన్నాయి. మా వ్యవసాయ నిపుణుల బృందం మీ అభ్యర్థనలను పరిశీలిస్తోంది. టికెట్ల వివరాలు చూడటానికి లేదా కొత్త సమస్య నమోదు చేయడానికి క్రింది బటన్లు ఉపయోగించండి:`
+              : isHi
+              ? `आपके खाते में वर्तमान में ${ticketCount} सहायता टिकट दर्ज हैं। हमारी कृषि टीम आपके अनुरोधों पर कार्य कर रही है। स्थिति देखने या नया टिकट दर्ज करने हेतु नीचे दिए विकल्प चुनें:`
+              : `You currently have ${ticketCount} active support ticket(s) registered with Krishi Green. Our agricultural team is reviewing your request. Use the buttons below to review active tickets or submit a new query:`,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            actionCard: {
+              type: 'ticket_form',
+              title: isTe ? `యాక్టివ్ టికెట్లు చూడండి (${ticketCount})` : isHi ? `सक्रिय टिकट देखें (${ticketCount})` : `View Active Tickets (${ticketCount})`,
+              description: isTe ? 'టికెట్ డ్రాయర్ తెరవండి లేదా కొత్త ప్రశ్న నమోదు చేయండి' : 'Open tickets drawer or submit new inquiry',
+            },
+          };
+        } else {
+          botReply = {
+            id: `bot-${Date.now()}`,
+            sender: 'bot',
+            text: isTe
+              ? 'ప్రస్తుతం మీ ఖాతాలో ఎలాంటి ఓపెన్ సపోర్ట్ టికెట్లు లేవు. వ్యర్థాల సేకరణ, ఎరువుల ఆర్డర్ లేదా సాంకేతిక సాయం కోసం మీరు వెంటనే అధికారిక టికెట్ నమోదు చేయవచ్చు.'
+              : isHi
+              ? 'वर्तमान में आपके खाते में कोई सक्रिय टिकट नहीं है। अपशिष्ट संग्रह, खाद ऑर्डर या किसी भी समस्या के समाधान के लिए आप तुरंत टिकट दर्ज कर सकते हैं।'
+              : 'You currently have 0 active support tickets. If you need assistance with farm waste collection, fertilizer delivery, or equipment booking, you can raise an instant support ticket below.',
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            actionCard: {
+              type: 'ticket_form',
+              title: isTe ? 'కొత్త సపోర్ట్ టికెట్ నమోదు' : isHi ? 'नया टिकट दर्ज करें' : 'Raise Support Ticket',
+            },
+          };
+        }
+      } else if (topicId === 'how_to_order') {
+        botReply = {
+          id: `bot-${Date.now()}`,
+          sender: 'bot',
+          text: isTe
+            ? `🌾 **AGA సేంద్రీయ ఎరువు (Bio-Enriched Compost) ఆర్డర్ విధానం:**\n• కనీస ఆర్డర్: 5 బ్యాగులు (50kg ప్రతి బ్యాగ్)\n• సబ్సిడీ ధర: ₹320 / బ్యాగ్ (మార్కెట్ ధర ₹480)\n• రవాణా: మీ గ్రామానికే ఉచిత రవాణా\n• నాణ్యత: FCO-1985 ధృవీకృత బ్యాచ్ ల్యాబ్ రిపోర్ట్\n• చెల్లింపు: UPI, కిసాన్ క్రెడిట్ కార్డ్ లేదా క్యాష్ ఆన్ డెలివరీ (COD)\n\nఆర్డర్ బుక్ చేయడానికి క్రింది బటన్ నొక్కండి:`
+            : isHi
+            ? `🌾 **एजीए जैविक खाद (Bio-Enriched Compost) ऑर्डर करने की विधि:**\n• न्यूनतम मात्रा: 5 बोरी (50 किग्रा)\n• रियायती दर: ₹320 प्रति बोरी (बाजार दर ₹480)\n• डिलीवरी: आपके गाँव तक निःशुल्क परिवहन\n• गुणवत्ता: FCO-1985 प्रमाणित लैब रिपोर्ट\n• भुगतान: UPI, किसान क्रेडिट कार्ड या कैश ऑन डिलीवरी (COD)\n\nऑर्डर शुरू करने के लिए नीचे दिए बटन पर टैप करें:`
+            : `🌾 **How to Order AGA Bio-Fermented Organic Fertilizer:**\n• Packaging: 50kg HDPE bags at subsidized ₹320/bag (Market ₹480)\n• Doorstep Delivery: Free logistics for orders of 5+ bags across AP pilot mandals\n• Quality Guarantee: FCO-1985 certified with batch nitrogen & carbon lab reports\n• Payment: UPI, Kisan Credit Card (KCC), or Cash on Delivery (COD)\n\nTap the button below to open the AGA ordering page:`,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          actionCard: {
+            type: 'navigation',
+            title: isTe ? 'AGA ఎరువు పేజీకి వెళ్ళండి' : isHi ? 'एजीए खाद ऑर्डर पेज खोलें' : 'Go to AGA Order Page',
+            route: APP_ROUTES.AGA,
+            routeLabel: isTe ? 'AGA ఎరువు ఆర్డర్ చేయండి' : isHi ? 'खाद ऑर्डर करें' : 'Order AGA Fertilizer Now',
+          },
+        };
+      } else if (topicId === 'waste_pickup') {
+        botReply = {
+          id: `bot-${Date.now()}`,
+          sender: 'bot',
+          text: isTe
+            ? `🚛 **వ్యర్థాల సేకరణ (Biomass Pickup) అభ్యర్థన విధానం:**\n1. మీ పొలం లేదా మార్కెట్ లొకేషన్ ఎంచుకోండి.\n2. వ్యర్థాల రకం (వరి గడ్డి, అరటి వ్యర్థాలు, కూరగాయల వ్యర్థాలు) నమోదు చేయండి.\n3. మా హైడ్రాలిక్ ట్రాక్టర్ ట్రాలీ 24 గంటల్లో వచ్చి వ్యర్థాలను ఉచితంగా సేకరిస్తుంది.\n4. కాల్చకుండా నివారించిన ప్రతి టన్నుకు కార్బన్ క్రెడిట్ నగదు మీ బ్యాంక్ ఖాతాలో జమ చేయబడుతుంది.`
+            : isHi
+            ? `🚛 **अपशिष्ट संग्रह (Biomass Pickup) अनुरोध प्रक्रिया:**\n1. अपने खेत या मंडी का स्थान दर्ज करें।\n2. अपशिष्ट प्रकार (पराली, केले के अवशेष, मंडी कचरा) चुनें।\n3. हमारी ट्रैक्टर ट्रॉली 24 घंटे में आपके पास आकर निःशुल्क संग्रह करेगी।\n4. पराली न जलाने पर प्रमाणित कार्बन क्रेडिट भुगतान आपके खाते में जमा होगा।`
+            : `🚛 **How to Request Farm & Mandi Waste Pickup:**\n1. Submit your farm coordinates or village pickup location.\n2. Select waste category (paddy straw, banana pseudo-stems, vegetable rejects).\n3. Krishi Green hydraulic aggregation tractor collects it within 24 hours.\n4. Certified carbon credits are credited via DBT directly to your bank account.`,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          actionCard: {
+            type: 'navigation',
+            title: isTe ? 'వ్యర్థాల సేకరణ ఫారమ్' : isHi ? 'कचरा संग्रह पोर्टल' : 'Waste Pickup Portal',
+            route: APP_ROUTES.WASTE_MANAGEMENT,
+            routeLabel: isTe ? 'వ్యర్థాల సేకరణ షెడ్యూల్ చేయండి' : isHi ? 'संग्रह का अनुरोध करें' : 'Schedule Waste Pickup',
+          },
+        };
+      } else if (topicId === 'rent_machinery') {
+        botReply = {
+          id: `bot-${Date.now()}`,
+          sender: 'bot',
+          text: isTe
+            ? `🚜 **కృషి గ్రీన్ యంత్రాల అద్దె కేంద్రం (Custom Hiring Centre):**\n• మొబైల్ స్ట్రా ష్రెడ్డర్లు & మల్చర్లు (గంటకు ₹450 సబ్సిడీ రేటు)\n• రౌండ్ స్ట్రా బేలర్లు & లోడర్లు (ఎకరాకు ₹600)\n• లేజర్ ల్యాండ్ లెవెలర్లు & ట్రాక్టర్లు\n\nమీ గ్రామానికి సమీపంలోని హబ్ నుండి అవసరమైన యంత్రాన్ని తేలికగా బుక్ చేసుకోండి:`
+            : isHi
+            ? `🚜 **कृषि ग्रीन कस्टम हायरिंग सेंटर (CHC):**\n• मोबाइल स्ट्रॉ श्रेडर व मल्चर (₹450/घंटा सब्सिडी दर)\n• राउंड स्ट्रॉ बेलर व लोडर (₹600/एकड़)\n• लेजर लैंड लेवलर व आधुनिक ट्रैक्टर\n\nअपने गाँव के निकटतम हब से उपकरण बुक करने के लिए नीचे टैप करें:`
+            : `🚜 **Krishi Green Custom Hiring Centre (CHC) Rentals:**\n• Mobile Residue Shredders & Mulchers (Subsidized ₹450/hr)\n• High-density Round Straw Balers & Loaders (₹600/acre)\n• Laser Land Levellers & Modern Tractors\n\nReserve verified machinery from your nearest mandal hub:`,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          actionCard: {
+            type: 'navigation',
+            title: isTe ? 'యంత్రాల అద్దె పేజీ' : isHi ? 'कृषि यंत्र हब' : 'Farming Equipment Hub',
+            route: APP_ROUTES.EQUIPMENT_HUB,
+            routeLabel: isTe ? 'యంత్రాలు బ్రౌజ్ చేయండి' : isHi ? 'यंत्र बुक करें' : 'Browse & Book Machinery',
+          },
+        };
+      } else if (topicId === 'weather_mandi') {
+        botReply = {
+          id: `bot-${Date.now()}`,
+          sender: 'bot',
+          text: isTe
+            ? `🌤️ **లైవ్ వాతావరణ రాడార్ & APMC మార్కెట్ ధరలు:**\n• నేటి వర్ష సూచన, ఉపగ్రహ మేఘాల పటాలు మరియు నేల తేమ వివరాలు\n• వరి, మొక్కజొన్న, పత్తి, మిరప మరియు కూరగాయల రోజువారీ క్వింటాల్ ధరలు\n\nతాజా సమాచారం చూడటానికి క్రింది లింక్ నొక్కండి:`
+            : isHi
+            ? `🌤️ **लाइव मौसम रडार एवं APMC मंडी भाव:**\n• वर्षा पूर्वानुमान, उपग्रह बादल मानचित्र व मिट्टी की नमी\n• धान, मक्का, कपास, मिर्च व सब्जियों के लाइव दैनिक थोक भाव\n\nताजा कृषि जानकारी के लिए नीचे टैप करें:`
+            : `🌤️ **Hyperlocal Weather Radar & APMC Mandi Rates:**\n• Doppler rainfall radar, 7-day precipitation forecasts, and soil moisture\n• Real-time APMC mandi prices for Paddy, Maize, Cotton, Chillies, and Vegetables\n\nTap below to open live updates:`,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          actionCard: {
+            type: 'navigation',
+            title: isTe ? 'వాతావరణం & ధరల పేజీ' : isHi ? 'मौसम व मंडी भाव पेज' : 'Weather & Mandi Portal',
+            route: APP_ROUTES.AGRICULTURE_UPDATES,
+            routeLabel: isTe ? 'వాతావరణం & ధరలు చూడండి' : isHi ? 'लाइव भाव देखें' : 'View Weather & Mandi Rates',
+          },
+        };
+      } else {
+        // chemical_savings
+        botReply = {
+          id: `bot-${Date.now()}`,
+          sender: 'bot',
+          text: isTe
+            ? `💰 **రసాయన ఎరువుల ఖర్చు పొదుపు కాలిక్యులేటర్:**\n• AGA సేంద్రీయ ఎరువుతో 40-50% DAP మరియు యూరియా రసాయన ఖర్చు ఆదా అవుతుంది\n• ఎకరాకు సగటున ₹3,200 నుండి ₹5,400 వరకు నికర లాభం\n• నేలలో కర్బనం పెరిగి పంట కరువును తట్టుకునే శక్తి 25% పెరుగుతుంది\n\nమీ పొలానికి పొదుపును లెక్కించడానికి క్రింది కాలిక్యులేటర్ తెరవండి:`
+            : isHi
+            ? `💰 **रासायनिक खाद बचत कैलकुलेटर:**\n• एजीए जैविक खाद से 40-50% यूरिया व डीएपी की आवश्यकता कम होती है\n• प्रति एकड़ औसतन ₹3,200 से ₹5,400 की सीधी बचत\n• मिट्टी की कार्बन गुणवत्ता व जल धारण क्षमता में 25% सुधार\n\nअपनी फसल के लिए बचत का आकलन करने हेतु नीचे टैप करें:`
+            : `💰 **Chemical Fertilizer Savings Calculator:**\n• Replacing 40-50% DAP & Urea with AGA Bio-Enriched Compost\n• Average net cash savings of ₹3,200 to ₹5,400 per acre per crop cycle\n• Restores soil microbial biodiversity and water retention by 25%\n\nLaunch the interactive calculator below:`,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          actionCard: {
+            type: 'navigation',
+            title: isTe ? 'ఎరువుల కాలిక్యులేటర్' : isHi ? 'खाद बचत कैलकुलेटर' : 'Fertilizer Calculator',
+            route: APP_ROUTES.AGA,
+            routeLabel: isTe ? 'పొదుపు కాలిక్యులేటర్ తెరవండి' : isHi ? 'कैलकुलेटर खोलें' : 'Open Savings Calculator',
+          },
+        };
+      }
+
+      setMessages((prev) => [...prev, botReply]);
+    }, 200);
+  };
 
   // Dynamic typing suggestions
   const filteredSuggestions = inputMessage.trim().length > 1
@@ -610,6 +922,15 @@ export const CropChatbot: React.FC<CropChatbotProps> = ({
                 </div>
               )}
 
+              {/* Reset to Common Topics / Clear Chat */}
+              <button
+                onClick={handleResetChat}
+                className="p-1.5 hover:bg-emerald-800 rounded-lg text-emerald-200 hover:text-white transition cursor-pointer"
+                title={isTe ? 'ప్రశ్నల గ్రిడ్‌కు రీసెట్ చేయండి' : isHi ? 'मुख्य विषयों पर रीसेट करें' : 'Reset to Common Topics'}
+              >
+                <RefreshCw className="w-3.5 h-3.5" />
+              </button>
+
               {/* Expand Toggle */}
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
@@ -737,13 +1058,24 @@ export const CropChatbot: React.FC<CropChatbotProps> = ({
 
                               {/* In-chat Ticket Shortcut */}
                               {msg.actionCard.type === 'ticket_form' && (
-                                <button
-                                  onClick={() => setActiveTab('ticket')}
-                                  className="w-full py-2 px-3 bg-amber-500 hover:bg-amber-600 text-amber-950 rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer"
-                                >
-                                  <FileText className="w-3.5 h-3.5" />
-                                  <span>{isTe ? 'టికెట్ ఫారమ్ తెరవండి' : 'Open Support Ticket Form'}</span>
-                                </button>
+                                <div className="space-y-1.5">
+                                  {onOpenTicketsDrawer && ticketCount > 0 && (
+                                    <button
+                                      onClick={() => onOpenTicketsDrawer()}
+                                      className="w-full py-2.5 px-3 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer touch-target-44"
+                                    >
+                                      <FileText className="w-3.5 h-3.5" />
+                                      <span>{isTe ? `యాక్టివ్ టికెట్లు చూడండి (${ticketCount})` : isHi ? `सक्रिय टिकट देखें (${ticketCount})` : `View Active Tickets (${ticketCount})`}</span>
+                                    </button>
+                                  )}
+                                  <button
+                                    onClick={() => setActiveTab('ticket')}
+                                    className="w-full py-2.5 px-3 bg-amber-500 hover:bg-amber-600 text-amber-950 rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer touch-target-44"
+                                  >
+                                    <CheckCircle2 className="w-3.5 h-3.5" />
+                                    <span>{isTe ? 'కొత్త సపోర్ట్ టికెట్ నమోదు' : isHi ? 'नया टिकट दर्ज करें' : 'Raise Support Ticket'}</span>
+                                  </button>
+                                </div>
                               )}
                             </div>
                           )}
@@ -775,6 +1107,60 @@ export const CropChatbot: React.FC<CropChatbotProps> = ({
                   );
                 })}
 
+                {/* QUICK REPLIES / COMMON TOPICS GRID: Displayed prominently when no conversation has started */}
+                {!hasUserStartedConversation && (
+                  <div className="pt-2 pb-1 space-y-2.5 animate-fadeIn">
+                    <div className="flex items-center justify-between px-1">
+                      <div className="flex items-center gap-1.5 text-emerald-950 font-extrabold text-xs">
+                        <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>
+                          {isTe
+                            ? 'సాధారణ అంశాలు • త్వరిత ప్రత్యుత్తరాలు'
+                            : isHi
+                            ? 'त्वरित प्रत्युत्तर एवं मुख्य विषय'
+                            : 'Quick Replies & Common Topics'}
+                        </span>
+                      </div>
+                      <span className="text-[10px] text-emerald-800 font-bold bg-emerald-100/80 px-2 py-0.5 rounded-full border border-emerald-200/60">
+                        {isTe ? 'ఒక్క ట్యాప్‌తో తక్షణ సమాధానం' : isHi ? 'एक टैप में उत्तर' : '1-Tap Instant Responses'}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      {QUICK_TOPICS.map((topic) => (
+                        <button
+                          key={topic.id}
+                          onClick={() => handleQuickTopicSelect(topic.id)}
+                          className="flex flex-col text-left p-3 rounded-2xl bg-white hover:bg-emerald-50 active:bg-emerald-100 border border-emerald-200/90 hover:border-emerald-500 shadow-2xs hover:shadow-xs transition group justify-between cursor-pointer touch-target-44 min-h-[66px]"
+                        >
+                          <div className="flex items-start justify-between gap-1 w-full mb-1">
+                            <div className="flex items-center gap-1.5 min-w-0">
+                              <span className="p-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200/60 group-hover:bg-emerald-700 group-hover:text-white transition shrink-0">
+                                {topic.icon}
+                              </span>
+                              <span className="text-xs font-bold text-gray-900 group-hover:text-emerald-950 leading-snug truncate">
+                                {isTe ? topic.title.te : isHi ? topic.title.hi : topic.title.en}
+                              </span>
+                            </div>
+                            {topic.badge && (
+                              <span className="px-1.5 py-0.5 rounded-full text-[9px] font-black bg-emerald-600 text-white shrink-0 ml-1">
+                                {topic.badge}
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="flex items-center justify-between text-[10px] text-gray-500 font-medium w-full mt-1 pt-1 border-t border-gray-100">
+                            <span className="truncate pr-1">
+                              {isTe ? topic.desc.te : isHi ? topic.desc.hi : topic.desc.en}
+                            </span>
+                            <ChevronRight className="w-3.5 h-3.5 text-emerald-600 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition shrink-0" />
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {/* Typing Indicator */}
                 {isTyping && (
                   <div className="flex items-center gap-2 p-3 bg-white rounded-2xl border border-emerald-100 shadow-2xs w-max text-xs text-emerald-800 font-mono animate-fadeIn">
@@ -800,6 +1186,31 @@ export const CropChatbot: React.FC<CropChatbotProps> = ({
                     >
                       <span className="truncate">{isTe ? faq.question.te : isHi ? faq.question.hi : faq.question.en}</span>
                       <ArrowRight className="w-3 h-3 text-emerald-700 shrink-0 ml-1" />
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Compact Quick Topic Chips: Available during active chat */}
+              {hasUserStartedConversation && !isTyping && (
+                <div className="px-3 py-1.5 bg-emerald-50/70 border-t border-emerald-100 flex items-center gap-1.5 overflow-x-auto text-xs no-scrollbar">
+                  <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider shrink-0 flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-emerald-600" />
+                    {isTe ? 'అంశాలు:' : isHi ? 'विषय:' : 'Topics:'}
+                  </span>
+                  {QUICK_TOPICS.map((topic) => (
+                    <button
+                      key={topic.id}
+                      onClick={() => handleQuickTopicSelect(topic.id)}
+                      className="px-2.5 py-1 rounded-lg bg-white hover:bg-emerald-100/90 border border-emerald-200 text-emerald-950 text-[11px] font-bold transition shrink-0 flex items-center gap-1.5 cursor-pointer touch-target-44"
+                    >
+                      <span className="scale-90">{topic.icon}</span>
+                      <span>{isTe ? topic.title.te : isHi ? topic.title.hi : topic.title.en}</span>
+                      {topic.badge && (
+                        <span className="px-1.5 py-0.2 rounded-full text-[9px] bg-emerald-700 text-white font-black">
+                          {topic.badge}
+                        </span>
+                      )}
                     </button>
                   ))}
                 </div>
