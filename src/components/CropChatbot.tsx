@@ -84,6 +84,17 @@ export const CropChatbot: React.FC<CropChatbotProps> = ({
   });
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
+
+  useEffect(() => {
+    return () => {
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.abort();
+        } catch (e) {}
+      }
+    };
+  }, []);
 
   // Common Farmer FAQs with direct routing suggestions
   const COMMON_FAQS: CommonFAQ[] = [
@@ -242,36 +253,85 @@ export const CropChatbot: React.FC<CropChatbotProps> = ({
     setSpeakingMessageId(msgId);
   };
 
-  // Speech Recognition (Mic Input)
+  // Speech Recognition (Mic Input directly inside input field)
   const toggleListening = () => {
     const SpeechRecognition =
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      alert(isTe ? 'ఈ బ్రౌజర్‌లో మైక్ సపోర్ట్ లేదు' : 'Microphone input is not supported in this browser.');
+      alert(
+        isTe
+          ? 'ఈ బ్రౌజర్‌లో మైక్రోఫోన్ వాయిస్ రికార్డింగ్ అందుబాటులో లేదు. దయచేసి గూగుల్ క్రోమ్‌లో ప్రయత్నించండి.'
+          : isHi
+          ? 'इस ब्राउज़र में वॉयस रिकॉर्डिंग समर्थित नहीं है। कृपया क्रोम का उपयोग करें।'
+          : 'Microphone voice recording is not supported in this browser. Please use Chrome or Edge.'
+      );
       return;
     }
 
     if (isListening) {
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.stop();
+        } catch (e) {}
+      }
       setIsListening(false);
       return;
     }
 
     try {
       const recognition = new SpeechRecognition();
+      recognitionRef.current = recognition;
       recognition.lang = isTe ? 'te-IN' : isHi ? 'hi-IN' : 'en-IN';
-      recognition.interimResults = false;
+      recognition.interimResults = true;
+      recognition.continuous = false;
       recognition.maxAlternatives = 1;
 
-      recognition.onstart = () => setIsListening(true);
-      recognition.onend = () => setIsListening(false);
-      recognition.onerror = () => setIsListening(false);
+      recognition.onstart = () => {
+        setIsListening(true);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+        recognitionRef.current = null;
+      };
+
+      recognition.onerror = (event: any) => {
+        console.warn('Speech recognition status:', event.error);
+        setIsListening(false);
+        recognitionRef.current = null;
+        if (event.error === 'not-allowed') {
+          alert(
+            isTe
+              ? 'దయచేసి బ్రౌజర్ సెట్టింగ్స్‌లో మైక్రోఫోన్ అనుమతిని (Microphone Permission) ఆన్ చేయండి.'
+              : 'Please enable microphone permissions in your browser address bar to record your voice.'
+          );
+        }
+      };
 
       recognition.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript;
-        if (transcript) {
-          setInputMessage(transcript);
-          handleSendMessage(transcript);
+        let interimTranscript = '';
+        let finalTranscript = '';
+
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcriptChunk = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalTranscript += transcriptChunk;
+          } else {
+            interimTranscript += transcriptChunk;
+          }
+        }
+
+        const currentText = finalTranscript || interimTranscript;
+        if (currentText) {
+          setInputMessage(currentText);
+        }
+
+        // If final sentence detected, automatically convert and dispatch to bot
+        if (finalTranscript.trim()) {
+          setTimeout(() => {
+            handleSendMessage(finalTranscript.trim());
+          }, 350);
         }
       };
 
@@ -279,6 +339,7 @@ export const CropChatbot: React.FC<CropChatbotProps> = ({
     } catch (err) {
       console.warn('Speech recognition error:', err);
       setIsListening(false);
+      recognitionRef.current = null;
     }
   };
 
@@ -744,39 +805,63 @@ export const CropChatbot: React.FC<CropChatbotProps> = ({
                 </div>
               )}
 
-              {/* Chat Input Bar */}
+              {/* Chat Input Bar with Embedded Microphone inside field */}
               <div className="p-3 bg-white border-t border-gray-100 flex items-center gap-2 shrink-0">
-                <button
-                  onClick={toggleListening}
-                  className={`p-2.5 rounded-xl border transition cursor-pointer touch-target-44 ${
-                    isListening
-                      ? 'bg-red-500 text-white animate-pulse border-red-600'
-                      : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border-emerald-200'
-                  }`}
-                  title={isTe ? 'వాయిస్ మాట్లాడండి (మైక్)' : 'Voice Mic Input'}
-                >
-                  {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-                </button>
+                <div className="relative flex-1 flex items-center">
+                  <input
+                    type="text"
+                    value={inputMessage}
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                    placeholder={
+                      isListening
+                        ? isTe
+                          ? 'మీ స్వరాన్ని వింటున్నాను... మాట్లాడండి...'
+                          : isHi
+                          ? 'आपकी आवाज सुन रहे हैं... बोलिए...'
+                          : 'Listening to your voice... speak now...'
+                        : isTe
+                        ? 'ప్రశ్న టైప్ చేయండి లేదా మైక్ నొక్కండి...'
+                        : isHi
+                        ? 'प्रश्न टाइप करें या माइक दबाकर बोलें...'
+                        : 'Ask question or tap mic inside field...'
+                    }
+                    className={`w-full bg-gray-50 border rounded-xl pl-3.5 pr-11 py-2.5 text-xs sm:text-sm text-gray-900 focus:outline-none transition ${
+                      isListening
+                        ? 'border-red-400 ring-2 ring-red-400/30 bg-red-50/20 placeholder-red-600 font-semibold'
+                        : 'border-gray-200 focus:ring-2 focus:ring-emerald-500'
+                    }`}
+                  />
 
-                <input
-                  type="text"
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                  placeholder={
-                    isTe
-                      ? 'ఎరువు, వ్యర్థాల సేకరణ లేదా ప్రశ్న టైప్ చేయండి...'
-                      : isHi
-                      ? 'खाद, कचरा संग्रह या प्रश्न टाइप करें...'
-                      : 'Ask about fertilizer, waste collection, equipment...'
-                  }
-                  className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                />
+                  {/* Microphone Button INSIDE the Input Field */}
+                  <button
+                    type="button"
+                    onClick={toggleListening}
+                    className={`absolute right-1.5 top-1/2 -translate-y-1/2 p-2 rounded-lg transition cursor-pointer flex items-center justify-center touch-target-44 ${
+                      isListening
+                        ? 'bg-red-500 text-white animate-pulse shadow-sm'
+                        : 'text-gray-400 hover:text-emerald-700 hover:bg-emerald-100/60'
+                    }`}
+                    title={
+                      isListening
+                        ? isTe ? 'రికార్డింగ్ ఆపు' : 'Stop voice recording'
+                        : isTe ? 'వాయిస్ ద్వారా మాట్లాడండి' : 'Record voice to text'
+                    }
+                  >
+                    {isListening ? (
+                      <MicOff className="w-4 h-4 text-white" />
+                    ) : (
+                      <Mic className="w-4 h-4" />
+                    )}
+                  </button>
+                </div>
 
+                {/* Send Button */}
                 <button
+                  type="button"
                   onClick={() => handleSendMessage()}
                   disabled={!inputMessage.trim() || isTyping}
-                  className="p-2.5 bg-emerald-700 hover:bg-emerald-800 disabled:opacity-40 text-white rounded-xl transition cursor-pointer shadow-xs touch-target-44 flex items-center justify-center"
+                  className="p-2.5 bg-emerald-700 hover:bg-emerald-800 disabled:opacity-40 text-white rounded-xl transition cursor-pointer shadow-xs touch-target-44 flex items-center justify-center shrink-0"
                   title="Send message"
                 >
                   <Send className="w-4 h-4" />
