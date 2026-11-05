@@ -37,9 +37,9 @@ export const CropLoader: React.FC<CropLoaderProps> = ({
       <div className="relative inline-flex items-center justify-center">
         {/* Soft emerald radial glow */}
         <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-md animate-pulse pointer-events-none" />
-        {/* Crop Sprout Icon with Spin animation */}
+        {/* Crop Sprout Icon with calm rotational animation */}
         <div className={`relative ${boxSizes} rounded-2xl bg-emerald-950/80 border border-emerald-400/50 shadow-md flex items-center justify-center`}>
-          <Sprout className={`${iconSizes} text-emerald-400 animate-spin`} />
+          <Sprout className={`${iconSizes} text-emerald-400 animate-crop-spin`} />
         </div>
       </div>
       {label && (
@@ -60,5 +60,5 @@ export const CropLoader: React.FC<CropLoaderProps> = ({
  * InlineCropSpinner - A drop-in replacement for inline `<Loader2 className="... animate-spin" />`
  */
 export const InlineCropSpinner: React.FC<{ className?: string }> = ({ className = 'w-3.5 h-3.5' }) => (
-  <Sprout className={`animate-spin text-emerald-500 shrink-0 ${className}`} />
+  <Sprout className={`animate-crop-spin text-emerald-500 shrink-0 ${className}`} />
 );

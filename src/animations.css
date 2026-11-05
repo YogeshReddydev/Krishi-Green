@@ -69,13 +69,30 @@
 /* ── Pulse dot (already in index.css, extended here) ───────────── */
 @keyframes kgPulseDot {
   0%, 100% { opacity: 1;   transform: scale(1); }
-  50%       { opacity: 0.4; transform: scale(1.5); }
+  50%       { opacity: 0.4; transform: scale(1.3); }
 }
 .kg-pulse-dot {
-  animation: kgPulseDot 1.6s ease-in-out infinite;
+  animation: kgPulseDot 2.8s ease-in-out infinite;
 }
 
-/* ── News ticker smooth horizontal scroll ───────────────────────── */
+/* ── Calm Crop Sprout Rotational Spin ───────────────────────────── */
+@keyframes kgCropSpin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.animate-crop-spin {
+  animation: kgCropSpin 3.8s linear infinite;
+}
+
+@keyframes kgCropGentle {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  50%      { transform: rotate(180deg) scale(1.08); }
+}
+.animate-crop-gentle {
+  animation: kgCropGentle 4.5s ease-in-out infinite;
+}
+
+/* ── News ticker smooth horizontal scroll (Slower for rural readability) ── */
 @keyframes kgTicker {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
@@ -84,7 +101,7 @@
   display: flex;
   white-space: nowrap;
   width: max-content;
-  animation: kgTicker 35s linear infinite;
+  animation: kgTicker 70s linear infinite;
 }
 .kg-ticker-track:hover {
   animation-play-state: paused;
@@ -93,7 +110,7 @@
   display: flex;
   white-space: nowrap;
   width: max-content;
-  animation: kgTicker 24s linear infinite;
+  animation: kgTicker 50s linear infinite;
 }
 .kg-ticker-track-fast:hover {
   animation-play-state: paused;

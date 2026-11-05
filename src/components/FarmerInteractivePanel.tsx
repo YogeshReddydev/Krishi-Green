@@ -9,6 +9,7 @@ import {
   Sun,
   CloudRain,
   Wind,
+  Sprout,
 } from 'lucide-react';
 import { SupportedLanguage } from '../types';
 import { getMultiTranslations } from '../utils/multiLang';
@@ -25,6 +26,7 @@ interface FarmerInteractivePanelProps {
 function EarningsCalc({ lang }: { lang: SupportedLanguage }) {
   const t = getMultiTranslations(lang);
   const [wasteKg, setWasteKg] = useState(500);
+  const [isCalculating, setIsCalculating] = useState(false);
 
   const compostKg = Math.round(wasteKg * 0.45);
   const compostEarning = Math.round(compostKg * 9.5);
@@ -34,6 +36,12 @@ function EarningsCalc({ lang }: { lang: SupportedLanguage }) {
   const dacSaved = Math.round(compostKg / 50);
 
   const presets = [100, 500, 1000, 5000];
+
+  const handleSetWaste = (qty: number) => {
+    setIsCalculating(true);
+    setWasteKg(qty);
+    setTimeout(() => setIsCalculating(false), 220);
+  };
 
   return (
     <div style={{ padding: '16px 0 4px' }}>
@@ -45,7 +53,7 @@ function EarningsCalc({ lang }: { lang: SupportedLanguage }) {
         {presets.map((p) => (
           <button
             key={p}
-            onClick={() => setWasteKg(p)}
+            onClick={() => handleSetWaste(p)}
             style={{
               padding: '6px 14px',
               borderRadius: 10,
@@ -165,6 +173,16 @@ function QuickPickup({
   const [village, setVillage] = useState('');
   const [wasteType, setWasteType] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleBookingSubmit = () => {
+    if (!village || !wasteType || isSubmitting) return;
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setSubmitted(true);
+    }, 850);
+  };
 
   const wasteOptions = [
     { en: 'Kitchen waste', te: 'వంటగది వ్యర్థాలు', hi: 'रसोई अपशिष्ट', ta: 'சமையல் கழிவு' },
@@ -265,17 +283,17 @@ function QuickPickup({
       </div>
 
       <button
-        disabled={!village || !wasteType}
-        onClick={() => setSubmitted(true)}
+        disabled={!village || !wasteType || isSubmitting}
+        onClick={handleBookingSubmit}
         style={{
           padding: '13px',
           borderRadius: 12,
           border: 'none',
-          background: village && wasteType ? '#4ade80' : 'rgba(255,255,255,0.1)',
-          color: village && wasteType ? '#052e16' : 'rgba(255,255,255,0.3)',
+          background: village && wasteType && !isSubmitting ? '#4ade80' : 'rgba(255,255,255,0.1)',
+          color: village && wasteType && !isSubmitting ? '#052e16' : 'rgba(255,255,255,0.3)',
           fontWeight: 900,
           fontSize: 15,
-          cursor: village && wasteType ? 'pointer' : 'not-allowed',
+          cursor: village && wasteType && !isSubmitting ? 'pointer' : 'not-allowed',
           transition: 'all 0.2s',
           display: 'flex',
           alignItems: 'center',
@@ -283,8 +301,17 @@ function QuickPickup({
           gap: 8,
         }}
       >
-        <Truck size={18} />
-        {t.bookFreePickup}
+        {isSubmitting ? (
+          <>
+            <Sprout size={18} className="animate-crop-spin text-emerald-950" />
+            <span>{lang === 'te' ? 'నమోదు అవుతోంది...' : lang === 'hi' ? 'बुकिंग हो रही है...' : 'Connecting to local depot...'}</span>
+          </>
+        ) : (
+          <>
+            <Truck size={18} />
+            {t.bookFreePickup}
+          </>
+        )}
       </button>
     </div>
   );

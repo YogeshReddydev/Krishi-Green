@@ -574,13 +574,13 @@ export const WeatherAlertBanner: React.FC<WeatherAlertBannerProps> = ({ language
     return allFeedItems.filter((item) => item.category === selectedCategoryFilter);
   }, [allFeedItems, selectedCategoryFilter]);
 
-  // Auto-rotation timer for live agricultural stream with pause support
+  // Auto-rotation timer for live agricultural stream with pause support (paced with 9.5s reading latency)
   useEffect(() => {
     if (!isStreaming || isHovered || filteredFeedItems.length <= 1) return;
 
     const timer = setInterval(() => {
       setActiveItemIndex((prev) => (prev + 1) % filteredFeedItems.length);
-    }, 6500);
+    }, 9500);
 
     return () => clearInterval(timer);
   }, [isStreaming, isHovered, filteredFeedItems.length]);

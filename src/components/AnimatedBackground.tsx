@@ -53,11 +53,11 @@ export const AnimatedBackground: React.FC = () => {
         x: Math.random() * width,
         y: Math.random() * height,
         size: Math.random() * 8 + 6,
-        speedY: -(Math.random() * 0.45 + 0.15), // gently float upwards
-        speedX: Math.sin(Math.random() * Math.PI * 2) * 0.35,
+        speedY: -(Math.random() * 0.18 + 0.06), // calm, slow upward float
+        speedX: Math.sin(Math.random() * Math.PI * 2) * 0.15,
         angle: Math.random() * Math.PI * 2,
-        angularSpeed: (Math.random() - 0.5) * 0.015,
-        opacity: Math.random() * 0.25 + 0.08,
+        angularSpeed: (Math.random() - 0.5) * 0.005,
+        opacity: Math.random() * 0.22 + 0.06,
         type: Math.random() > 0.4 ? 'leaf' : 'seed',
         color: colors[Math.floor(Math.random() * colors.length)],
       });

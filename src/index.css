@@ -155,17 +155,17 @@
 .skeleton-shimmer {
   background: linear-gradient(90deg, #edeae1 25%, #f4f2eb 50%, #edeae1 75%);
   background-size: 200% 100%;
-  animation: skeletonShimmer 1.5s infinite;
+  animation: skeletonShimmer 2.6s infinite;
 }
 
-/* Subtle fade in keyframe without transform jumps */
+/* Subtle fade in keyframe with gentle ease-out latency */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
 .animate-fadeIn {
-  animation: fadeIn 0.2s ease-out forwards;
+  animation: fadeIn 0.35s ease-out forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -177,7 +177,7 @@
   }
 }
 
-/* Material Design Indeterminate Linear Progress Indicator */
+/* Material Design Indeterminate Linear Progress Indicator (Slowed down for relaxed perception) */
 @keyframes indeterminate-1 {
   0% {
     left: -35%;
@@ -209,15 +209,15 @@
 }
 
 .animate-indeterminate-1 {
-  animation: indeterminate-1 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+  animation: indeterminate-1 3.6s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
 }
 
 .animate-indeterminate-2 {
-  animation: indeterminate-2 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
-  animation-delay: 1.15s;
+  animation: indeterminate-2 3.6s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+  animation-delay: 1.8s;
 }
 
-/* Continuous gradient stream sweep */
+/* Continuous gradient stream sweep (Calm 5.2s sweep) */
 @keyframes linear-stream-sweep {
   0% {
     background-position: 200% 0;
@@ -230,7 +230,7 @@
 .animate-linear-stream {
   background: linear-gradient(90deg, #059669 0%, #10b981 25%, #34d399 50%, #38bdf8 75%, #059669 100%);
   background-size: 200% 100%;
-  animation: linear-stream-sweep 2.4s linear infinite;
+  animation: linear-stream-sweep 5.2s linear infinite;
 }
 
 @keyframes pulse-dot {
@@ -239,13 +239,13 @@
     transform: scale(1);
   }
   50% {
-    opacity: 0.3;
-    transform: scale(0.85);
+    opacity: 0.35;
+    transform: scale(0.9);
   }
 }
 
 .animate-pulse-dot {
-  animation: pulse-dot 1.4s ease-in-out infinite;
+  animation: pulse-dot 2.6s ease-in-out infinite;
 }
 
 

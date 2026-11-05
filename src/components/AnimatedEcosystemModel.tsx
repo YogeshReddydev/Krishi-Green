@@ -186,12 +186,12 @@ export const AnimatedEcosystemModel: React.FC<AnimatedEcosystemModelProps> = ({
     },
   ];
 
-  // Auto-advance loop when playing
+  // Auto-advance loop when playing (slowed down for relaxed reading latency)
   useEffect(() => {
     if (!isPlaying) return;
     const interval = setInterval(() => {
       setActiveNodeIndex((prev) => (prev + 1) % nodes.length);
-    }, 4500);
+    }, 7500);
     return () => clearInterval(interval);
   }, [isPlaying, nodes.length]);
 
@@ -269,9 +269,9 @@ export const AnimatedEcosystemModel: React.FC<AnimatedEcosystemModelProps> = ({
               key={node.id}
               onClick={() => {
                 setActiveNodeIndex(index);
-                // Pause momentarily on user inspection, then smoothly resume the automated visual flow
+                // Pause on user inspection to allow reading, then smoothly resume the automated flow
                 setIsPlaying(false);
-                setTimeout(() => setIsPlaying(true), 6000);
+                setTimeout(() => setIsPlaying(true), 9500);
               }}
               className={`text-left p-4 rounded-2xl border transition-all duration-300 relative group cursor-pointer ${
                 isActive

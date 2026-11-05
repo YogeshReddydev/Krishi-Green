@@ -69,6 +69,12 @@ export const CropAdvisorySuggester: React.FC<CropAdvisorySuggesterProps> = ({
   const [activeCropId, setActiveCropId] = useState<string>('maize');
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
   const [shareCopied, setShareCopied] = useState<boolean>(false);
+  const [isCalculating, setIsCalculating] = useState<boolean>(false);
+
+  const triggerCalculation = () => {
+    setIsCalculating(true);
+    setTimeout(() => setIsCalculating(false), 380);
+  };
 
   // Database of Regional Crop Recommendations
   const cropDatabase: CropSuggestion[] = [
@@ -383,7 +389,10 @@ export const CropAdvisorySuggester: React.FC<CropAdvisorySuggesterProps> = ({
             </label>
             <select
               value={selectedDistrict}
-              onChange={(e) => setSelectedDistrict(e.target.value)}
+              onChange={(e) => {
+                setSelectedDistrict(e.target.value);
+                triggerCalculation();
+              }}
               className="w-full bg-white border border-emerald-300 rounded-xl px-3 py-2.5 text-xs sm:text-sm font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-2xs"
             >
               <option value="palnadu">Palnadu (Narasaraopet / Vinukonda)</option>
@@ -405,6 +414,7 @@ export const CropAdvisorySuggester: React.FC<CropAdvisorySuggesterProps> = ({
               value={selectedSoil}
               onChange={(e) => {
                 setSelectedSoil(e.target.value);
+                triggerCalculation();
                 // Auto switch active crop if current isn't suitable
                 const matched = cropDatabase.filter((c) => c.soilSuitability.includes(e.target.value));
                 if (matched.length > 0 && !matched.some((m) => m.id === activeCropId)) {
@@ -427,7 +437,10 @@ export const CropAdvisorySuggester: React.FC<CropAdvisorySuggesterProps> = ({
             </label>
             <select
               value={selectedWater}
-              onChange={(e) => setSelectedWater(e.target.value)}
+              onChange={(e) => {
+                setSelectedWater(e.target.value);
+                triggerCalculation();
+              }}
               className="w-full bg-white border border-emerald-300 rounded-xl px-3 py-2.5 text-xs sm:text-sm font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-2xs"
             >
               <option value="borewell">{isTe ? 'బోరు బావి / బావి (Borewell / Well)' : 'Borewell / Tube Well'}</option>
@@ -444,7 +457,10 @@ export const CropAdvisorySuggester: React.FC<CropAdvisorySuggesterProps> = ({
             </label>
             <select
               value={selectedSeason}
-              onChange={(e) => setSelectedSeason(e.target.value)}
+              onChange={(e) => {
+                setSelectedSeason(e.target.value);
+                triggerCalculation();
+              }}
               className="w-full bg-white border border-emerald-300 rounded-xl px-3 py-2.5 text-xs sm:text-sm font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-2xs"
             >
               <option value="rabi">{isTe ? 'రబీ / చలికాలం (Rabi Season - Now)' : 'Rabi Season (Winter - Current)'}</option>
@@ -500,13 +516,21 @@ export const CropAdvisorySuggester: React.FC<CropAdvisorySuggesterProps> = ({
       {/* Crop Recommendations Tabs */}
       <div className="p-6 sm:p-8 space-y-6">
         <div>
-          <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">
-            {isTe
-              ? 'ఈ నేల మరియు కాలానికి సిఫార్సు చేయబడిన పంటలు:'
-              : isHi
-              ? 'आपकी मिट्टी और सीजन के लिए अनुशंसित फसलें:'
-              : 'Recommended Crops for Selected Soil & Regime:'}
-          </h3>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider">
+              {isTe
+                ? 'ఈ నేల మరియు కాలానికి సిఫార్సు చేయబడిన పంటలు:'
+                : isHi
+                ? 'आपकी मिट्टी और सीजन के लिए अनुशंसित फसलें:'
+                : 'Recommended Crops for Selected Soil & Regime:'}
+            </h3>
+            {isCalculating && (
+              <span className="inline-flex items-center gap-1.5 text-xs text-emerald-700 font-bold font-mono animate-fadeIn">
+                <Sprout className="w-3.5 h-3.5 animate-crop-spin text-emerald-600" />
+                <span>{isTe ? 'లెక్కించబడుతోంది...' : isHi ? 'गणना जारी...' : 'Analyzing agro-soil match...'}</span>
+              </span>
+            )}
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {filteredCrops.map((crop) => {
